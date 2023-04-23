@@ -14,7 +14,7 @@ import com.itshop.web.bo.UserInfoVO;
 import com.itshop.web.constants.ProductItemConstants;
 import com.itshop.web.constants.SnowConstants;
 import com.itshop.web.dao.SequenceNumberRepository;
-import com.itshop.web.dao.deviceControl.StatsRepository;
+import com.itshop.web.dao.devicecontrol.StatsRepository;
 import com.itshop.web.dao.mysql.*;
 import com.itshop.web.dao.po.*;
 import com.itshop.web.dto.PageParam;

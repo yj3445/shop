@@ -1,4 +1,4 @@
-package com.itshop.web.dao.deviceControl;
+package com.itshop.web.dao.devicecontrol;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;

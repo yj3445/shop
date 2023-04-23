@@ -12,12 +12,15 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.ConnectionKeepAliveStrategy;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeaderElementIterator;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.ssl.SSLContextBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,6 +36,7 @@ import org.springframework.util.StopWatch;
 import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -96,39 +100,21 @@ public class RestTemplateConfigurer {
 
     @Bean
     public PoolingHttpClientConnectionManager poolingHttpClientConnectionManager() {
-        SSLConnectionSocketFactory socketFactory = null;
+        SSLConnectionSocketFactory sslConnectionSocketFactory = null;
         try {
-            //采用绕过验证的方式处理https请求
-            SSLContext sc = SSLContext.getInstance("SSLv3");
-            // 实现一个X509TrustManager接口，用于绕过验证，不用修改里面的方法
-            X509TrustManager trustManager = new X509TrustManager() {
-                @Override
-                public void checkClientTrusted(
-                        java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
-                        String paramString) {
-                }
-
-                @Override
-                public void checkServerTrusted(
-                        java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
-                        String paramString) {
-                }
-
-                @Override
-                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                    return null;
-                }
-            };
-            sc.init(null, new TrustManager[]{trustManager}, null);
-            socketFactory = new SSLConnectionSocketFactory(sc);
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null,
+                    (TrustStrategy) (arg0, arg1) -> true).build();
+            HostnameVerifier hostnameVerifier = NoopHostnameVerifier.INSTANCE;
+            sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,
+                    hostnameVerifier);
         } catch (GeneralSecurityException ex) {
             log.error("自定义SSLConnectionSocketFactory发生异常", ex);
-            socketFactory = SSLConnectionSocketFactory.getSocketFactory();
+            sslConnectionSocketFactory = SSLConnectionSocketFactory.getSocketFactory();
         }
         //设置协议http和https对应的处理socket连接工厂的对象
         Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register("http", PlainConnectionSocketFactory.INSTANCE)
-                .register("https", socketFactory)
+                .register("https", sslConnectionSocketFactory)
                 .build();
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(registry);
         // 可用空闲连接过期时间,重用空闲连接时会先检查是否空闲时间超过这个时间，如果超过，释放socket重新建立
@@ -259,13 +245,13 @@ public class RestTemplateConfigurer {
 
         @Override
         public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
-                StopWatch stopWatch = new StopWatch();
-                stopWatch.start();
-                ClientHttpResponse response = execution.execute(request, body);
-                stopWatch.stop();
-                Object[] obj = {request.getURI(), request.getMethodValue(), stopWatch.getLastTaskTimeMillis()};
-                LOG.info("URI: {} ,HTTP Method: {},costTime:{} ", obj);
-                return response;
+            StopWatch stopWatch = new StopWatch();
+            stopWatch.start();
+            ClientHttpResponse response = execution.execute(request, body);
+            stopWatch.stop();
+            Object[] obj = {request.getURI(), request.getMethodValue(), response.getStatusCode().value(), stopWatch.getLastTaskTimeMillis()};
+            LOG.info("URI: {} ,HTTP Method: {}, response StatusCode:{},costTime:{} ", obj);
+            return response;
         }
     }
 }

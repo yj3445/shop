@@ -1,36 +1,23 @@
 package com.itshop.web.service;
 
-import com.itshop.web.bo.DeviceControlParam;
 import com.itshop.web.bo.InternetAccessOrderAuditResult;
 import com.itshop.web.bo.InternetAccessOrderBeforeChangeAndDetail;
 import com.itshop.web.bo.UserInfoVO;
-import com.itshop.web.dao.mysql.TDeviceControlTransDAO;
-import com.itshop.web.dao.po.TDeviceControlTrans;
 import com.itshop.web.dao.price.InternetAccessProductPriceRepository;
-import com.itshop.web.dto.deviceControl.BandWidthIspChangeRequest;
-import com.itshop.web.dto.deviceControl.BandWidthUpdateRequest;
-import com.itshop.web.dto.deviceControl.DeviceControlResponseResult;
 import com.itshop.web.dto.price.InternetAccessProductPriceConfig;
 import com.itshop.web.dto.price.InternetAccessProductPriceItem;
 import com.itshop.web.dto.request.InternetAccessOrderSaveParam;
 import com.itshop.web.dto.request.OrderAuditParam;
 import com.itshop.web.dto.response.InternetAccessOrderAmountResp;
 import com.itshop.web.dto.response.InternetAccessOrderPriceResp;
-import com.itshop.web.enums.DeviceControlIspId;
-import com.itshop.web.enums.DeviceControlTransCode;
-import com.itshop.web.enums.DeviceControlTransStatus;
 import com.itshop.web.enums.OrgTypeEnum;
-import com.itshop.web.manager.DeviceControlManager;
 import com.itshop.web.manager.InternetAccessOrderManager;
-import com.itshop.web.support.ApplicationContextProvider;
+import com.itshop.web.service.devicecontrol.InternetAccessDeviceControlService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -39,22 +26,20 @@ import java.util.Objects;
  * @author liufenglong
  * @date 2022/5/7
  */
-@Service("internetAccessCustomOrderService")
-public class InternetAccessCustomOrderService {
+@Service
+public class InternetAccessOrderService {
     @Autowired
     InternetAccessOrderManager internetAccessOrderManager;
 
     @Autowired
-    DeviceControlManager deviceControlManager;
-
-    @Autowired
-    TDeviceControlTransDAO deviceControlTransDAO;
-
-    @Autowired
     InternetAccessProductPriceRepository internetAccessProductPriceRepository;
+
+    @Autowired
+    InternetAccessDeviceControlService internetAccessDeviceControlService;
 
     /**
      * 计算总价和折扣金额
+     *
      * @param productDOrderParam
      * @return
      */
@@ -135,6 +120,13 @@ public class InternetAccessCustomOrderService {
         return resp;
     }
 
+    /**
+     * 保存
+     *
+     * @param productDOrderParam 产品信息
+     * @param userInfoVO 用户信息
+     * @return
+     */
     public int save(InternetAccessOrderSaveParam productDOrderParam, UserInfoVO userInfoVO) {
         InternetAccessOrderPriceResp orderPriceResp = calcTotalPriceAndDiscount(productDOrderParam, userInfoVO, true);
         InternetAccessOrderAmountResp orderAmountResp = getInternetAccessOrderAmountResp(orderPriceResp, productDOrderParam, userInfoVO);
@@ -142,6 +134,14 @@ public class InternetAccessCustomOrderService {
         return saveResult.getChange().getOrderId();
     }
 
+    /**
+     * 得到产品金额
+     *
+     * @param orderPriceResp
+     * @param productDOrderParam
+     * @param userInfoVO
+     * @return
+     */
     private InternetAccessOrderAmountResp getInternetAccessOrderAmountResp(InternetAccessOrderPriceResp orderPriceResp,
                                                                            InternetAccessOrderSaveParam productDOrderParam,
                                                                            UserInfoVO userInfoVO) {
@@ -201,71 +201,19 @@ public class InternetAccessCustomOrderService {
         return resp;
     }
 
+    /**
+     * 订单审批
+     *
+     * @param orderAuditParam
+     * @param userInfoVO
+     * @return
+     */
     public int orderAudit(OrderAuditParam orderAuditParam, UserInfoVO userInfoVO){
         InternetAccessOrderAuditResult auditResult= internetAccessOrderManager.orderAudit(orderAuditParam,userInfoVO);
         if (auditResult.getTransId() != 0) {
-            InternetAccessCustomOrderService innerService = (InternetAccessCustomOrderService) ApplicationContextProvider.getBean("internetAccessCustomOrderService");
-            innerService.callDeviceControl(auditResult, userInfoVO.getAppUserInfoId());
+            internetAccessDeviceControlService.callDeviceControl(auditResult, userInfoVO.getAppUserInfoId());
         }
         return auditResult.getOrderId();
     }
 
-    @Async
-    public void callDeviceControl(InternetAccessOrderAuditResult saveResult, Integer currentUserId) {
-        LinkedList<Integer> afterStatusList = saveResult.getAfterStatusList(saveResult.getTransCurrent());
-        for (int i = 0; i < afterStatusList.size(); i++) {
-            Integer currentStatus = afterStatusList.get(i);
-            int nextStatus = saveResult.getTransEnd();
-            if (i < afterStatusList.size() - 1) {
-                nextStatus = afterStatusList.get(i + 1);
-            }
-            if (Objects.equals(DeviceControlTransCode.BROAD_BAND_UPDATE.getCode(), currentStatus)) {
-                broadBandUpdate(saveResult, currentUserId, currentStatus, nextStatus);
-            }
-            if (Objects.equals(DeviceControlTransCode.BROAD_BAND_ISP_CHANGE.getCode(), currentStatus)) {
-                broadBandIspChange(saveResult, currentUserId, currentStatus, nextStatus);
-            }
-        }
-    }
-
-    void broadBandUpdate(InternetAccessOrderAuditResult saveResult, Integer currentUserId,
-                         Integer currentStatus, Integer nextStatus) {
-        BandWidthUpdateRequest request = new BandWidthUpdateRequest();
-        request.setBusiness_id(saveResult.getBusiness_id());
-        request.setBandwidth(saveResult.getBroadBand());
-        DeviceControlParam<BandWidthUpdateRequest> param = new DeviceControlParam<>();
-        param.setRequest(request);
-        param.setCurrentUserId(currentUserId);
-        DeviceControlResponseResult<String> responseResult = deviceControlManager.broadBandUpdate(param);
-        updateTrans(saveResult, currentUserId,currentStatus, nextStatus, responseResult);
-    }
-
-    void broadBandIspChange(InternetAccessOrderAuditResult saveResult, Integer currentUserId,
-                            Integer currentStatus, Integer nextStatus) {
-        BandWidthIspChangeRequest request = new BandWidthIspChangeRequest();
-        request.setBusiness_id(saveResult.getBusiness_id());
-        request.setIsp_id(DeviceControlIspId.getIspIdByExport(saveResult.getExport()));
-        DeviceControlParam<BandWidthIspChangeRequest> param = new DeviceControlParam<>();
-        param.setRequest(request);
-        param.setCurrentUserId(currentUserId);
-        DeviceControlResponseResult<String> responseResult = deviceControlManager.broadBandIspChange(param);
-        updateTrans(saveResult, currentUserId,currentStatus, nextStatus, responseResult);
-    }
-
-    private void updateTrans(InternetAccessOrderAuditResult saveResult, Integer currentUserId,
-                             Integer currentStatus, Integer nextStatus,
-                             DeviceControlResponseResult responseResult) {
-        TDeviceControlTrans tDeviceControlTrans = new TDeviceControlTrans();
-        tDeviceControlTrans.setTransId(saveResult.getTransId());
-        tDeviceControlTrans.setModifiedBy(currentUserId);
-        tDeviceControlTrans.setModifiedTime(new Date());
-        if (DeviceControlResponseResult.SUCCEED.equalsIgnoreCase(responseResult.getCode())) {
-            tDeviceControlTrans.setProcess(currentStatus);
-            if (Objects.equals(nextStatus, saveResult.getTransEnd())) {
-                tDeviceControlTrans.setProcess(nextStatus);
-                tDeviceControlTrans.setStatus(DeviceControlTransStatus.SUCCEED.getCode());
-            }
-        }
-        deviceControlTransDAO.updateByPrimaryKeySelective(tDeviceControlTrans);
-    }
 }

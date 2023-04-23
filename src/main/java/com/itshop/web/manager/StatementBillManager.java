@@ -21,9 +21,11 @@ import com.itshop.web.dto.response.*;
 import com.itshop.web.enums.*;
 import com.itshop.web.exception.BusinessException;
 import com.itshop.web.util.DateUtil;
+//import com.sun.xml.internal.txw2.output.IndentingXMLFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -77,30 +79,57 @@ public class StatementBillManager {
     @Transactional(value = "mysqlTransactionManager", rollbackFor = Exception.class)
     public void SaveInternetAccessOrderBill(TInternetAccessOrderBeforeChange lastTimeAuditPassInfo,
                                             TInternetAccessOrderBeforeChange nowAuditPassInfo) {
-        //当前月(季/年)第一天
-        LocalDate curMQY = LocalDate.now();
-        if (Objects.equals(PaymentCycleEnum.QUARTER.getCode(), nowAuditPassInfo.getPaymentCycle())) {
-            curMQY = DateUtil.getStartOrEndDayOfQuarter(LocalDate.now(), true);
-        } else if (Objects.equals(PaymentCycleEnum.YEAR.getCode(), nowAuditPassInfo.getPaymentCycle())) {
-            curMQY = LocalDate.now().with(TemporalAdjusters.firstDayOfYear());
-        } else {
-            curMQY = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth());
+        TOrderAmount orderAmountQuery = new TOrderAmount();
+        orderAmountQuery.setOrderId(nowAuditPassInfo.getOrderId());
+        orderAmountQuery.setChangeId(nowAuditPassInfo.getChangeId());
+        orderAmountQuery.setOrderTableName(OrderType.INTERNET_ACCESS_ORDER.getValue());
+        TOrderAmount orderAmount = tOrderAmountDAO.selectByOrderIdAndChangeId(orderAmountQuery);
+        if (orderAmount == null) {
+            return;
         }
-        String currentYearMonthStr = curMQY.format(SnowConstants.YYYYMM);
-        //
+        String currentYearMonthStr = getFirstDayByPaymentCycle(nowAuditPassInfo);
         LocalDate startDate = DateUtil.date2LocalDate(nowAuditPassInfo.getStartTime());
         LocalDate endDate = DateUtil.date2LocalDate(nowAuditPassInfo.getEndTime());
         //共多少天
         long totalDays = ChronoUnit.DAYS.between(startDate, endDate) + 1;
         //共多少个月(季/年)
-        long totalMQYs = 0l;
+        long totalMQYs;
+        //缴费周期(单位:月、季、年)跟该订单的开始时间-结束时间是否吻合
+        boolean outEqual = true;
         if (Objects.equals(PaymentCycleEnum.QUARTER.getCode(), nowAuditPassInfo.getPaymentCycle())) {
-            totalMQYs = DateUtil.durationQuarters(startDate, endDate);
+            outEqual = (nowAuditPassInfo.getContractPeriod() % 3) == 0;
+            totalMQYs = outEqual
+                    ? (nowAuditPassInfo.getContractPeriod() / 3)
+                    : (nowAuditPassInfo.getContractPeriod() / 3) + 1;
         } else if (Objects.equals(PaymentCycleEnum.YEAR.getCode(), nowAuditPassInfo.getPaymentCycle())) {
-            totalMQYs = DateUtil.durationYears(startDate, endDate);
+            outEqual = (nowAuditPassInfo.getContractPeriod() % 12) == 0;
+            totalMQYs = outEqual
+                    ? (nowAuditPassInfo.getContractPeriod() / 12)
+                    : (nowAuditPassInfo.getContractPeriod() / 12) + 1;
         } else {
             //合同期间(月)
             totalMQYs = nowAuditPassInfo.getContractPeriod();
+        }
+        totalDays = recalculateHistoricalBills(lastTimeAuditPassInfo, nowAuditPassInfo, totalDays);
+        if (outEqual) {
+            //若需要更新历史账单,则订单开始时间变为当前日期;
+            // 此时需要重新计算[缴费周期(单位:月、季、年)跟该订单的开始时间-结束时间是否吻合]
+            boolean flag = isNeedRecalculate(lastTimeAuditPassInfo, nowAuditPassInfo, totalMQYs);
+            if (flag) {
+                if (Objects.equals(PaymentCycleEnum.QUARTER.getCode(), nowAuditPassInfo.getPaymentCycle())) {
+                    outEqual = DateUtil.beforeAddAmountEqAfter(LocalDate.now(),
+                            endDate.plusDays(1)
+                            , 3, ChronoUnit.MONTHS);
+                } else if (Objects.equals(PaymentCycleEnum.YEAR.getCode(), nowAuditPassInfo.getPaymentCycle())) {
+                    outEqual = DateUtil.beforeAddAmountEqAfter(LocalDate.now(),
+                            endDate.plusDays(1)
+                            , 1, ChronoUnit.YEARS);
+                } else {
+                    outEqual = DateUtil.beforeAddAmountEqAfter(LocalDate.now(),
+                            endDate.plusDays(1)
+                            , 1, ChronoUnit.MONTHS);
+                }
+            }
         }
         log.info("[SaveInternetAccessOrderBill] orderTableName:{}," +
                         "orderId:{}," +
@@ -123,80 +152,6 @@ public class StatementBillManager {
                 totalDays,
                 totalMQYs
         );
-        TOrderAmount orderAmountQuery = new TOrderAmount();
-        orderAmountQuery.setOrderId(nowAuditPassInfo.getOrderId());
-        orderAmountQuery.setChangeId(nowAuditPassInfo.getChangeId());
-        orderAmountQuery.setOrderTableName(OrderType.INTERNET_ACCESS_ORDER.getValue());
-        TOrderAmount orderAmount = tOrderAmountDAO.selectByOrderIdAndChangeId(orderAmountQuery);
-        if (orderAmount == null) {
-            return;
-        }
-        if (lastTimeAuditPassInfo != null) {
-            TBill billQuery = new TBill();
-            billQuery.setOrderId(lastTimeAuditPassInfo.getOrderId());
-            billQuery.setChangeId(lastTimeAuditPassInfo.getChangeId());
-            billQuery.setOrderTableName(OrderType.INTERNET_ACCESS_ORDER.getValue());
-            billQuery.setBillYearMonth(currentYearMonthStr);
-            TBill bill = tBillDAO.selectByOrderIdAndChangeId(billQuery);
-            if (bill != null && Objects.equals(BillStatusEnum.UN_OUT_ACCOUNT.getValue(), bill.getBillStatus())) {
-                //当前期需要重新计算
-                LocalDate startDate1 = DateUtil.date2LocalDate(bill.getServiceStartTime());
-                LocalDate endDate1 = DateUtil.date2LocalDate(bill.getServiceEndTime());
-                long totalDays1 = ChronoUnit.DAYS.between(startDate1, endDate1) + 1;
-                long days1 = ChronoUnit.DAYS.between(startDate1, LocalDate.now()) + 1;
-
-                //总天数 = 总天数 - 已过去的天数
-                long lostDays= ChronoUnit.DAYS.between(startDate, LocalDate.now()) + 1;
-                totalDays = totalDays - lostDays;
-                log.info("[SaveInternetAccessOrderBill] [currentYearMonth-Need-Recalculate]" +
-                                "orderTableName:{}," +
-                                "orderId:{}," +
-                                "changeId:{}," +
-                                "currentYearMonth:{}," +
-                                "paymentCycle:{}," +
-                                "paymentMethod:{}," +
-                                "startDate1[bill.serviceStartTime]:{}," +
-                                "endDate1[bill.serviceEndTime]:{}," +
-                                "totalDays1[=(endDate1-startDate1)+1] :{}," +
-                                "days1[=(now-startDate1)+1]:{}," +
-                                "lostDays[(now-startDate)+1]:{},"+
-                                "totalDays[totalDays-lostDays]:{}",
-                        OrderType.INTERNET_ACCESS_ORDER.getValue(),
-                        nowAuditPassInfo.getOrderId(),
-                        nowAuditPassInfo.getChangeId(),
-                        currentYearMonthStr,
-                        PaymentCycleEnum.getValueByCode(nowAuditPassInfo.getPaymentCycle()),
-                        PaymentMethodEnum.getValueByCode(nowAuditPassInfo.getPaymentMethod()),
-                        startDate1,
-                        endDate1,
-                        totalDays1,
-                        days1,
-                        lostDays,
-                        totalDays
-                );
-
-                bill.setBillStatus(BillStatusEnum.OUT_OF_ACCOUNT.getValue());
-                bill.setModifiedTime(new Date());
-                bill.setProviderPayAmount(bill.getProviderPayAmount()
-                        .multiply(BigDecimal.valueOf(days1))
-                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
-                bill.setAgentLevel1PayAmount(bill.getAgentLevel1PayAmount()
-                        .multiply(BigDecimal.valueOf(days1))
-                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
-                bill.setAgentLevel2PayAmount(bill.getAgentLevel2PayAmount()
-                        .multiply(BigDecimal.valueOf(days1))
-                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
-                bill.setAgentLevel3PayAmount(bill.getAgentLevel3PayAmount()
-                        .multiply(BigDecimal.valueOf(days1))
-                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
-                bill.setEndUserPayAmount(bill.getEndUserPayAmount()
-                        .multiply(BigDecimal.valueOf(days1))
-                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
-                tBillDAO.updateByPrimaryKeySelective(bill);
-            }
-            //当前期往后的需要删除
-            tBillDAO.deleteByAfterBillYearMonth(billQuery);
-        }
         /*服务商金额*/
         BigDecimal providerPayAmount = BigDecimal.ZERO;
         /*一级代理金额*/
@@ -209,9 +164,9 @@ public class StatementBillManager {
         BigDecimal endUserPayAmount = BigDecimal.ZERO;
         int index = 0;
         List<TBill> billList = Lists.newArrayList();
-        while (index <= totalMQYs) {
+        while (index < totalMQYs) {
             //对账年月
-            LocalDate billYearMonth = startDate;
+            LocalDate billYearMonth;
             if (Objects.equals(PaymentCycleEnum.QUARTER.getCode(), nowAuditPassInfo.getPaymentCycle())) {
                 billYearMonth = DateUtil.getStartOrEndDayOfQuarter(startDate, true);
             } else if (Objects.equals(PaymentCycleEnum.YEAR.getCode(), nowAuditPassInfo.getPaymentCycle())) {
@@ -220,33 +175,23 @@ public class StatementBillManager {
                 billYearMonth = startDate.with(TemporalAdjusters.firstDayOfMonth());
             }
             String billYearMonthStr = billYearMonth.format(SnowConstants.YYYYMM);
-
             //服务开始时间
             LocalDate serviceStartTime = startDate;
-            if (index != 0) {
-                if (Objects.equals(PaymentCycleEnum.QUARTER.getCode(), nowAuditPassInfo.getPaymentCycle())) {
-                    serviceStartTime = DateUtil.getStartOrEndDayOfQuarter(startDate, true);
-                } else if (Objects.equals(PaymentCycleEnum.YEAR.getCode(), nowAuditPassInfo.getPaymentCycle())) {
-                    serviceStartTime = startDate.with(TemporalAdjusters.firstDayOfYear());
-                } else {
-                    serviceStartTime = startDate.with(TemporalAdjusters.firstDayOfMonth());
-                }
-            }
             if (lastTimeAuditPassInfo != null && billYearMonthStr.equalsIgnoreCase(currentYearMonthStr)) {
+                //当期有变更
                 serviceStartTime = LocalDate.now();
             }
             //服务结束时间
             LocalDate serviceEndTime = endDate;
-            if (index != totalMQYs) {
+            if (index != totalMQYs - 1) {
                 if (Objects.equals(PaymentCycleEnum.QUARTER.getCode(), nowAuditPassInfo.getPaymentCycle())) {
-                    serviceEndTime = DateUtil.getStartOrEndDayOfQuarter(startDate, false);
+                    serviceEndTime = startDate.plusMonths(3).plusDays(-1);
                 } else if (Objects.equals(PaymentCycleEnum.YEAR.getCode(), nowAuditPassInfo.getPaymentCycle())) {
-                    serviceEndTime = startDate.with(TemporalAdjusters.lastDayOfYear());
+                    serviceEndTime = startDate.plusYears(1).plusDays(-1);
                 } else {
-                    serviceEndTime = startDate.with(TemporalAdjusters.lastDayOfMonth());
+                    serviceEndTime = startDate.plusMonths(1).plusDays(-1);
                 }
             }
-
             if (serviceStartTime.isAfter(serviceEndTime)) {
                 break;
             }
@@ -263,23 +208,35 @@ public class StatementBillManager {
             bill.setServiceStartTime(DateUtil.localDate2Date(serviceStartTime));
             bill.setServiceEndTime(DateUtil.localDate2Date(serviceEndTime));
             long days = ChronoUnit.DAYS.between(serviceStartTime, serviceEndTime) + 1;
-            if (!serviceEndTime.isEqual(endDate)) {
-                bill.setProviderPayAmount(orderAmount.getProviderTotalPrice()
-                        .multiply(BigDecimal.valueOf(days))
-                        .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
-                bill.setAgentLevel1PayAmount(orderAmount.getAgentLevel1TotalPrice()
-                        .multiply(BigDecimal.valueOf(days))
-                        .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
-                bill.setAgentLevel2PayAmount(orderAmount.getAgentLevel2TotalPrice()
-                        .multiply(BigDecimal.valueOf(days))
-                        .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
-                bill.setAgentLevel3PayAmount(orderAmount.getAgentLevel3TotalPrice()
-                        .multiply(BigDecimal.valueOf(days))
-                        .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
-                bill.setEndUserPayAmount(orderAmount.getSalesTotalPrice()
-                        .multiply(BigDecimal.valueOf(days))
-                        .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
-
+            if (index != totalMQYs - 1) {
+                if (outEqual) {
+                    bill.setProviderPayAmount(orderAmount.getProviderTotalPrice()
+                            .divide(BigDecimal.valueOf(totalMQYs), 2, RoundingMode.HALF_UP));
+                    bill.setAgentLevel1PayAmount(orderAmount.getAgentLevel1TotalPrice()
+                            .divide(BigDecimal.valueOf(totalMQYs), 2, RoundingMode.HALF_UP));
+                    bill.setAgentLevel2PayAmount(orderAmount.getAgentLevel2TotalPrice()
+                            .divide(BigDecimal.valueOf(totalMQYs), 2, RoundingMode.HALF_UP));
+                    bill.setAgentLevel3PayAmount(orderAmount.getAgentLevel3TotalPrice()
+                            .divide(BigDecimal.valueOf(totalMQYs), 2, RoundingMode.HALF_UP));
+                    bill.setEndUserPayAmount(orderAmount.getSalesTotalPrice()
+                            .divide(BigDecimal.valueOf(totalMQYs), 2, RoundingMode.HALF_UP));
+                } else {
+                    bill.setProviderPayAmount(orderAmount.getProviderTotalPrice()
+                            .multiply(BigDecimal.valueOf(days))
+                            .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
+                    bill.setAgentLevel1PayAmount(orderAmount.getAgentLevel1TotalPrice()
+                            .multiply(BigDecimal.valueOf(days))
+                            .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
+                    bill.setAgentLevel2PayAmount(orderAmount.getAgentLevel2TotalPrice()
+                            .multiply(BigDecimal.valueOf(days))
+                            .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
+                    bill.setAgentLevel3PayAmount(orderAmount.getAgentLevel3TotalPrice()
+                            .multiply(BigDecimal.valueOf(days))
+                            .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
+                    bill.setEndUserPayAmount(orderAmount.getSalesTotalPrice()
+                            .multiply(BigDecimal.valueOf(days))
+                            .divide(BigDecimal.valueOf(totalDays), 2, RoundingMode.HALF_UP));
+                }
                 providerPayAmount = providerPayAmount.add(bill.getProviderPayAmount());
                 /*一级代理金额*/
                 agentLevel1PayAmount = agentLevel1PayAmount.add(bill.getAgentLevel1PayAmount());
@@ -327,9 +284,9 @@ public class StatementBillManager {
                             "startDate:{}," +
                             "endDate:{}," +
                             "totalDays[(endDate-startDate)+1]:{}," +
-                            "totalMQYs:{},"+
-                            "serviceStartTime:{},"+
-                            "serviceEndTime:{},"+
+                            "totalMQYs:{}," +
+                            "serviceStartTime:{}," +
+                            "serviceEndTime:{}," +
                             "days[(serviceEndTime-serviceStartTime)+1]:{}",
                     OrderType.INTERNET_ACCESS_ORDER.getValue(),
                     nowAuditPassInfo.getOrderId(),
@@ -348,10 +305,157 @@ public class StatementBillManager {
             billList.add(bill);
             index++;
         }
-        //会生成n或者n+1行数据 （n个月(季/年)）
-        // 2022-01-01 至 2022-12-31 会生成12条
-        // 2022-01-10 至 2023-01-09 会生成13条
         tBillDAO.insertBatch(billList);
+    }
+
+    /**
+     * 是否重新计算[缴费周期(单位:月、季、年)跟该账单的服务开始时间-结束时间是否吻合]
+     *
+     * @param lastTimeAuditPassInfo
+     * @param nowAuditPassInfo
+     * @param totalMQYs
+     * @return
+     */
+    private boolean isNeedRecalculate(TInternetAccessOrderBeforeChange lastTimeAuditPassInfo,
+                                                         TInternetAccessOrderBeforeChange nowAuditPassInfo,
+                                                         long totalMQYs) {
+//        if (lastTimeAuditPassInfo == null) {
+//            return false;
+//        }
+        String currentYearMonthStr = getFirstDayByPaymentCycle(nowAuditPassInfo);
+        LocalDate startDate = DateUtil.date2LocalDate(nowAuditPassInfo.getStartTime());
+        int index = 0;
+        while (index < totalMQYs) {
+            //对账年月
+            LocalDate billYearMonth;
+            if (Objects.equals(PaymentCycleEnum.QUARTER.getCode(), nowAuditPassInfo.getPaymentCycle())) {
+                billYearMonth = DateUtil.getStartOrEndDayOfQuarter(startDate, true);
+            } else if (Objects.equals(PaymentCycleEnum.YEAR.getCode(), nowAuditPassInfo.getPaymentCycle())) {
+                billYearMonth = startDate.with(TemporalAdjusters.firstDayOfYear());
+            } else {
+                billYearMonth = startDate.with(TemporalAdjusters.firstDayOfMonth());
+            }
+            String billYearMonthStr = billYearMonth.format(SnowConstants.YYYYMM);
+            if (lastTimeAuditPassInfo != null
+                    && billYearMonthStr.equalsIgnoreCase(currentYearMonthStr)) {
+                return true;
+            }
+            if (Objects.equals(PaymentCycleEnum.QUARTER.getCode(), nowAuditPassInfo.getPaymentCycle())) {
+                startDate = startDate.plusMonths(3);
+            } else if (Objects.equals(PaymentCycleEnum.YEAR.getCode(), nowAuditPassInfo.getPaymentCycle())) {
+                startDate = startDate.plusYears(1);
+            } else {
+                startDate = startDate.plusMonths(1);
+            }
+            index++;
+        }
+        return false;
+    }
+
+
+    /**
+     * 根据 缴费周期 得到 当前月(季/年)第一天
+     *
+     * @param nowAuditPassInfo
+     * @return
+     */
+    private String getFirstDayByPaymentCycle(TInternetAccessOrderBeforeChange nowAuditPassInfo) {
+        //当前月(季/年)第一天
+        String currentYearMonthStr =LocalDate.now().format(SnowConstants.YYYYMM);
+        if (Objects.equals(PaymentCycleEnum.QUARTER.getCode(), nowAuditPassInfo.getPaymentCycle())) {
+            currentYearMonthStr = DateUtil.getStartOrEndDayOfQuarter(LocalDate.now(), true)
+                    .format(SnowConstants.YYYYMM);
+        } else if (Objects.equals(PaymentCycleEnum.YEAR.getCode(), nowAuditPassInfo.getPaymentCycle())) {
+            currentYearMonthStr = LocalDate.now().with(TemporalAdjusters.firstDayOfYear())
+                    .format(SnowConstants.YYYYMM);
+        } else {
+            currentYearMonthStr = LocalDate.now().with(TemporalAdjusters.firstDayOfMonth())
+                    .format(SnowConstants.YYYYMM);
+        }
+        return currentYearMonthStr;
+    }
+
+    /**
+     * 重新计算历史账期,并返回新的总天数
+     *
+     * @param lastTimeAuditPassInfo
+     * @param nowAuditPassInfo
+     * @param totalDays
+     * @return
+     */
+    private long recalculateHistoricalBills(TInternetAccessOrderBeforeChange lastTimeAuditPassInfo,
+                                      TInternetAccessOrderBeforeChange nowAuditPassInfo,
+                                       long totalDays) {
+
+        LocalDate startDate = DateUtil.date2LocalDate(nowAuditPassInfo.getStartTime());
+        String currentYearMonthStr = getFirstDayByPaymentCycle(nowAuditPassInfo);
+        if (lastTimeAuditPassInfo != null) {
+            TBill billQuery = new TBill();
+            billQuery.setOrderId(lastTimeAuditPassInfo.getOrderId());
+            billQuery.setChangeId(lastTimeAuditPassInfo.getChangeId());
+            billQuery.setOrderTableName(OrderType.INTERNET_ACCESS_ORDER.getValue());
+            billQuery.setBillYearMonth(currentYearMonthStr);
+            TBill bill = tBillDAO.selectByOrderIdAndChangeId(billQuery);
+            if (bill != null && Objects.equals(BillStatusEnum.UN_OUT_ACCOUNT.getValue(), bill.getBillStatus())) {
+                //当前期需要重新计算
+                LocalDate startDate1 = DateUtil.date2LocalDate(bill.getServiceStartTime());
+                LocalDate endDate1 = DateUtil.date2LocalDate(bill.getServiceEndTime());
+                long totalDays1 = ChronoUnit.DAYS.between(startDate1, endDate1) + 1;
+                long days1 = ChronoUnit.DAYS.between(startDate1, LocalDate.now()) + 1;
+
+                //总天数 = 总天数 - 已过去的天数
+                long lostDays = ChronoUnit.DAYS.between(startDate, LocalDate.now()) + 1;
+                totalDays = totalDays - lostDays;
+                log.info("[SaveInternetAccessOrderBill] [currentYearMonth-Need-Recalculate]" +
+                                "orderTableName:{}," +
+                                "orderId:{}," +
+                                "changeId:{}," +
+                                "currentYearMonth:{}," +
+                                "paymentCycle:{}," +
+                                "paymentMethod:{}," +
+                                "startDate1[bill.serviceStartTime]:{}," +
+                                "endDate1[bill.serviceEndTime]:{}," +
+                                "totalDays1[=(endDate1-startDate1)+1] :{}," +
+                                "days1[=(now-startDate1)+1]:{}," +
+                                "lostDays[(now-startDate)+1]:{}," +
+                                "totalDays[totalDays-lostDays]:{}",
+                        OrderType.INTERNET_ACCESS_ORDER.getValue(),
+                        nowAuditPassInfo.getOrderId(),
+                        nowAuditPassInfo.getChangeId(),
+                        currentYearMonthStr,
+                        PaymentCycleEnum.getValueByCode(nowAuditPassInfo.getPaymentCycle()),
+                        PaymentMethodEnum.getValueByCode(nowAuditPassInfo.getPaymentMethod()),
+                        startDate1,
+                        endDate1,
+                        totalDays1,
+                        days1,
+                        lostDays,
+                        totalDays
+                );
+                bill.setServiceEndTime(DateUtil.localDate2Date(LocalDate.now().plusDays(-1)));
+                bill.setBillStatus(BillStatusEnum.OUT_OF_ACCOUNT.getValue());
+                bill.setModifiedTime(new Date());
+                bill.setProviderPayAmount(bill.getProviderPayAmount()
+                        .multiply(BigDecimal.valueOf(days1))
+                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
+                bill.setAgentLevel1PayAmount(bill.getAgentLevel1PayAmount()
+                        .multiply(BigDecimal.valueOf(days1))
+                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
+                bill.setAgentLevel2PayAmount(bill.getAgentLevel2PayAmount()
+                        .multiply(BigDecimal.valueOf(days1))
+                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
+                bill.setAgentLevel3PayAmount(bill.getAgentLevel3PayAmount()
+                        .multiply(BigDecimal.valueOf(days1))
+                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
+                bill.setEndUserPayAmount(bill.getEndUserPayAmount()
+                        .multiply(BigDecimal.valueOf(days1))
+                        .divide(BigDecimal.valueOf(totalDays1), 2, RoundingMode.HALF_UP));
+                tBillDAO.updateByPrimaryKeySelective(bill);
+            }
+            //当前期往后的需要删除
+            tBillDAO.deleteByAfterBillYearMonth(billQuery);
+        }
+        return totalDays;
     }
 
 
@@ -388,7 +492,7 @@ public class StatementBillManager {
                     tBillDAO.updateByOrgIdAndLteBillYearMonth(bill);
                 }
 
-                if(organizational.getParentOrgId() != -1){
+                if (organizational.getParentOrgId() != -1) {
                     List<TBill> descendantOrgBills = bills.stream().filter(p -> !Objects.equals(p.getOrgId(), organizational.getOrgId())).collect(Collectors.toList());
                     if (CollectionUtils.isNotEmpty(descendantOrgBills)) {
                         saveTStatement(statementMonth, organizational, descendantOrgBills, false);
@@ -399,12 +503,12 @@ public class StatementBillManager {
     }
 
     private TStatement saveTStatement(String statementMonth, TOrganizational organizational,
-                                      List<TBill> bills,Boolean payeeEqualPayer) {
+                                      List<TBill> bills, Boolean payeeEqualPayer) {
         TStatement statement = new TStatement();
         statement.setParentStatementId(-1);
         //收款组织ID
         statement.setPayeeOrgId(organizational.getParentOrgId());
-        if(payeeEqualPayer){
+        if (payeeEqualPayer) {
             statement.setPayeeOrgId(organizational.getOrgId());
         }
         //付款方组织ID
@@ -482,7 +586,7 @@ public class StatementBillManager {
      * 得到公司账单列表
      *
      * @param pageParam 分页参数
-     * @return  PageInfo<CompanyStatementBillResp>
+     * @return PageInfo<CompanyStatementBillResp>
      */
     public PageInfo<CompanyStatementBillResp> selectCompanyBillList(PageParam<CompanyBillQueryParam> pageParam) {
         String orderBy;
@@ -594,7 +698,7 @@ public class StatementBillManager {
         });
         if (statementMonth != null) {
             String[] arr = statementMonth.split("-");
-            if(arr.length >1){
+            if (arr.length > 1) {
                 statementMonth = arr[0] + arr[1];
             }
         }
@@ -654,15 +758,15 @@ public class StatementBillManager {
      * @param pageParam
      * @return CustomerStatementBillOverviewResp
      */
-    public CustomerStatementBillOverviewResp  selectCustomerStatementBill(
+    public CustomerStatementBillOverviewResp selectCustomerStatementBill(
             UserInfoVO userInfoVO,
             PageParam<CustomerStatementBillQuery> pageParam) {
 
-        String hashKey =String.format("",
+        String hashKey = String.format("",
                 userInfoVO.getOrgId(),
                 userInfoVO.getUserId());
-        redisTemplate.opsForHash().put(hashKey,pageParam.getSearchParam().getPayeeOrgId().toString(),pageParam.getSearchParam());
-        redisTemplate.expire(hashKey,2, TimeUnit.HOURS);
+        redisTemplate.opsForHash().put(hashKey, pageParam.getSearchParam().getPayeeOrgId().toString(), pageParam.getSearchParam());
+        redisTemplate.expire(hashKey, 2, TimeUnit.HOURS);
 
         CustomerStatementBillOverviewResp resp = new CustomerStatementBillOverviewResp();
         resp.setStatementMonth(pageParam.getSearchParam().getStatementMonth());
@@ -697,7 +801,7 @@ public class StatementBillManager {
                         organizationalResp.setOrgId(p.getOrgId());
                         organizationalResp.setCompanyName(p.getCompanyName());
                         organizationalResp.setOrgType(p.getOrgType());
-                        CustomerStatementBillQuery query = (CustomerStatementBillQuery) redisTemplate.opsForHash().get(hashKey,p.getOrgId().toString());
+                        CustomerStatementBillQuery query = (CustomerStatementBillQuery) redisTemplate.opsForHash().get(hashKey, p.getOrgId().toString());
                         organizationalResp.setQuery(query);
                         resp.getOrgLinked().add(organizationalResp);
                     });
@@ -780,7 +884,7 @@ public class StatementBillManager {
                 userInfoVO.getOrgId(),
                 userInfoVO.getOrgTypeName());
         TStatement oldInfo = tStatementDAO.selectByPrimaryKey(statementId);
-        if (oldInfo != null ) {
+        if (oldInfo != null) {
             log.info("[ResetStatementPaymentInfo],TStatement:{}", JSONObject.toJSONString(oldInfo));
         }
         return tStatementDAO.ResetStatementPaymentInfo(statementId);
@@ -793,7 +897,7 @@ public class StatementBillManager {
      * @param statementId
      * @return
      */
-    public AgentMonthlyBillDetailPageResp selectAgentMonthlyBill(UserInfoVO userInfoVO,Integer statementId) {
+    public AgentMonthlyBillDetailPageResp selectAgentMonthlyBill(UserInfoVO userInfoVO, Integer statementId) {
         AgentMonthlyBillDetailPageResp resp = new AgentMonthlyBillDetailPageResp();
         resp.setOrgLinked(Lists.newLinkedList());
         TStatement tStatement = tStatementDAO.selectByPrimaryKey(statementId);

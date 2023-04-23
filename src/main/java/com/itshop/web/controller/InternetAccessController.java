@@ -14,7 +14,7 @@ import com.itshop.web.dto.response.*;
 import com.itshop.web.manager.InternetAccessApplicationGroupManager;
 import com.itshop.web.manager.InternetAccessOrderManager;
 import com.itshop.web.manager.InternetAccessExportConfigManager;
-import com.itshop.web.service.InternetAccessCustomOrderService;
+import com.itshop.web.service.InternetAccessOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ public class InternetAccessController extends BaseController {
     InternetAccessOrderManager internetAccessOrderManager;
 
     @Autowired
-    InternetAccessCustomOrderService internetAccessCustomOrderService;
+    InternetAccessOrderService internetAccessOrderService;
 
     @Autowired
     InternetAccessExportConfigManager internetAccessExportConfigManager;
@@ -111,7 +111,7 @@ public class InternetAccessController extends BaseController {
     @PostMapping("/custom/order/calcTotalPrice")
     @ApiOperation(value = "互联网接入订单-计算价格")
     public RetResult<InternetAccessOrderPriceResp> calcTotalPriceAndDiscount(@RequestBody InternetAccessOrderSaveParam productDOrderParam) {
-        InternetAccessOrderPriceResp result = internetAccessCustomOrderService.calcTotalPriceAndDiscount(productDOrderParam,getUserInfoVO(),true);
+        InternetAccessOrderPriceResp result = internetAccessOrderService.calcTotalPriceAndDiscount(productDOrderParam,getUserInfoVO(),true);
         return RetWrapper.success(result);
     }
 
@@ -128,7 +128,7 @@ public class InternetAccessController extends BaseController {
         if (productDOrderParam.getProductId() == null) {
             productDOrderParam.setProductId(5);
         }
-        int result = internetAccessCustomOrderService.save(productDOrderParam,getUserInfoVO());
+        int result = internetAccessOrderService.save(productDOrderParam,getUserInfoVO());
         return RetWrapper.success(result);
     }
 

@@ -3,6 +3,7 @@ package com.itshop.web.util;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
 
 public class DateUtil {
@@ -119,9 +120,33 @@ public class DateUtil {
         long result = 0;
         while (dateBeforeFirstDay.isBefore(dateAfterFirstDay)) {
             dateBeforeFirstDay = dateBeforeFirstDay.plusYears(1);
-            result ++;
+            result++;
         }
         return result;
+    }
+
+    /**
+     * dateBefore按照amountToAdd累加，判断跟dateAfter是否一致
+     *
+     *
+     * @param dateBefore
+     * @param dateAfter
+     * @param amountToAdd 添加到结果的单位的数量，可能是负数
+     * @param unit 要添加的数量的单位
+     * @return
+     */
+    public static boolean beforeAddAmountEqAfter(LocalDate dateBefore,LocalDate dateAfter,
+                                                 long amountToAdd, TemporalUnit unit) {
+        LocalDate temp = dateBefore;
+        while (true) {
+            if (temp.isEqual(dateAfter)) {
+                return true;
+            }
+            if (temp.isAfter(dateAfter)) {
+                return false;
+            }
+            temp = temp.plus(amountToAdd, unit);
+        }
     }
 
     /**
@@ -150,10 +175,39 @@ public class DateUtil {
     }
 
     public static void main(String[] args) {
-//        LocalDate dateBefore = LocalDate.of(2022, 1, 1);
-//        LocalDate dateAfter = LocalDate.of(2022, 1, 23);
-//        long quarters = durationMonths(dateBefore, dateAfter);
-//        System.out.println("quarters: "+quarters);
+
+//        Boolean result= beforeAddAmountEqAfter(
+//                LocalDate.of(2022, 8, 31),
+//                LocalDate.of(2022, 9, 30),
+//                1,ChronoUnit.MONTHS);
+//        System.out.println("result:"+result);
+//        result=beforeAddAmountEqAfter(
+//                LocalDate.of(2022, 8, 31),
+//                LocalDate.of(2023, 8, 31),
+//                1,ChronoUnit.YEARS);
+//        System.out.println("result:"+result);
+//        result= beforeAddAmountEqAfter(
+//                LocalDate.of(2022, 8, 31),
+//                LocalDate.of(2023, 2, 28),
+//                3,ChronoUnit.MONTHS);
+//        System.out.println("result:"+result);
+
+        LocalDate d1 =LocalDate.of(2022, 8, 2);
+        LocalDate d2 = LocalDate.of(2023, 9, 2);
+        long year0= durationYears(d1,d2);
+        long year1= ChronoUnit.YEARS.between(d1,d2);
+        System.out.println("year0: "+year0);
+        System.out.println("year1: "+year1);
+
+        LocalDate dateBefore = LocalDate.of(2022, 1, 1);
+        LocalDate dateAfter = LocalDate.of(2022, 2, 28);
+        //month0 跟 month1 不相等
+        long month0 = durationMonths(dateBefore, dateAfter);
+        long month1=  ChronoUnit.MONTHS.between(dateBefore, dateAfter);
+        System.out.println("month0: "+month0);
+        System.out.println("month1: "+month1);
+
+
 
         LocalDate[][] aa = new LocalDate[5][2];
         aa[0][0] = LocalDate.of(2022, 12, 19);

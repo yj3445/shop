@@ -11,6 +11,7 @@ import com.itshop.web.dto.request.UserLoginParam;
 import com.itshop.web.enums.OrgTypeEnum;
 import com.itshop.web.enums.RetCode;
 import com.itshop.web.manager.MenuManager;
+import com.itshop.web.util.ConvertUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -61,9 +63,9 @@ public class LoginController {
             return RetWrapper.userNameOrPassWordError();
         } else if (Result.OK.equalsIgnoreCase(authResult.getCode())) {
             if (authResult.getSobj() != null) {
-                request.getSession().setAttribute(SessionConstants.USER_LOGIN_FLAG_SESSION, true);
+                request.getSession().setAttribute(SessionConstants.USER_ID_SESSION, loginParam.getUserId());
                 request.getSession().setAttribute(SessionConstants.USER_MENU_SESSION, menuManager.getLoginUserMenuList(authResult.getSobj().getUserVO()));
-                request.getSession().setAttribute(SessionConstants.USER_INFO_SESSION, convert2UserInfoVO(authResult.getSobj()));
+                request.getSession().setAttribute(SessionConstants.USER_INFO_SESSION, ConvertUtils.convert2UserInfoVO(authResult.getSobj()));
             }
             return RetWrapper.success();
         } else {
@@ -71,80 +73,6 @@ public class LoginController {
         }
     }
 
-    private UserInfoVO convert2UserInfoVO(LoginUserAuthVO loginUserAuthVO) {
-        UserInfoVO userInfoVO = new UserInfoVO();
-        BeanUtils.copyProperties(loginUserAuthVO.getAppUserVO(), userInfoVO);
-        BeanUtils.copyProperties(loginUserAuthVO.getOrganizationalVO(), userInfoVO);
-        if (loginUserAuthVO.getUserVO() != null) {
-            if (CollectionUtils.isNotEmpty(loginUserAuthVO.getUserVO().getUserGroups())) {
-                userInfoVO.setUserGroups(loginUserAuthVO.getUserVO().getUserGroups().stream().map(UserGroupVO::getName).collect(Collectors.toList()));
-            }
-            if (CollectionUtils.isNotEmpty(loginUserAuthVO.getUserVO().getRoles())) {
-                userInfoVO.setRoles(loginUserAuthVO.getUserVO().getRoles().stream().map(RoleVO::getName).collect(Collectors.toList()));
-            }
-            if (CollectionUtils.isNotEmpty(loginUserAuthVO.getUserVO().getPermissionTargets())) {
-                userInfoVO.setUrls(loginUserAuthVO.getUserVO().getPermissionTargets().stream()
-                        .filter(p -> MenuManager.isDelete.equals(p.getIsDelete()) && MenuManager.showConfig == p.getInAppUi())
-                        .filter(p -> StringUtils.isNotBlank(p.getUrl()))
-                        .map(PermissionTargetVO::getUrl).collect(Collectors.toList()));
-            }
-        }
-        //
-        userInfoVO.setOrgTier(new Integer[]{});
-        if (StringUtils.isNotEmpty(userInfoVO.getOrgFullPath())) {
-            String[] arr = StringUtils.split(userInfoVO.getOrgFullPath(), '/');
-            if (ArrayUtils.isNotEmpty(arr)) {
-                Integer[] arr1 = new Integer[arr.length];
-                for (int i = 0; i < arr.length; i++) {
-                    arr1[i] = Integer.parseInt(arr[i]);
-                }
-                userInfoVO.setOrgTier(arr1);
-            }
-        }
-        userInfoVO.setCanCreateAgentPrice(false);
-        userInfoVO.setServiceProviderOrgId(-1);
-        userInfoVO.setAgentLevel1OrgId(-1);
-        userInfoVO.setAgentLevel2OrgId(-1);
-        userInfoVO.setAgentLevel3OrgId(-1);
-        userInfoVO.setCustomerCompanyOrgId(-1);
-        Integer[] orgTier = userInfoVO.getOrgTier();
-        if (ArrayUtils.isNotEmpty(orgTier) && orgTier.length > 0) {
-            userInfoVO.setServiceProviderOrgId(orgTier[0]);
-        }
-        if (Objects.equals(OrgTypeEnum.SERVICE_PROVIDER.getCode(), userInfoVO.getOrgType())) {
-            userInfoVO.setCanCreateAgentPrice(true);
-        }
-        if (Objects.equals(OrgTypeEnum.CUSTOMER_COMPANY.getCode(), userInfoVO.getOrgType())) {
-            userInfoVO.setCustomerCompanyOrgId(userInfoVO.getOrgId());
-            if (ArrayUtils.isNotEmpty(orgTier)) {
-                if (orgTier.length > 2) { //服务提供商/1级代理/客户公司
-                    userInfoVO.setAgentLevel1OrgId(orgTier[1]);
-                }
-                if (orgTier.length > 3) {//服务提供商/1级代理/2级代理/客户公司
-                    userInfoVO.setAgentLevel2OrgId(orgTier[2]);
-                }
-                if (orgTier.length > 4) {//服务提供商/1级代理/2级代理/三级代理/客户公司
-                    userInfoVO.setAgentLevel3OrgId(orgTier[3]);
-                }
-            }
-        }
-        if (Objects.equals(OrgTypeEnum.AGENT_COMPANY.getCode(), userInfoVO.getOrgType())) {
-            if (ArrayUtils.isNotEmpty(orgTier)) {
-                if (orgTier.length > 1) {//服务提供商/1级代理
-                    userInfoVO.setAgentLevel1OrgId(orgTier[1]);
-                    userInfoVO.setCanCreateAgentPrice(true);
-                }
-                if (orgTier.length > 2) {//服务提供商/1级代理/2级代理
-                    userInfoVO.setAgentLevel2OrgId(orgTier[2]);
-                    userInfoVO.setCanCreateAgentPrice(true);
-                }
-                if (orgTier.length > 3) {//服务提供商/1级代理/2级代理/三级代理
-                    userInfoVO.setAgentLevel3OrgId(orgTier[3]);
-                }
-            }
-        }
-        return userInfoVO;
-    }
 
     /**
      * 退出接口
@@ -153,12 +81,27 @@ public class LoginController {
      */
     @GetMapping("/out")
     @ApiOperation(value = "退出接口")
-    public RetResult<String> out(HttpServletRequest request) {
-        request.getSession().removeAttribute(SessionConstants.USER_LOGIN_FLAG_SESSION);
+    public RetResult<String> out(HttpServletRequest request,HttpServletResponse response) {
+        request.getSession().removeAttribute(SessionConstants.USER_ID_SESSION);
         request.getSession().removeAttribute(SessionConstants.USER_MENU_SESSION);
         request.getSession().removeAttribute(SessionConstants.USER_INFO_SESSION);
         request.getSession().invalidate();
-        return RetWrapper.unauthorized();
+
+        Cookie cookie = new Cookie("SESSION", null);
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+
+//        cookie = new Cookie("authelia_session", null);
+//        cookie.setMaxAge(0);
+//        cookie.setDomain(".cbdtelecom.cn");
+//        cookie.setHttpOnly(true);
+//        cookie.setSecure(true);
+//        cookie.setPath("/");
+//        response.addCookie(cookie);
+
+        return RetWrapper.success();
     }
 
     @GetMapping("/debug")

@@ -20,6 +20,7 @@ import com.itshop.web.enums.DeviceControlTransStatus;
 import com.itshop.web.exception.BusinessException;
 import com.itshop.web.manager.ApplicationSpeedUpOrderManager;
 import com.itshop.web.manager.DeviceControlManager;
+import com.itshop.web.service.devicecontrol.ApplicationSpeedUpDeviceControlService;
 import com.itshop.web.support.ApplicationContextProvider;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,22 +33,19 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.Objects;
 
-@Service("applicationSpeedUpOrderService")
+@Service
 public class ApplicationSpeedUpOrderService {
     @Autowired
     ApplicationSpeedUpOrderManager applicationSpeedUpOrderManager;
-
-    @Autowired
-    DeviceControlManager deviceControlManager;
-
-    @Autowired
-    TDeviceControlTransDAO deviceControlTransDAO;
 
     @Autowired
     ApplicationSpeedUpProductPriceRepository applicationSpeedUpProductPriceRepository;
 
     @Autowired
     TUrlSpeedUpConfigDAO tUrlSpeedUpConfigDAO;
+
+    @Autowired
+    ApplicationSpeedUpDeviceControlService applicationSpeedUpDeviceControlService;
 
     /**
      * 计算总价和折扣金额
@@ -128,64 +126,9 @@ public class ApplicationSpeedUpOrderService {
         ApplicationSpeedUpOrderPriceResp orderPriceResp = calcTotalPriceAndDiscount(speedUpOrderSaveParam);
         ApplicationSpeedUpOrderSaveResult saveResult = applicationSpeedUpOrderManager.save(speedUpOrderSaveParam,orderPriceResp);
         if (saveResult.getTransId() != 0) {
-            ApplicationSpeedUpOrderService innerService = (ApplicationSpeedUpOrderService) ApplicationContextProvider.getBean("applicationSpeedUpOrderService");
-            innerService.callDeviceControl(saveResult, speedUpOrderSaveParam.getCreaterBy());
+            applicationSpeedUpDeviceControlService.callDeviceControl(saveResult, speedUpOrderSaveParam.getCreaterBy());
         }
         return saveResult.getOrderId();
     }
 
-    @Async
-    public void callDeviceControl(ApplicationSpeedUpOrderSaveResult saveResult, Integer currentUserId) {
-        LinkedList<Integer> afterStatusList = saveResult.getAfterStatusList(saveResult.getTransCurrent());
-        for (int i = 0; i < afterStatusList.size(); i++) {
-            Integer currentStatus = afterStatusList.get(i);
-            int nextStatus = saveResult.getTransEnd();
-            if (i < afterStatusList.size() - 1) {
-                nextStatus = afterStatusList.get(i + 1);
-            }
-            if (Objects.equals(DeviceControlTransCode.URL_SPEED_UP_ADD.getCode(), currentStatus)) {
-                urlSpeedUpAdd(saveResult, currentUserId,currentStatus, nextStatus);
-            }
-            if (Objects.equals(DeviceControlTransCode.URL_SPEED_UP_REMOVE.getCode(), currentStatus)) {
-                urlSpeedUpRemove(saveResult, currentUserId,currentStatus, nextStatus);
-            }
-        }
-    }
-
-    void urlSpeedUpAdd(ApplicationSpeedUpOrderSaveResult saveResult, Integer currentUserId,
-            Integer currentStatus, Integer nextStatus) {
-        UrlSpeedUpAddRequest request = new UrlSpeedUpAddRequest();
-        request.setBusiness_id(saveResult.getBusiness_id());
-        request.setTotal(saveResult.getNewUrls().size());
-        request.setUrllist(saveResult.getNewUrls());
-        DeviceControlParam<UrlSpeedUpAddRequest> param = new DeviceControlParam<>();
-        param.setRequest(request);
-        param.setCurrentUserId(currentUserId);
-        DeviceControlResponseResult<UrlSpeedUpQueryResponse> responseResult = deviceControlManager.urlSpeedUpAdd(param);
-        updateTrans(saveResult, currentUserId, currentStatus, nextStatus,responseResult);
-    }
-
-    void urlSpeedUpRemove(ApplicationSpeedUpOrderSaveResult saveResult, Integer currentUserId,
-            Integer currentStatus, Integer nextStatus) {
-        DeviceControlResponseResult responseResult = new DeviceControlResponseResult<>();
-        responseResult.setCode(DeviceControlResponseResult.SUCCEED);
-        updateTrans(saveResult, currentUserId, currentStatus, nextStatus, responseResult);
-    }
-
-    private void updateTrans(ApplicationSpeedUpOrderSaveResult saveResult, Integer currentUserId,
-                             Integer currentStatus, Integer nextStatus,
-                             DeviceControlResponseResult responseResult) {
-        TDeviceControlTrans tDeviceControlTrans = new TDeviceControlTrans();
-        tDeviceControlTrans.setTransId(saveResult.getTransId());
-        tDeviceControlTrans.setModifiedBy(currentUserId);
-        tDeviceControlTrans.setModifiedTime(new Date());
-        if (DeviceControlResponseResult.SUCCEED.equalsIgnoreCase(responseResult.getCode())) {
-            tDeviceControlTrans.setProcess(currentStatus);
-            if (Objects.equals(nextStatus, saveResult.getTransEnd())) {
-                tDeviceControlTrans.setProcess(nextStatus);
-                tDeviceControlTrans.setStatus(DeviceControlTransStatus.SUCCEED.getCode());
-            }
-        }
-        deviceControlTransDAO.updateByPrimaryKeySelective(tDeviceControlTrans);
-    }
 }

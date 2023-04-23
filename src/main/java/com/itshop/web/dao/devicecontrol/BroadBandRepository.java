@@ -1,4 +1,4 @@
-package com.itshop.web.dao.deviceControl;
+package com.itshop.web.dao.devicecontrol;
 
 import com.alibaba.fastjson.JSONObject;
 import com.itshop.web.dto.deviceControl.*;

@@ -28,7 +28,7 @@ import com.itshop.web.enums.OrgTypeEnum;
 import com.itshop.web.enums.RetCode;
 import com.itshop.web.manager.InternetAccessOrderManager;
 import com.itshop.web.manager.UserConsoleManager;
-import com.itshop.web.service.InternetAccessCustomOrderService;
+import com.itshop.web.service.InternetAccessOrderService;
 import com.itshop.web.util.CompareObjectPropertyUtil;
 import com.itshop.web.util.ModifiedPropertyInfo;
 import com.itshop.web.util.OrderTypeUtil;
@@ -66,7 +66,7 @@ public class UserConsoleController extends BaseController {
     InternetAccessOrderManager internetAccessOrderManager;
 
     @Autowired
-    InternetAccessCustomOrderService internetAccessCustomOrderService;
+    InternetAccessOrderService internetAccessOrderService;
 
 
     /**
@@ -221,7 +221,7 @@ public class UserConsoleController extends BaseController {
             return RetWrapper.failure("参数错误(orderId或productId为空)!");
         }
         if (OrderTypeUtil.isInternetAccessOrder(orderAuditParam.getProductId())) {
-            return RetWrapper.success(internetAccessCustomOrderService.orderAudit(orderAuditParam, getUserInfoVO()));
+            return RetWrapper.success(internetAccessOrderService.orderAudit(orderAuditParam, getUserInfoVO()));
         }
         return RetWrapper.success();
     }
