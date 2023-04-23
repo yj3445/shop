@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TUrlSpeedUpConfigDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TUrlSpeedUpConfig">
+    <id column="url_speed_up_id" jdbcType="INTEGER" property="urlSpeedUpId" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="reference_ping" jdbcType="INTEGER" property="referencePing" />
+    <result column="reference_lost" jdbcType="INTEGER" property="referenceLost" />
+    <result column="reference_trace" jdbcType="INTEGER" property="referenceTrace" />
+    <result column="speed_unit" jdbcType="VARCHAR" property="speedUnit" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="price_unit" jdbcType="VARCHAR" property="priceUnit" />
+    <result column="url_cn_name" jdbcType="VARCHAR" property="urlCnName" />
+    <result column="url_en_name" jdbcType="VARCHAR" property="urlEnName" />
+    <result column="url_group" jdbcType="VARCHAR" property="urlGroup" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    url_speed_up_id, url, reference_ping, reference_lost, reference_trace, speed_unit, 
+    price, order_num, creater_by, create_time, modified_by, modified_time, is_deleted,price_unit,
+    url_cn_name,url_en_name,url_group,product_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_url_speed_up_config
+    where url_speed_up_id = #{urlSpeedUpId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_url_speed_up_config
+    where url_speed_up_id = #{urlSpeedUpId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.itshop.web.dao.po.TUrlSpeedUpConfig">
+    insert into t_url_speed_up_config (url_speed_up_id, url, reference_ping, 
+      reference_lost, reference_trace, speed_unit, 
+      price, order_num, creater_by, 
+      create_time, modified_by, modified_time, 
+      is_deleted,price_unit,
+      url_cn_name,url_en_name,url_group,
+      product_id
+     )
+    values (#{urlSpeedUpId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{referencePing,jdbcType=INTEGER}, 
+      #{referenceLost,jdbcType=INTEGER}, #{referenceTrace,jdbcType=INTEGER}, #{speedUnit,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{orderNum,jdbcType=INTEGER}, #{createrBy,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=INTEGER}, #{modifiedTime,jdbcType=TIMESTAMP}, 
+      #{isDeleted,jdbcType=BIT},#{priceUnit,jdbcType=VARCHAR},
+      #{urlCnName,jdbcType=VARCHAR},#{urlEnName,jdbcType=VARCHAR},#{urlGroup,jdbcType=VARCHAR}
+      #{productId,jdbcType=INTEGER}     )
+  </insert>
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TUrlSpeedUpConfig">
+    insert into t_url_speed_up_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="urlSpeedUpId != null">
+        url_speed_up_id,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="referencePing != null">
+        reference_ping,
+      </if>
+      <if test="referenceLost != null">
+        reference_lost,
+      </if>
+      <if test="referenceTrace != null">
+        reference_trace,
+      </if>
+      <if test="speedUnit != null">
+        speed_unit,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="priceUnit !=null">
+        price_unit,
+      </if>
+      <if test="urlCnName !=null">
+        url_cn_name,
+      </if>
+      <if test="urlEnName !=null">
+        url_en_name,
+      </if>
+      <if test="urlGroup !=null">
+        url_group,
+      </if>
+      <if test="productId !=null">
+        product_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="urlSpeedUpId != null">
+        #{urlSpeedUpId,jdbcType=INTEGER},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="referencePing != null">
+        #{referencePing,jdbcType=INTEGER},
+      </if>
+      <if test="referenceLost != null">
+        #{referenceLost,jdbcType=INTEGER},
+      </if>
+      <if test="referenceTrace != null">
+        #{referenceTrace,jdbcType=INTEGER},
+      </if>
+      <if test="speedUnit != null">
+        #{speedUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="priceUnit !=null">
+        #{priceUnit,jdbcType=VARCHAR}
+      </if>
+      <if test="urlCnName !=null">
+        #{urlCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="urlEnName !=null">
+        #{urlEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="urlGroup !=null">
+        #{urlGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="productId !=null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TUrlSpeedUpConfig">
+    update t_url_speed_up_config
+    <set>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="referencePing != null">
+        reference_ping = #{referencePing,jdbcType=INTEGER},
+      </if>
+      <if test="referenceLost != null">
+        reference_lost = #{referenceLost,jdbcType=INTEGER},
+      </if>
+      <if test="referenceTrace != null">
+        reference_trace = #{referenceTrace,jdbcType=INTEGER},
+      </if>
+      <if test="speedUnit != null">
+        speed_unit = #{speedUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="priceUnit !=null">
+        price_unit = #{priceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="urlCnName !=null">
+        url_cn_name=#{urlCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="urlEnName !=null">
+        url_en_name=#{urlEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="urlGroup !=null">
+        url_group=#{urlGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="productId !=null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where url_speed_up_id = #{urlSpeedUpId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TUrlSpeedUpConfig">
+    update t_url_speed_up_config
+    set url = #{url,jdbcType=VARCHAR},
+      reference_ping = #{referencePing,jdbcType=INTEGER},
+      reference_lost = #{referenceLost,jdbcType=INTEGER},
+      reference_trace = #{referenceTrace,jdbcType=INTEGER},
+      speed_unit = #{speedUnit,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      creater_by = #{createrBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT},
+      price_unit = #{priceUnit,jdbcType=VARCHAR},
+      url_cn_name=#{urlCnName,jdbcType=VARCHAR},
+      url_en_name=#{urlEnName,jdbcType=VARCHAR},
+      url_group=#{urlGroup,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=INTEGER}
+    where url_speed_up_id = #{urlSpeedUpId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByQueryParam" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_url_speed_up_config
+    where is_deleted =0
+    <if test="url !=null">
+      and  url like CONCAT('%',#{url,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="productId != null">
+      and product_id = #{productId,jdbcType=INTEGER}
+    </if>
+  </select>
+</mapper>

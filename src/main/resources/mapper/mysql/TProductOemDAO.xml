@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TProductOemDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TProductOem">
+    <id column="product_oem_id" jdbcType="INTEGER" property="productOemId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="product_oem_name" jdbcType="VARCHAR" property="productOemName" />
+    <result column="product_oem_larger_image" jdbcType="VARCHAR" property="productOemLargerImage" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+
+    <result column="product_oem_summary" jdbcType="VARCHAR" property="productOemSummary" />
+    <result column="product_oem_applicable_company" jdbcType="VARCHAR" property="productOemApplicableCompany" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.itshop.web.dao.po.TProductOem">
+    <result column="product_oem_describe" jdbcType="LONGVARCHAR" property="productOemDescribe" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    product_oem_id, product_id, org_id, product_oem_name, product_oem_larger_image, creater_by, 
+    create_time, modified_by, modified_time, is_deleted,product_oem_summary,product_oem_applicable_company
+  </sql>
+  <sql id="Blob_Column_List">
+    product_oem_describe
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_product_oem
+    where product_oem_id = #{productOemId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_product_oem
+    where product_oem_id = #{productOemId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="productOemId"
+          parameterType="com.itshop.web.dao.po.TProductOem">
+    insert into t_product_oem
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productOemId != null">
+        product_oem_id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="productOemName != null">
+        product_oem_name,
+      </if>
+      <if test="productOemLargerImage != null">
+        product_oem_larger_image,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="productOemDescribe != null">
+        product_oem_describe,
+      </if>
+      <if test="productOemSummary != null">
+        product_oem_summary,
+      </if>
+      <if test="productOemApplicableCompany != null">
+        product_oem_applicable_company,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productOemId != null">
+        #{productOemId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="productOemName != null">
+        #{productOemName,jdbcType=VARCHAR},
+      </if>
+      <if test="productOemLargerImage != null">
+        #{productOemLargerImage,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="productOemDescribe != null">
+        #{productOemDescribe,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="productOemSummary != null">
+        #{productOemSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="productOemApplicableCompany != null">
+        #{productOemApplicableCompany,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TProductOem">
+    update t_product_oem
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="productOemName != null">
+        product_oem_name = #{productOemName,jdbcType=VARCHAR},
+      </if>
+      <if test="productOemLargerImage != null">
+        product_oem_larger_image = #{productOemLargerImage,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="productOemDescribe != null">
+        product_oem_describe = #{productOemDescribe,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="productOemSummary != null">
+        product_oem_summary=#{productOemSummary,jdbcType=VARCHAR},
+      </if>
+      <if test="productOemApplicableCompany != null">
+        product_oem_applicable_company=#{productOemApplicableCompany,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where product_oem_id = #{productOemId,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectByProductAndOrgId" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_product_oem
+    where is_deleted =0
+    <if test="productId !=null">
+        and product_id = #{productId,jdbcType=INTEGER}
+    </if>
+    <if test="orgId !=null ">
+        and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    limit 1
+  </select>
+
+  <select id="selectByProductAndOrgIds" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_product_oem
+    where is_deleted =0
+    <if test="list !=null and list.size() > 0 ">
+      and product_id in
+      <foreach collection="list" item="name" index="index" open="(" close=")" separator=",">
+        #{name}
+      </foreach>
+    </if>
+    <if test="orgId !=null ">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+  </select>
+
+  <select id="selectCategoryProductOEM" resultType="com.itshop.web.dao.po.TCategoryProductOEM" >
+    select
+    a.category_id as categoryId,
+    a.category_code as categoryCode,
+    a.category_name as categoryName,
+    a.category_level as categoryLevel,
+    a.order_num as categoryOrderNum,
+    a.enable as categoryEnable,
+    a.path as categoryPath,
+    a.parent_category_id as parentCategoryId,
+    b.product_id as productId,
+    b.product_code as productCode,
+    b.product_name as productName,
+    b.order_num as productOrderNum,
+    b.enable as productEnable,
+    b.path as productPath,
+    b.product_agent_relation_id as productAgentRelationId,
+    b.is_agent as productIsAgent,
+    b.product_oem_id as productOemId,
+    b.product_oem_name as productOemName,
+    b.product_oem_larger_image as productOemLargerImage,
+    b.product_oem_describe as productOemDescribe,
+    b.product_oem_summary as productOemSummary,
+    b.product_oem_applicable_company as productOemApplicableCompany
+    from (
+    select * from t_category
+    where 1=1
+    and is_deleted =0
+    and enable =1
+    ) a
+    left join (
+    select
+    r.product_agent_relation_id,
+    r.org_id,
+    r.is_agent,
+    p.product_id,
+    p.category_id,
+    p.product_code,
+    p.product_name,
+    p.order_num,
+    p.enable,
+    p.path,
+    o.product_oem_id,
+    ifnull(o.product_oem_name,p.product_name) as product_oem_name,
+    ifnull(o.product_oem_larger_image,p.product_larger_image) as product_oem_larger_image,
+    ifnull(o.product_oem_describe,p.product_describe) as product_oem_describe,
+    ifnull(o.product_oem_summary,p.product_summary) as product_oem_summary,
+    ifnull(o.product_oem_applicable_company,p.product_applicable_company) as product_oem_applicable_company
+    from
+    <!-- 代理商代理产品,前台才能显示-->
+    (
+    select * from t_product_agent_relation
+    where is_deleted =0
+    and is_agent =1
+    <if test="orgId != null">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    ) r
+    left join
+    (
+    select * from  t_product
+    where is_deleted =0
+    and enable =1
+    ) p
+    on r.product_id = p.product_id
+    left join
+    (
+    select * from t_product_oem
+    where is_deleted =0
+    <if test="orgId != null">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    ) o
+    on r.product_id = o.product_id and r.org_id= o.org_id
+
+    ) b
+    on a.category_id = b.category_id
+  </select>
+</mapper>

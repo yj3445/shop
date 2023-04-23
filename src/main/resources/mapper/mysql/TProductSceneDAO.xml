@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TProductSceneDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TProductScene">
+    <id column="product_scene_id" jdbcType="INTEGER" property="productSceneId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="scene_name" jdbcType="VARCHAR" property="sceneName" />
+    <result column="scene_desc" jdbcType="VARCHAR" property="sceneDesc" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    product_scene_id, product_id, scene_name, scene_desc, pic_url, creater_by, create_time, 
+    modified_by, modified_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_scene
+    where product_scene_id = #{productSceneId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByProductId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product_scene
+    where is_deleted =0 and product_id = #{productId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update t_product_scene
+    set is_deleted =1,
+    modified_time =now(),
+    modified_by = #{modifiedBy,jdbcType=INTEGER}
+    where product_scene_id = #{productSceneId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByProductId" parameterType="java.lang.Integer">
+    update t_product_scene
+    set is_deleted =1,
+    modified_time =now(),
+    modified_by = #{modifiedBy,jdbcType=INTEGER}
+    where product_id = #{productId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertBatch" useGeneratedKeys="true" keyProperty="productSceneId"
+          parameterType="java.util.List" >
+    insert into t_product_scene (product_scene_id, product_id, scene_name,
+    scene_desc, pic_url, creater_by,
+    create_time, modified_by, modified_time,
+    is_deleted)
+    values
+    <foreach collection ="list" item="data" index= "index" separator =",">
+      (#{data.productSceneId,jdbcType=INTEGER},
+      #{data.productId,jdbcType=INTEGER},
+      #{data.sceneName,jdbcType=VARCHAR},
+      #{data.sceneDesc,jdbcType=VARCHAR},
+      #{data.picUrl,jdbcType=VARCHAR},
+      #{data.createrBy,jdbcType=INTEGER},
+      #{data.createTime,jdbcType=TIMESTAMP},
+      #{data.modifiedBy,jdbcType=INTEGER},
+      #{data.modifiedTime,jdbcType=TIMESTAMP},
+      #{data.isDeleted,jdbcType=BIT})
+    </foreach >
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="productSceneId" parameterType="com.itshop.web.dao.po.TProductScene">
+    insert into t_product_scene
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productSceneId != null">
+        product_scene_id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="sceneName != null">
+        scene_name,
+      </if>
+      <if test="sceneDesc != null">
+        scene_desc,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productSceneId != null">
+        #{productSceneId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="sceneName != null">
+        #{sceneName,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneDesc != null">
+        #{sceneDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TProductScene">
+    update t_product_scene
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="sceneName != null">
+        scene_name = #{sceneName,jdbcType=VARCHAR},
+      </if>
+      <if test="sceneDesc != null">
+        scene_desc = #{sceneDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where product_scene_id = #{productSceneId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

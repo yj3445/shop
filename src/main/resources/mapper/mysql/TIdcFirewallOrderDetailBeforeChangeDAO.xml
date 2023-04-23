@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TIdcFirewallOrderDetailBeforeChangeDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TIdcFirewallOrderDetailBeforeChange">
+    <id column="change_detail_id" jdbcType="INTEGER" property="changeDetailId" />
+    <result column="change_id" jdbcType="INTEGER" property="changeId" />
+    <result column="order_detail_id" jdbcType="INTEGER" property="orderDetailId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="port" jdbcType="INTEGER" property="port" />
+    <result column="in_or_out" jdbcType="INTEGER" property="inOrOut" />
+    <result column="protocol" jdbcType="VARCHAR" property="protocol" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    change_detail_id, change_id, order_detail_id, order_id, port,in_or_out,protocol
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_idc_firewall_order_detail_before_change
+    where change_detail_id = #{changeDetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_idc_firewall_order_detail_before_change
+    where change_detail_id = #{changeDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="changeDetailId"
+          parameterType="com.itshop.web.dao.po.TIdcFirewallOrderDetailBeforeChange">
+    insert into t_idc_firewall_order_detail_before_change (change_detail_id, change_id, order_detail_id, 
+      order_id, port,in_or_out,protocol)
+    values (#{changeDetailId,jdbcType=INTEGER}, #{changeId,jdbcType=INTEGER}, #{orderDetailId,jdbcType=INTEGER}, 
+      #{orderId,jdbcType=INTEGER}, #{port,jdbcType=INTEGER},#{inOrOut,jdbcType=INTEGER},#{protocol,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="changeDetailId"
+          parameterType="com.itshop.web.dao.po.TIdcFirewallOrderDetailBeforeChange">
+    insert into t_idc_firewall_order_detail_before_change
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="changeDetailId != null">
+        change_detail_id,
+      </if>
+      <if test="changeId != null">
+        change_id,
+      </if>
+      <if test="orderDetailId != null">
+        order_detail_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="port != null">
+        port,
+      </if>
+      <if test="inOrOut != null">
+        in_or_out,
+      </if>
+      <if test="protocol != null">
+        protocol,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="changeDetailId != null">
+        #{changeDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="changeId != null">
+        #{changeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDetailId != null">
+        #{orderDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="port != null">
+        #{port,jdbcType=INTEGER},
+      </if>
+      <if test="inOrOut != null">
+        #{inOrOut,jdbcType=INTEGER},
+      </if>
+      <if test="protocol != null">
+        #{protocol,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TIdcFirewallOrderDetailBeforeChange">
+    update t_idc_firewall_order_detail_before_change
+    <set>
+      <if test="changeId != null">
+        change_id = #{changeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDetailId != null">
+        order_detail_id = #{orderDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="port != null">
+        port = #{port,jdbcType=INTEGER},
+      </if>
+      <if test="inOrOut != null">
+        in_or_out = #{inOrOut,jdbcType=INTEGER},
+      </if>
+      <if test="protocol != null">
+        protocol = #{protocol,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where change_detail_id = #{changeDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TIdcFirewallOrderDetailBeforeChange">
+    update t_idc_firewall_order_detail_before_change
+    set change_id = #{changeId,jdbcType=INTEGER},
+      order_detail_id = #{orderDetailId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      port = #{port,jdbcType=INTEGER},
+        in_or_out = #{inOrOut,jdbcType=INTEGER},
+        protocol = #{protocol,jdbcType=VARCHAR}
+    where change_detail_id = #{changeDetailId,jdbcType=INTEGER}
+  </update>
+
+  <insert id="insertBatch" useGeneratedKeys="true" keyProperty="changeDetailId"
+          parameterType="java.util.List" >
+    insert into t_idc_firewall_order_detail_before_change (change_detail_id, change_id, order_detail_id,
+    order_id, port,in_or_out,protocol)
+    values
+    <foreach collection ="list" item="data" index= "index" separator =",">
+      (#{data.changeDetailId,jdbcType=INTEGER},
+      #{data.changeId,jdbcType=INTEGER},
+      #{data.orderDetailId,jdbcType=INTEGER},
+      #{data.orderId,jdbcType=INTEGER},
+      #{data.port,jdbcType=INTEGER},
+      #{data.inOrOut,jdbcType=INTEGER},
+      #{data.protocol,jdbcType=VARCHAR})
+    </foreach >
+  </insert>
+</mapper>

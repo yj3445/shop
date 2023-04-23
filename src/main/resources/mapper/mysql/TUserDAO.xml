@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TUserDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TUser">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="pass_word" jdbcType="VARCHAR" property="passWord" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="gender" jdbcType="BIT" property="gender" />
+    <result column="cell_phone_number" jdbcType="VARCHAR" property="cellPhoneNumber" />
+    <result column="tele_phone_number" jdbcType="VARCHAR" property="telePhoneNumber" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="enable" jdbcType="BIT" property="enable" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, user_name, pass_word, real_name, gender, cell_phone_number, tele_phone_number, 
+    email, org_id, `enable`, creater_by, create_time, modified_by, modified_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.itshop.web.dao.po.TUser">
+    insert into t_user (user_id, user_name, pass_word, 
+      real_name, gender, cell_phone_number, 
+      tele_phone_number, email, org_id, 
+      `enable`, creater_by, create_time, 
+      modified_by, modified_time, is_deleted
+      )
+    values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{passWord,jdbcType=VARCHAR}, 
+      #{realName,jdbcType=VARCHAR}, #{gender,jdbcType=BIT}, #{cellPhoneNumber,jdbcType=VARCHAR}, 
+      #{telePhoneNumber,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{orgId,jdbcType=INTEGER}, 
+      #{enable,jdbcType=BIT}, #{createrBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifiedBy,jdbcType=INTEGER}, #{modifiedTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TUser">
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="passWord != null">
+        pass_word,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="cellPhoneNumber != null">
+        cell_phone_number,
+      </if>
+      <if test="telePhoneNumber != null">
+        tele_phone_number,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="enable != null">
+        `enable`,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="passWord != null">
+        #{passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        #{gender,jdbcType=BIT},
+      </if>
+      <if test="cellPhoneNumber != null">
+        #{cellPhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="telePhoneNumber != null">
+        #{telePhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null">
+        #{enable,jdbcType=BIT},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TUser">
+    update t_user
+    <set>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="passWord != null">
+        pass_word = #{passWord,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="gender != null">
+        gender = #{gender,jdbcType=BIT},
+      </if>
+      <if test="cellPhoneNumber != null">
+        cell_phone_number = #{cellPhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="telePhoneNumber != null">
+        tele_phone_number = #{telePhoneNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="enable != null">
+        `enable` = #{enable,jdbcType=BIT},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TUser">
+    update t_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      pass_word = #{passWord,jdbcType=VARCHAR},
+      real_name = #{realName,jdbcType=VARCHAR},
+      gender = #{gender,jdbcType=BIT},
+      cell_phone_number = #{cellPhoneNumber,jdbcType=VARCHAR},
+      tele_phone_number = #{telePhoneNumber,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      org_id = #{orgId,jdbcType=INTEGER},
+      `enable` = #{enable,jdbcType=BIT},
+      creater_by = #{createrBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TInternetAccessUpdateServiceOrderDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TInternetAccessUpdateServiceOrder">
+    <id column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="internet_access_order_id" jdbcType="INTEGER" property="internetAccessOrderId" />
+    <result column="terminal_num" jdbcType="INTEGER" property="terminalNum" />
+    <result column="ip_num" jdbcType="INTEGER" property="ipNum" />
+    <result column="ip_backup" jdbcType="BIT" property="ipBackup" />
+    <result column="ip_export" jdbcType="INTEGER" property="ipExport" />
+    <result column="broad_band" jdbcType="INTEGER" property="broadBand" />
+    <result column="unit" jdbcType="INTEGER" property="unit" />
+    <result column="duration" jdbcType="INTEGER" property="duration" />
+    <result column="payment_cycle" jdbcType="INTEGER" property="paymentCycle" />
+    <result column="payment_method" jdbcType="INTEGER" property="paymentMethod" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <!--额外字段-->
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_id, order_no, product_id, internet_access_order_id, terminal_num, ip_num, ip_backup, 
+    ip_export, broad_band, unit, duration, payment_cycle, payment_method, start_time, 
+    end_time, total_price, creater_by, create_time, modified_by, modified_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_internet_access_update_service_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_internet_access_update_service_order
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="orderId"
+          parameterType="com.itshop.web.dao.po.TInternetAccessUpdateServiceOrder">
+    insert into t_internet_access_update_service_order (order_id, order_no, product_id, 
+      internet_access_order_id, terminal_num, ip_num, 
+      ip_backup, ip_export, broad_band, 
+      unit, duration, payment_cycle, 
+      payment_method, start_time, end_time, 
+      total_price, creater_by, create_time, 
+      modified_by, modified_time, is_deleted
+      )
+    values (#{orderId,jdbcType=INTEGER}, #{orderNo,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, 
+      #{internetAccessOrderId,jdbcType=INTEGER}, #{terminalNum,jdbcType=INTEGER}, #{ipNum,jdbcType=INTEGER}, 
+      #{ipBackup,jdbcType=BIT}, #{ipExport,jdbcType=INTEGER}, #{broadBand,jdbcType=INTEGER}, 
+      #{unit,jdbcType=INTEGER}, #{duration,jdbcType=INTEGER}, #{paymentCycle,jdbcType=INTEGER}, 
+      #{paymentMethod,jdbcType=INTEGER}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{totalPrice,jdbcType=DECIMAL}, #{createrBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifiedBy,jdbcType=INTEGER}, #{modifiedTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="orderId"
+          parameterType="com.itshop.web.dao.po.TInternetAccessUpdateServiceOrder">
+    insert into t_internet_access_update_service_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="internetAccessOrderId != null">
+        internet_access_order_id,
+      </if>
+      <if test="terminalNum != null">
+        terminal_num,
+      </if>
+      <if test="ipNum != null">
+        ip_num,
+      </if>
+      <if test="ipBackup != null">
+        ip_backup,
+      </if>
+      <if test="ipExport != null">
+        ip_export,
+      </if>
+      <if test="broadBand != null">
+        broad_band,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="duration != null">
+        duration,
+      </if>
+      <if test="paymentCycle != null">
+        payment_cycle,
+      </if>
+      <if test="paymentMethod != null">
+        payment_method,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="internetAccessOrderId != null">
+        #{internetAccessOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="terminalNum != null">
+        #{terminalNum,jdbcType=INTEGER},
+      </if>
+      <if test="ipNum != null">
+        #{ipNum,jdbcType=INTEGER},
+      </if>
+      <if test="ipBackup != null">
+        #{ipBackup,jdbcType=BIT},
+      </if>
+      <if test="ipExport != null">
+        #{ipExport,jdbcType=INTEGER},
+      </if>
+      <if test="broadBand != null">
+        #{broadBand,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=INTEGER},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="paymentCycle != null">
+        #{paymentCycle,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethod != null">
+        #{paymentMethod,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TInternetAccessUpdateServiceOrder">
+    update t_internet_access_update_service_order
+    <set>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="internetAccessOrderId != null">
+        internet_access_order_id = #{internetAccessOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="terminalNum != null">
+        terminal_num = #{terminalNum,jdbcType=INTEGER},
+      </if>
+      <if test="ipNum != null">
+        ip_num = #{ipNum,jdbcType=INTEGER},
+      </if>
+      <if test="ipBackup != null">
+        ip_backup = #{ipBackup,jdbcType=BIT},
+      </if>
+      <if test="ipExport != null">
+        ip_export = #{ipExport,jdbcType=INTEGER},
+      </if>
+      <if test="broadBand != null">
+        broad_band = #{broadBand,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=INTEGER},
+      </if>
+      <if test="duration != null">
+        duration = #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="paymentCycle != null">
+        payment_cycle = #{paymentCycle,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TInternetAccessUpdateServiceOrder">
+    update t_internet_access_update_service_order
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=INTEGER},
+      internet_access_order_id = #{internetAccessOrderId,jdbcType=INTEGER},
+      terminal_num = #{terminalNum,jdbcType=INTEGER},
+      ip_num = #{ipNum,jdbcType=INTEGER},
+      ip_backup = #{ipBackup,jdbcType=BIT},
+      ip_export = #{ipExport,jdbcType=INTEGER},
+      broad_band = #{broadBand,jdbcType=INTEGER},
+      unit = #{unit,jdbcType=INTEGER},
+      duration = #{duration,jdbcType=INTEGER},
+      payment_cycle = #{paymentCycle,jdbcType=INTEGER},
+      payment_method = #{paymentMethod,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      creater_by = #{createrBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where order_id = #{orderId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByQueryParam" parameterType="com.itshop.web.dto.request.InternetAccessUpdateServiceOrderQueryParam"
+          resultMap="BaseResultMap">
+    select * from
+    (
+    select a.*, c.product_code,c.product_name from
+    (
+    select
+    <include refid="Base_Column_List" />
+    from t_internet_access_update_service_order
+    where is_deleted =0
+    <if test="createrBy !=null">
+      and creater_by = #{createrBy,jdbcType=INTEGER}
+    </if>
+    ) a
+    left join t_product c
+    on a.product_id = c.product_id
+    ) tb0
+  </select>
+</mapper>

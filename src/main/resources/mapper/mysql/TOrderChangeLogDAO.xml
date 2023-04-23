@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TOrderChangeLogDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TOrderChangeLog">
+    <id column="change_log_id" jdbcType="INTEGER" property="changeLogId" />
+    <result column="chage_type" jdbcType="VARCHAR" property="chageType" />
+    <result column="version" jdbcType="INTEGER" property="version" />
+    <result column="order_table_name" jdbcType="VARCHAR" property="orderTableName" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="order_detail_table_name" jdbcType="VARCHAR" property="orderDetailTableName" />
+    <result column="order_detail_id" jdbcType="INTEGER" property="orderDetailId" />
+    <result column="order_sub_detail_table_name" jdbcType="VARCHAR" property="orderSubDetailTableName" />
+    <result column="order_sub_detail_id" jdbcType="INTEGER" property="orderSubDetailId" />
+    <result column="field_name" jdbcType="VARCHAR" property="fieldName" />
+    <result column="old_vlaue" jdbcType="VARCHAR" property="oldVlaue" />
+    <result column="new_vlaue" jdbcType="VARCHAR" property="newVlaue" />
+    <result column="value_is_dic" jdbcType="BIT" property="valueIsDic" />
+    <result column="dic_type_id" jdbcType="INTEGER" property="dicTypeId" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    change_log_id, chage_type, version, order_table_name, order_id, order_detail_table_name, 
+    order_detail_id, order_sub_detail_table_name, order_sub_detail_id, field_name, old_vlaue, 
+    new_vlaue, value_is_dic, dic_type_id, creater_by, create_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_change_log
+    where change_log_id = #{changeLogId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_order_change_log
+    where change_log_id = #{changeLogId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.itshop.web.dao.po.TOrderChangeLog">
+    insert into t_order_change_log (change_log_id, chage_type, version, 
+      order_table_name, order_id, order_detail_table_name, 
+      order_detail_id, order_sub_detail_table_name, 
+      order_sub_detail_id, field_name, old_vlaue, 
+      new_vlaue, value_is_dic, dic_type_id, 
+      creater_by, create_time, is_deleted
+      )
+    values (#{changeLogId,jdbcType=INTEGER}, #{chageType,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, 
+      #{orderTableName,jdbcType=VARCHAR}, #{orderId,jdbcType=INTEGER}, #{orderDetailTableName,jdbcType=VARCHAR}, 
+      #{orderDetailId,jdbcType=INTEGER}, #{orderSubDetailTableName,jdbcType=VARCHAR}, 
+      #{orderSubDetailId,jdbcType=INTEGER}, #{fieldName,jdbcType=VARCHAR}, #{oldVlaue,jdbcType=VARCHAR}, 
+      #{newVlaue,jdbcType=VARCHAR}, #{valueIsDic,jdbcType=BIT}, #{dicTypeId,jdbcType=INTEGER}, 
+      #{createrBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TOrderChangeLog">
+    insert into t_order_change_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="changeLogId != null">
+        change_log_id,
+      </if>
+      <if test="chageType != null">
+        chage_type,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="orderTableName != null">
+        order_table_name,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderDetailTableName != null">
+        order_detail_table_name,
+      </if>
+      <if test="orderDetailId != null">
+        order_detail_id,
+      </if>
+      <if test="orderSubDetailTableName != null">
+        order_sub_detail_table_name,
+      </if>
+      <if test="orderSubDetailId != null">
+        order_sub_detail_id,
+      </if>
+      <if test="fieldName != null">
+        field_name,
+      </if>
+      <if test="oldVlaue != null">
+        old_vlaue,
+      </if>
+      <if test="newVlaue != null">
+        new_vlaue,
+      </if>
+      <if test="valueIsDic != null">
+        value_is_dic,
+      </if>
+      <if test="dicTypeId != null">
+        dic_type_id,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="changeLogId != null">
+        #{changeLogId,jdbcType=INTEGER},
+      </if>
+      <if test="chageType != null">
+        #{chageType,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="orderTableName != null">
+        #{orderTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDetailTableName != null">
+        #{orderDetailTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDetailId != null">
+        #{orderDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderSubDetailTableName != null">
+        #{orderSubDetailTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSubDetailId != null">
+        #{orderSubDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="fieldName != null">
+        #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="oldVlaue != null">
+        #{oldVlaue,jdbcType=VARCHAR},
+      </if>
+      <if test="newVlaue != null">
+        #{newVlaue,jdbcType=VARCHAR},
+      </if>
+      <if test="valueIsDic != null">
+        #{valueIsDic,jdbcType=BIT},
+      </if>
+      <if test="dicTypeId != null">
+        #{dicTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TOrderChangeLog">
+    update t_order_change_log
+    <set>
+      <if test="chageType != null">
+        chage_type = #{chageType,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="orderTableName != null">
+        order_table_name = #{orderTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDetailTableName != null">
+        order_detail_table_name = #{orderDetailTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderDetailId != null">
+        order_detail_id = #{orderDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderSubDetailTableName != null">
+        order_sub_detail_table_name = #{orderSubDetailTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderSubDetailId != null">
+        order_sub_detail_id = #{orderSubDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="fieldName != null">
+        field_name = #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="oldVlaue != null">
+        old_vlaue = #{oldVlaue,jdbcType=VARCHAR},
+      </if>
+      <if test="newVlaue != null">
+        new_vlaue = #{newVlaue,jdbcType=VARCHAR},
+      </if>
+      <if test="valueIsDic != null">
+        value_is_dic = #{valueIsDic,jdbcType=BIT},
+      </if>
+      <if test="dicTypeId != null">
+        dic_type_id = #{dicTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where change_log_id = #{changeLogId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TOrderChangeLog">
+    update t_order_change_log
+    set chage_type = #{chageType,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      order_table_name = #{orderTableName,jdbcType=VARCHAR},
+      order_id = #{orderId,jdbcType=INTEGER},
+      order_detail_table_name = #{orderDetailTableName,jdbcType=VARCHAR},
+      order_detail_id = #{orderDetailId,jdbcType=INTEGER},
+      order_sub_detail_table_name = #{orderSubDetailTableName,jdbcType=VARCHAR},
+      order_sub_detail_id = #{orderSubDetailId,jdbcType=INTEGER},
+      field_name = #{fieldName,jdbcType=VARCHAR},
+      old_vlaue = #{oldVlaue,jdbcType=VARCHAR},
+      new_vlaue = #{newVlaue,jdbcType=VARCHAR},
+      value_is_dic = #{valueIsDic,jdbcType=BIT},
+      dic_type_id = #{dicTypeId,jdbcType=INTEGER},
+      creater_by = #{createrBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where change_log_id = #{changeLogId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into t_order_change_log (change_log_id, chage_type, version,
+    order_table_name, order_id, order_detail_table_name,
+    order_detail_id, order_sub_detail_table_name,
+    order_sub_detail_id, field_name, old_vlaue,
+    new_vlaue, value_is_dic, dic_type_id,
+    creater_by, create_time, is_deleted
+    )
+    values
+    <foreach collection ="list" item="item" index= "index" separator =",">
+      (
+      #{item.changeLogId,jdbcType=INTEGER},
+      #{item.chageType,jdbcType=VARCHAR},
+      #{item.version,jdbcType=INTEGER},
+      #{item.orderTableName,jdbcType=VARCHAR},
+      #{item.orderId,jdbcType=INTEGER},
+      #{item.orderDetailTableName,jdbcType=VARCHAR},
+      #{item.orderDetailId,jdbcType=INTEGER},
+      #{item.orderSubDetailTableName,jdbcType=VARCHAR},
+      #{item.orderSubDetailId,jdbcType=INTEGER},
+      #{item.fieldName,jdbcType=VARCHAR},
+      #{item.oldVlaue,jdbcType=VARCHAR},
+      #{item.newVlaue,jdbcType=VARCHAR},
+      #{item.valueIsDic,jdbcType=BIT},
+      #{item.dicTypeId,jdbcType=INTEGER},
+      #{item.createrBy,jdbcType=INTEGER},
+      #{item.createTime,jdbcType=TIMESTAMP},
+      #{item.isDeleted,jdbcType=BIT}
+      )
+    </foreach >
+  </insert>
+</mapper>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TDictionaryDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TDictionary">
+    <id column="dictionary_id" jdbcType="INTEGER" property="dictionaryId" />
+    <result column="dictionary_type_id" jdbcType="INTEGER" property="dictionaryTypeId" />
+    <result column="dictionary_code" jdbcType="VARCHAR" property="dictionaryCode" />
+    <result column="dictionary_name" jdbcType="VARCHAR" property="dictionaryName" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    dictionary_id, dictionary_type_id, dictionary_code, dictionary_name, order_num, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_dictionary
+    where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_dictionary
+    where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.itshop.web.dao.po.TDictionary">
+    insert into t_dictionary (dictionary_id, dictionary_type_id, dictionary_code, 
+      dictionary_name, order_num, remark
+      )
+    values (#{dictionaryId,jdbcType=INTEGER}, #{dictionaryTypeId,jdbcType=INTEGER}, #{dictionaryCode,jdbcType=VARCHAR}, 
+      #{dictionaryName,jdbcType=VARCHAR}, #{orderNum,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TDictionary">
+    insert into t_dictionary
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dictionaryId != null">
+        dictionary_id,
+      </if>
+      <if test="dictionaryTypeId != null">
+        dictionary_type_id,
+      </if>
+      <if test="dictionaryCode != null">
+        dictionary_code,
+      </if>
+      <if test="dictionaryName != null">
+        dictionary_name,
+      </if>
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dictionaryId != null">
+        #{dictionaryId,jdbcType=INTEGER},
+      </if>
+      <if test="dictionaryTypeId != null">
+        #{dictionaryTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="dictionaryCode != null">
+        #{dictionaryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictionaryName != null">
+        #{dictionaryName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TDictionary">
+    update t_dictionary
+    <set>
+      <if test="dictionaryTypeId != null">
+        dictionary_type_id = #{dictionaryTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="dictionaryCode != null">
+        dictionary_code = #{dictionaryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dictionaryName != null">
+        dictionary_name = #{dictionaryName,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TDictionary">
+    update t_dictionary
+    set dictionary_type_id = #{dictionaryTypeId,jdbcType=INTEGER},
+      dictionary_code = #{dictionaryCode,jdbcType=VARCHAR},
+      dictionary_name = #{dictionaryName,jdbcType=VARCHAR},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR}
+    where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByDictionaryTypeId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_dictionary
+    where dictionary_type_id = #{dictionaryTypeId,jdbcType=INTEGER}
+    order by order_num
+  </select>
+</mapper>

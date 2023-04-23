@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TApplicationGroupCustomDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TApplicationGroupCustom">
+    <id column="application_id" jdbcType="INTEGER" property="applicationId" />
+    <result column="application_en_name" jdbcType="VARCHAR" property="applicationEnName" />
+    <result column="application_cn_name" jdbcType="VARCHAR" property="applicationCnName" />
+    <result column="application_url" jdbcType="VARCHAR" property="applicationUrl" />
+    <result column="application_icon" jdbcType="VARCHAR" property="applicationIcon" />
+    <result column="application_group" jdbcType="VARCHAR" property="applicationGroup" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    application_id, application_en_name, application_cn_name, application_url, application_icon, 
+    application_group, creater_by, create_time, modified_by, modified_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_application_group_custom
+    where application_id = #{applicationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_application_group_custom
+    where application_id = #{applicationId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.itshop.web.dao.po.TApplicationGroupCustom">
+    insert into t_application_group_custom (application_id, application_en_name, 
+      application_cn_name, application_url, application_icon, 
+      application_group, creater_by, create_time, 
+      modified_by, modified_time, is_deleted
+      )
+    values (#{applicationId,jdbcType=INTEGER}, #{applicationEnName,jdbcType=VARCHAR}, 
+      #{applicationCnName,jdbcType=VARCHAR}, #{applicationUrl,jdbcType=VARCHAR}, #{applicationIcon,jdbcType=VARCHAR}, 
+      #{applicationGroup,jdbcType=VARCHAR}, #{createrBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{modifiedBy,jdbcType=INTEGER}, #{modifiedTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TApplicationGroupCustom">
+    insert into t_application_group_custom
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="applicationId != null">
+        application_id,
+      </if>
+      <if test="applicationEnName != null">
+        application_en_name,
+      </if>
+      <if test="applicationCnName != null">
+        application_cn_name,
+      </if>
+      <if test="applicationUrl != null">
+        application_url,
+      </if>
+      <if test="applicationIcon != null">
+        application_icon,
+      </if>
+      <if test="applicationGroup != null">
+        application_group,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="applicationId != null">
+        #{applicationId,jdbcType=INTEGER},
+      </if>
+      <if test="applicationEnName != null">
+        #{applicationEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationCnName != null">
+        #{applicationCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationUrl != null">
+        #{applicationUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationIcon != null">
+        #{applicationIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationGroup != null">
+        #{applicationGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TApplicationGroupCustom">
+    update t_application_group_custom
+    <set>
+      <if test="applicationEnName != null">
+        application_en_name = #{applicationEnName,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationCnName != null">
+        application_cn_name = #{applicationCnName,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationUrl != null">
+        application_url = #{applicationUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationIcon != null">
+        application_icon = #{applicationIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationGroup != null">
+        application_group = #{applicationGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where application_id = #{applicationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TApplicationGroupCustom">
+    update t_application_group_custom
+    set application_en_name = #{applicationEnName,jdbcType=VARCHAR},
+      application_cn_name = #{applicationCnName,jdbcType=VARCHAR},
+      application_url = #{applicationUrl,jdbcType=VARCHAR},
+      application_icon = #{applicationIcon,jdbcType=VARCHAR},
+      application_group = #{applicationGroup,jdbcType=VARCHAR},
+      creater_by = #{createrBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where application_id = #{applicationId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectTApplicationGroupCustomAndLineIndicators" resultType="com.itshop.web.dto.response.ApplicationGroupCustomAndLineIndicators">
+    select
+      a.application_id as applicationId,
+      a.application_en_name as applicationEnName,
+      a.application_cn_name as applicationCnName,
+      a.application_url as applicationUrl,
+      a.application_icon as applicationIcon,
+      a.application_group as applicationGroup,
+      b.application_line_indicators_id as applicationLineIndicatorsId,
+      b.line_name as lineName,
+      b.reference_ping as referencePing,
+      b.reference_lost as referenceLost,
+      b.reference_trace as referenceTrace
+    from t_application_group_custom a
+           left join t_application_group_custom_line_indicators b
+                     on a.application_id = b.application_id
+    where a.is_deleted =0
+  </select>
+</mapper>

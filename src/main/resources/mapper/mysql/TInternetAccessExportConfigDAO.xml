@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TInternetAccessExportConfigDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TInternetAccessExportConfig">
+    <id column="export_id" jdbcType="INTEGER" property="exportId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    export_id, `name`, order_num, creater_by, create_time, modified_by, modified_time, 
+    is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_internet_access_export_config
+    where export_id = #{exportId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_internet_access_export_config
+    where export_id = #{exportId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.itshop.web.dao.po.TInternetAccessExportConfig">
+    insert into t_internet_access_export_config (export_id, `name`, order_num, 
+      creater_by, create_time, modified_by, 
+      modified_time, is_deleted)
+    values (#{exportId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{orderNum,jdbcType=INTEGER}, 
+      #{createrBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=INTEGER}, 
+      #{modifiedTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TInternetAccessExportConfig">
+    insert into t_internet_access_export_config
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="exportId != null">
+        export_id,
+      </if>
+      <if test="name != null">
+        `name`,
+      </if>
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="exportId != null">
+        #{exportId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TInternetAccessExportConfig">
+    update t_internet_access_export_config
+    <set>
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where export_id = #{exportId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TInternetAccessExportConfig">
+    update t_internet_access_export_config
+    set `name` = #{name,jdbcType=VARCHAR},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      creater_by = #{createrBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where export_id = #{exportId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByQueryParam" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_internet_access_export_config
+    where is_deleted = 0
+  </select>
+</mapper>

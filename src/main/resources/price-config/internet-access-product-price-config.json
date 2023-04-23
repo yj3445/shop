@@ -1,0 +1,731 @@
+[{
+		"productId": 1,
+		"productName": "产品A",
+		"broadBand": [{
+				"mbps": 50,
+				"price": 500,
+				"priceUnit": "YEAR"
+			},
+			{
+				"mbps": 100,
+				"price": 600,
+				"priceUnit": "YEAR"
+			},
+			{
+				"mbps": 200,
+				"price": 1000,
+				"priceUnit": "YEAR"
+			}
+		],
+		"export": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}, {
+			"value": 4,
+			"discountRate": 70
+		}, {
+			"value": 5,
+			"discountRate": 70
+		}, {
+			"value": 6,
+			"discountRate": 70
+		}],
+		"contractPeriod": [{
+			"value": 12,
+			"discountRate": 100
+		}, {
+			"value": 24,
+			"discountRate": 90
+		}, {
+			"value": 36,
+			"discountRate": 80
+		}],
+		"paymentCycle": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}],
+		"paymentMethod": [{
+			"value": 1,
+			"discountRate": 90
+		}, {
+			"value": 2,
+			"discountRate": 100
+		}]
+	},
+	{
+		"productId": 2,
+		"productName": "产品B",
+		"broadBand": [{
+				"mbps": 10,
+				"price": 390,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 20,
+				"price": 780,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 30,
+				"price": 1170,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 40,
+				"price": 1560,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 50,
+				"price": 1950,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 60,
+				"price": 2250,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 70,
+				"price": 2550,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 80,
+				"price": 2850,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 90,
+				"price": 3150,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 100,
+				"price": 3400,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 150,
+				"price": 5000,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 200,
+				"price": 6600,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 250,
+				"price": 8220,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 300,
+				"price": 9800,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 350,
+				"price": 11400,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 400,
+				"price": 12800,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 450,
+				"price": 14400,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 500,
+				"price": 15800,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 600,
+				"price": 19000,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 700,
+				"price": 22000,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 800,
+				"price": 24900,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 900,
+				"price": 27800,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 1000,
+				"price": 30800,
+				"priceUnit": "MONTH"
+			}
+		],
+		"export": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}, {
+			"value": 4,
+			"discountRate": 70
+		}, {
+			"value": 5,
+			"discountRate": 70
+		}, {
+			"value": 6,
+			"discountRate": 70
+		}],
+		"contractPeriod": [{
+			"value": 12,
+			"discountRate": 100
+		}, {
+			"value": 24,
+			"discountRate": 90
+		}, {
+			"value": 36,
+			"discountRate": 80
+		}],
+		"paymentCycle": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}],
+		"paymentMethod": [{
+			"value": 1,
+			"discountRate": 90
+		}, {
+			"value": 2,
+			"discountRate": 100
+		}]
+	},
+	{
+		"productId": 3,
+		"productName": "产品C",
+		"broadBand": [{
+				"mbps": 10,
+				"price": 430,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 20,
+				"price": 850,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 30,
+				"price": 1270,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 40,
+				"price": 1700,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 50,
+				"price": 2120,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 60,
+				"price": 2470,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 70,
+				"price": 2800,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 80,
+				"price": 3130,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 90,
+				"price": 3460,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 100,
+				"price": 3740,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 150,
+				"price": 5500,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 200,
+				"price": 7200,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 250,
+				"price": 9042,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 300,
+				"price": 10700,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 350,
+				"price": 12400,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 400,
+				"price": 14000,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 450,
+				"price": 15700,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 500,
+				"price": 17400,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 600,
+				"price": 20900,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 700,
+				"price": 24200,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 800,
+				"price": 27300,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 900,
+				"price": 30500,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 1000,
+				"price": 33800,
+				"priceUnit": "MONTH"
+			}
+		],
+		"export": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}, {
+			"value": 4,
+			"discountRate": 70
+		}, {
+			"value": 5,
+			"discountRate": 70
+		}, {
+			"value": 6,
+			"discountRate": 70
+		}],
+		"contractPeriod": [{
+			"value": 12,
+			"discountRate": 100
+		}, {
+			"value": 24,
+			"discountRate": 90
+		}, {
+			"value": 36,
+			"discountRate": 80
+		}],
+		"paymentCycle": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}],
+		"paymentMethod": [{
+			"value": 1,
+			"discountRate": 90
+		}, {
+			"value": 2,
+			"discountRate": 100
+		}]
+	},
+	{
+		"productId": 4,
+		"productName": "产品D",
+		"broadBand": [{
+				"mbps": 10,
+				"price": 600,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 20,
+				"price": 1170,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 30,
+				"price": 1750,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 40,
+				"price": 2330,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 50,
+				"price": 2900,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 60,
+				"price": 3370,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 70,
+				"price": 3830,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 80,
+				"price": 4280,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 90,
+				"price": 4730,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 100,
+				"price": 5200,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 150,
+				"price": 7570,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 200,
+				"price": 9960,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 250,
+				"price": 12300,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 300,
+				"price": 14700,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 350,
+				"price": 17100,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 400,
+				"price": 19400,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 450,
+				"price": 21800,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 500,
+				"price": 24200,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 600,
+				"price": 28600,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 700,
+				"price": 33000,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 800,
+				"price": 37400,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 900,
+				"price": 41800,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 1000,
+				"price": 46200,
+				"priceUnit": "MONTH"
+			}
+		],
+		"export": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}, {
+			"value": 4,
+			"discountRate": 70
+		}, {
+			"value": 5,
+			"discountRate": 70
+		}, {
+			"value": 6,
+			"discountRate": 70
+		}],
+		"contractPeriod": [{
+			"value": 12,
+			"discountRate": 100
+		}, {
+			"value": 24,
+			"discountRate": 90
+		}, {
+			"value": 36,
+			"discountRate": 80
+		}],
+		"paymentCycle": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}],
+		"paymentMethod": [{
+			"value": 1,
+			"discountRate": 90
+		}, {
+			"value": 2,
+			"discountRate": 100
+		}]
+	},
+	{
+		"productId": 5,
+		"productName": "产品E",
+		"broadBand": [{
+				"mbps": 10,
+				"price": 2500,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 20,
+				"price": 4880,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 30,
+				"price": 7320,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 40,
+				"price": 9750,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 50,
+				"price": 11900,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 60,
+				"price": 13900,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 70,
+				"price": 15800,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 80,
+				"price": 17800,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 90,
+				"price": 19700,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 100,
+				"price": 21700,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 150,
+				"price": 31600,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 200,
+				"price": 41500,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 250,
+				"price": 51400,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 300,
+				"price": 61300,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 350,
+				"price": 71200,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 400,
+				"price": 81100,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 450,
+				"price": 91000,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 500,
+				"price": 101000,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 600,
+				"price": 119300,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 700,
+				"price": 137600,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 800,
+				"price": 155900,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 900,
+				"price": 174200,
+				"priceUnit": "MONTH"
+			},
+			{
+				"mbps": 1000,
+				"price": 192500,
+				"priceUnit": "MONTH"
+			}
+		],
+		"export": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}, {
+			"value": 4,
+			"discountRate": 70
+		}, {
+			"value": 5,
+			"discountRate": 70
+		}, {
+			"value": 6,
+			"discountRate": 70
+		}],
+		"contractPeriod": [{
+			"value": 12,
+			"discountRate": 100
+		}, {
+			"value": 24,
+			"discountRate": 90
+		}, {
+			"value": 36,
+			"discountRate": 80
+		}],
+		"paymentCycle": [{
+			"value": 1,
+			"discountRate": 100
+		}, {
+			"value": 2,
+			"discountRate": 90
+		}, {
+			"value": 3,
+			"discountRate": 80
+		}],
+		"paymentMethod": [{
+			"value": 1,
+			"discountRate": 90
+		}, {
+			"value": 2,
+			"discountRate": 100
+		}]
+	}
+]

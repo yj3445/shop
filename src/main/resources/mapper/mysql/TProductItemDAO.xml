@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TProductItemDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TProductItem">
+    <id column="product_item_id" jdbcType="INTEGER" property="productItemId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="item_type" jdbcType="VARCHAR" property="itemType" />
+    <result column="item_type_name" jdbcType="VARCHAR" property="itemTypeName" />
+    <result column="item_type_order_num" jdbcType="INTEGER" property="itemTypeOrderNum" />
+    <result column="item_name" jdbcType="VARCHAR" property="itemName" />
+    <result column="item_value" jdbcType="INTEGER" property="itemValue" />
+    <result column="order_num" jdbcType="INTEGER" property="orderNum" />
+    <result column="price_item" jdbcType="BIT" property="priceItem" />
+    <result column="default_price" jdbcType="DECIMAL" property="defaultPrice" />
+    <result column="default_price_unit" jdbcType="VARCHAR" property="defaultPriceUnit" />
+    <result column="discount_item" jdbcType="BIT" property="discountItem" />
+    <result column="default_discount" jdbcType="DECIMAL" property="defaultDiscount" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    product_item_id, product_id, item_type, item_type_name, item_type_order_num, item_name, 
+    item_value, order_num, price_item, default_price, default_price_unit, discount_item, 
+    default_discount
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_item
+    where product_item_id = #{productItemId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_product_item
+    where product_item_id = #{productItemId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert"   useGeneratedKeys="true" keyProperty="productItemId" parameterType="com.itshop.web.dao.po.TProductItem">
+    insert into t_product_item (product_item_id, product_id, item_type, 
+      item_type_name, item_type_order_num, item_name, 
+      item_value, order_num, price_item, 
+      default_price, default_price_unit, discount_item, 
+      default_discount)
+    values (#{productItemId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{itemType,jdbcType=VARCHAR}, 
+      #{itemTypeName,jdbcType=VARCHAR}, #{itemTypeOrderNum,jdbcType=INTEGER}, #{itemName,jdbcType=VARCHAR}, 
+      #{itemValue,jdbcType=INTEGER}, #{orderNum,jdbcType=INTEGER}, #{priceItem,jdbcType=BIT}, 
+      #{defaultPrice,jdbcType=DECIMAL}, #{defaultPriceUnit,jdbcType=VARCHAR}, #{discountItem,jdbcType=BIT}, 
+      #{defaultDiscount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective"  useGeneratedKeys="true" keyProperty="productItemId"
+          parameterType="com.itshop.web.dao.po.TProductItem">
+    insert into t_product_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productItemId != null">
+        product_item_id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="itemType != null">
+        item_type,
+      </if>
+      <if test="itemTypeName != null">
+        item_type_name,
+      </if>
+      <if test="itemTypeOrderNum != null">
+        item_type_order_num,
+      </if>
+      <if test="itemName != null">
+        item_name,
+      </if>
+      <if test="itemValue != null">
+        item_value,
+      </if>
+      <if test="orderNum != null">
+        order_num,
+      </if>
+      <if test="priceItem != null">
+        price_item,
+      </if>
+      <if test="defaultPrice != null">
+        default_price,
+      </if>
+      <if test="defaultPriceUnit != null">
+        default_price_unit,
+      </if>
+      <if test="discountItem != null">
+        discount_item,
+      </if>
+      <if test="defaultDiscount != null">
+        default_discount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productItemId != null">
+        #{productItemId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="itemType != null">
+        #{itemType,jdbcType=VARCHAR},
+      </if>
+      <if test="itemTypeName != null">
+        #{itemTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemTypeOrderNum != null">
+        #{itemTypeOrderNum,jdbcType=INTEGER},
+      </if>
+      <if test="itemName != null">
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemValue != null">
+        #{itemValue,jdbcType=INTEGER},
+      </if>
+      <if test="orderNum != null">
+        #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="priceItem != null">
+        #{priceItem,jdbcType=BIT},
+      </if>
+      <if test="defaultPrice != null">
+        #{defaultPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="defaultPriceUnit != null">
+        #{defaultPriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="discountItem != null">
+        #{discountItem,jdbcType=BIT},
+      </if>
+      <if test="defaultDiscount != null">
+        #{defaultDiscount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TProductItem">
+    update t_product_item
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="itemType != null">
+        item_type = #{itemType,jdbcType=VARCHAR},
+      </if>
+      <if test="itemTypeName != null">
+        item_type_name = #{itemTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemTypeOrderNum != null">
+        item_type_order_num = #{itemTypeOrderNum,jdbcType=INTEGER},
+      </if>
+      <if test="itemName != null">
+        item_name = #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="itemValue != null">
+        item_value = #{itemValue,jdbcType=INTEGER},
+      </if>
+      <if test="orderNum != null">
+        order_num = #{orderNum,jdbcType=INTEGER},
+      </if>
+      <if test="priceItem != null">
+        price_item = #{priceItem,jdbcType=BIT},
+      </if>
+      <if test="defaultPrice != null">
+        default_price = #{defaultPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="defaultPriceUnit != null">
+        default_price_unit = #{defaultPriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="discountItem != null">
+        discount_item = #{discountItem,jdbcType=BIT},
+      </if>
+      <if test="defaultDiscount != null">
+        default_discount = #{defaultDiscount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where product_item_id = #{productItemId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TProductItem">
+    update t_product_item
+    set product_id = #{productId,jdbcType=INTEGER},
+      item_type = #{itemType,jdbcType=VARCHAR},
+      item_type_name = #{itemTypeName,jdbcType=VARCHAR},
+      item_type_order_num = #{itemTypeOrderNum,jdbcType=INTEGER},
+      item_name = #{itemName,jdbcType=VARCHAR},
+      item_value = #{itemValue,jdbcType=INTEGER},
+      order_num = #{orderNum,jdbcType=INTEGER},
+      price_item = #{priceItem,jdbcType=BIT},
+      default_price = #{defaultPrice,jdbcType=DECIMAL},
+      default_price_unit = #{defaultPriceUnit,jdbcType=VARCHAR},
+      discount_item = #{discountItem,jdbcType=BIT},
+      default_discount = #{defaultDiscount,jdbcType=DECIMAL}
+    where product_item_id = #{productItemId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByProductId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product_item
+    where  product_id = #{productId,jdbcType=INTEGER}
+    order by item_type_order_num,order_num
+  </select>
+</mapper>

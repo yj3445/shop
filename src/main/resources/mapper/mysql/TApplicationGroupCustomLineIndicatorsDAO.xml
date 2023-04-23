@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TApplicationGroupCustomLineIndicatorsDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TApplicationGroupCustomLineIndicators">
+    <id column="application_line_indicators_id" jdbcType="INTEGER" property="applicationLineIndicatorsId" />
+    <result column="application_id" jdbcType="INTEGER" property="applicationId" />
+    <result column="line_name" jdbcType="VARCHAR" property="lineName" />
+    <result column="reference_ping" jdbcType="INTEGER" property="referencePing" />
+    <result column="reference_lost" jdbcType="INTEGER" property="referenceLost" />
+    <result column="reference_trace" jdbcType="INTEGER" property="referenceTrace" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    application_line_indicators_id, application_id, line_name, reference_ping, reference_lost, 
+    reference_trace
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_application_group_custom_line_indicators
+    where application_line_indicators_id = #{applicationLineIndicatorsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_application_group_custom_line_indicators
+    where application_line_indicators_id = #{applicationLineIndicatorsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.itshop.web.dao.po.TApplicationGroupCustomLineIndicators">
+    insert into t_application_group_custom_line_indicators (application_line_indicators_id, application_id, 
+      line_name, reference_ping, reference_lost, 
+      reference_trace)
+    values (#{applicationLineIndicatorsId,jdbcType=INTEGER}, #{applicationId,jdbcType=INTEGER}, 
+      #{lineName,jdbcType=VARCHAR}, #{referencePing,jdbcType=INTEGER}, #{referenceLost,jdbcType=INTEGER}, 
+      #{referenceTrace,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TApplicationGroupCustomLineIndicators">
+    insert into t_application_group_custom_line_indicators
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="applicationLineIndicatorsId != null">
+        application_line_indicators_id,
+      </if>
+      <if test="applicationId != null">
+        application_id,
+      </if>
+      <if test="lineName != null">
+        line_name,
+      </if>
+      <if test="referencePing != null">
+        reference_ping,
+      </if>
+      <if test="referenceLost != null">
+        reference_lost,
+      </if>
+      <if test="referenceTrace != null">
+        reference_trace,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="applicationLineIndicatorsId != null">
+        #{applicationLineIndicatorsId,jdbcType=INTEGER},
+      </if>
+      <if test="applicationId != null">
+        #{applicationId,jdbcType=INTEGER},
+      </if>
+      <if test="lineName != null">
+        #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="referencePing != null">
+        #{referencePing,jdbcType=INTEGER},
+      </if>
+      <if test="referenceLost != null">
+        #{referenceLost,jdbcType=INTEGER},
+      </if>
+      <if test="referenceTrace != null">
+        #{referenceTrace,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TApplicationGroupCustomLineIndicators">
+    update t_application_group_custom_line_indicators
+    <set>
+      <if test="applicationId != null">
+        application_id = #{applicationId,jdbcType=INTEGER},
+      </if>
+      <if test="lineName != null">
+        line_name = #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="referencePing != null">
+        reference_ping = #{referencePing,jdbcType=INTEGER},
+      </if>
+      <if test="referenceLost != null">
+        reference_lost = #{referenceLost,jdbcType=INTEGER},
+      </if>
+      <if test="referenceTrace != null">
+        reference_trace = #{referenceTrace,jdbcType=INTEGER},
+      </if>
+    </set>
+    where application_line_indicators_id = #{applicationLineIndicatorsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TApplicationGroupCustomLineIndicators">
+    update t_application_group_custom_line_indicators
+    set application_id = #{applicationId,jdbcType=INTEGER},
+      line_name = #{lineName,jdbcType=VARCHAR},
+      reference_ping = #{referencePing,jdbcType=INTEGER},
+      reference_lost = #{referenceLost,jdbcType=INTEGER},
+      reference_trace = #{referenceTrace,jdbcType=INTEGER}
+    where application_line_indicators_id = #{applicationLineIndicatorsId,jdbcType=INTEGER}
+  </update>
+</mapper>

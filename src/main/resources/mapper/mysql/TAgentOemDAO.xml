@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TAgentOemDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TAgentOem">
+    <id column="agent_oem_id" jdbcType="INTEGER" property="agentOemId" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="site_name" jdbcType="VARCHAR" property="siteName" />
+    <result column="custom_domain_name" jdbcType="VARCHAR" property="customDomainName" />
+    <result column="custom_domain_enable" jdbcType="BIT" property="customDomainEnable" />
+    <result column="home_page_background_image" jdbcType="VARCHAR" property="homePageBackgroundImage" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="main_title" jdbcType="VARCHAR" property="mainTitle" />
+    <result column="sub_title" jdbcType="VARCHAR" property="subTitle" />
+    <result column="back_ground_color" jdbcType="VARCHAR" property="backGroundColor" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    agent_oem_id, org_id, site_name, custom_domain_name, custom_domain_enable, home_page_background_image, 
+    creater_by, create_time, modified_by, modified_time, is_deleted,main_title,sub_title,back_ground_color
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_agent_oem
+    where agent_oem_id = #{agentOemId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByOrgId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_agent_oem
+    where is_deleted =0
+    and org_id = #{orgId,jdbcType=INTEGER}
+    limit 1;
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update t_agent_oem
+    set is_deleted=1,
+    modified_time = now(),
+    modified_by = #{modifiedBy,jdbcType=INTEGER},
+    where agent_oem_id = #{agentOemId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TAgentOem" useGeneratedKeys="true" keyProperty="agentOemId">
+    insert into t_agent_oem
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="agentOemId != null">
+        agent_oem_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="siteName != null">
+        site_name,
+      </if>
+      <if test="customDomainName != null">
+        custom_domain_name,
+      </if>
+      <if test="customDomainEnable != null">
+        custom_domain_enable,
+      </if>
+      <if test="homePageBackgroundImage != null">
+        home_page_background_image,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="mainTitle != null">
+        main_title,
+      </if>
+      <if test="subTitle != null">
+        sub_title,
+      </if>
+      <if test="backGroundColor != null">
+        back_ground_color,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="agentOemId != null">
+        #{agentOemId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="siteName != null">
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="customDomainName != null">
+        #{customDomainName,jdbcType=VARCHAR},
+      </if>
+      <if test="customDomainEnable != null">
+        #{customDomainEnable,jdbcType=BIT},
+      </if>
+      <if test="homePageBackgroundImage != null">
+        #{homePageBackgroundImage,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="mainTitle != null">
+        #{mainTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="subTitle != null">
+        #{subTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="backGroundColor != null">
+        #{backGroundColor,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TAgentOem">
+    update t_agent_oem
+    <set>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="siteName != null">
+        site_name = #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="customDomainName != null">
+        custom_domain_name = #{customDomainName,jdbcType=VARCHAR},
+      </if>
+      <if test="customDomainEnable != null">
+        custom_domain_enable = #{customDomainEnable,jdbcType=BIT},
+      </if>
+      <if test="homePageBackgroundImage != null">
+        home_page_background_image = #{homePageBackgroundImage,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="mainTitle != null">
+        main_title=#{mainTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="subTitle != null">
+        sub_title=#{subTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="backGroundColor != null">
+        back_ground_color=#{backGroundColor,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where agent_oem_id = #{agentOemId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

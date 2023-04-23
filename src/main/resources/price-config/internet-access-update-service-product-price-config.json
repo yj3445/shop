@@ -1,0 +1,141 @@
+[{
+	"productId": 6,
+	"productName": "互联网接入-升级服务-增加终端数",
+	"paymentCycle": [{
+		"value": 1,
+		"discountRate": 100
+	}, {
+		"value": 2,
+		"discountRate": 90
+	}, {
+		"value": 3,
+		"discountRate": 80
+	}],
+	"paymentMethod": [{
+		"value": 1,
+		"discountRate": 90
+	}, {
+		"value": 2,
+		"discountRate": 100
+	}]
+},{
+	"productId": 7,
+	"productName": "互联网接入-升级服务-增加IP",
+	"paymentCycle": [{
+		"value": 1,
+		"discountRate": 100
+	}, {
+		"value": 2,
+		"discountRate": 90
+	}, {
+		"value": 3,
+		"discountRate": 80
+	}],
+	"paymentMethod": [{
+		"value": 1,
+		"discountRate": 90
+	}, {
+		"value": 2,
+		"discountRate": 100
+	}]
+},{
+	"productId": 8,
+	"productName": "互联网接入-升级服务-混合IP",
+	"paymentCycle": [{
+		"value": 1,
+		"discountRate": 100
+	}, {
+		"value": 2,
+		"discountRate": 90
+	}, {
+		"value": 3,
+		"discountRate": 80
+	}],
+	"paymentMethod": [{
+		"value": 1,
+		"discountRate": 90
+	}, {
+		"value": 2,
+		"discountRate": 100
+	}]
+},{
+	"productId": 9,
+	"productName": "互联网接入-升级服务-建站支持包",
+	"paymentCycle": [{
+		"value": 1,
+		"discountRate": 100
+	}, {
+		"value": 2,
+		"discountRate": 90
+	}, {
+		"value": 3,
+		"discountRate": 80
+	}],
+	"paymentMethod": [{
+		"value": 1,
+		"discountRate": 90
+	}, {
+		"value": 2,
+		"discountRate": 100
+	}]
+},{
+	"productId": 10,
+	"productName": "互联网接入-升级服务-带宽突发包",
+	"paymentCycle": [{
+		"value": 1,
+		"discountRate": 100
+	}, {
+		"value": 2,
+		"discountRate": 90
+	}, {
+		"value": 3,
+		"discountRate": 80
+	}],
+	"paymentMethod": [{
+		"value": 1,
+		"discountRate": 90
+	}, {
+		"value": 2,
+		"discountRate": 100
+	}]
+},{
+	"productId": 11,
+	"productName": "互联网接入-升级服务-出口备份",
+	"paymentCycle": [{
+		"value": 1,
+		"discountRate": 100
+	}, {
+		"value": 2,
+		"discountRate": 90
+	}, {
+		"value": 3,
+		"discountRate": 80
+	}],
+	"paymentMethod": [{
+		"value": 1,
+		"discountRate": 90
+	}, {
+		"value": 2,
+		"discountRate": 100
+	}]
+},{
+	"productId": 12,
+	"productName": "互联网接入-升级服务-路由优化",
+	"paymentCycle": [{
+		"value": 1,
+		"discountRate": 100
+	}, {
+		"value": 2,
+		"discountRate": 90
+	}, {
+		"value": 3,
+		"discountRate": 80
+	}],
+	"paymentMethod": [{
+		"value": 1,
+		"discountRate": 90
+	}, {
+		"value": 2,
+		"discountRate": 100
+	}]
+}]

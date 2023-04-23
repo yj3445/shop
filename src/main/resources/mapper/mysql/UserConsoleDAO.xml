@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.UserConsoleDAO">
+  <resultMap id="InternetAccessUnionOrderMap" type="com.itshop.web.dto.response.InternetAccessUnionOrderResp">
+    <result column="change_id" jdbcType="INTEGER" property="changeId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="main_line_order_id" jdbcType="INTEGER" property="mainLineOrderId" />
+    <result column="main_line_product_id" jdbcType="INTEGER" property="mainLineProductId" />
+    <result column="main_line_product_code" jdbcType="VARCHAR" property="mainLineProductCode" />
+    <result column="main_line_product_name" jdbcType="VARCHAR" property="mainLineProductName" />
+    <result column="main_line_broad_band" jdbcType="INTEGER" property="mainLineBroadBand" />
+    <result column="main_line_export" jdbcType="INTEGER" property="mainLineExport" />
+    <result column="modified_user_id" jdbcType="VARCHAR" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="creater_user_id" jdbcType="VARCHAR" property="createrUserId" />
+    <result column="creater_user_name" jdbcType="VARCHAR" property="createrUserName" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <!--审核相关-->
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="audit_user_id" jdbcType="VARCHAR" property="auditUserId" />
+    <result column="audit_user_name" jdbcType="VARCHAR" property="auditUserName" />
+    <result column="audit_price_user_id" jdbcType="VARCHAR" property="auditPriceUserId" />
+    <result column="audit_price_user_name" jdbcType="VARCHAR" property="auditPriceUserName" />
+    <result column="audit_price" jdbcType="DECIMAL" property="auditPrice" />
+    <result column="change_status" jdbcType="INTEGER" property="changeStatus" />
+    <result column="parent_org_id" jdbcType="INTEGER" property="parentOrgId" />
+
+  </resultMap>
+
+  <resultMap id="ApplicationSpeedUpUnionOrderMap" type="com.itshop.web.dto.response.ApplicationSpeedUpUnionOrderResp">
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="main_line_order_id" jdbcType="INTEGER" property="mainLineOrderId" />
+    <result column="main_line_product_id" jdbcType="INTEGER" property="mainLineProductId" />
+    <result column="main_line_product_code" jdbcType="VARCHAR" property="mainLineProductCode" />
+    <result column="main_line_product_name" jdbcType="VARCHAR" property="mainLineProductName" />
+    <result column="main_line_broad_band" jdbcType="INTEGER" property="mainLineBroadBand" />
+    <result column="main_line_export" jdbcType="INTEGER" property="mainLineExport" />
+    <result column="modified_user_id" jdbcType="VARCHAR" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+  </resultMap>
+
+  <sql id="select_from_t_internet_access_order">
+    select
+    -1 as change_id,
+    b.change_status,
+    a.*
+    from
+    (
+    select
+    order_id,
+    order_no,
+    start_time,
+    end_time,
+    product_id,
+    creater_by,
+    create_time,
+    modified_by,
+    modified_time,
+    broad_band,
+    export,
+    status,
+    total_price,
+    org_id,
+    line_name,
+    audit_time,
+    audit_price,
+    audit_by,
+    audit_price_by
+    from itshop.t_internet_access_order
+    where is_deleted =0
+    <if test="orgFullPath !=null" >
+      and org_full_path like concat(#{orgFullPath,jdbcType=VARCHAR},'%')
+    </if>
+    ) a
+    inner join
+    (
+    select
+    b.status as change_status,
+    b.order_id
+    from
+    (
+    select max(change_id) as change_id
+    from itshop.t_internet_access_order_before_change
+    where is_deleted =0
+    <if test="orgFullPath !=null">
+      and org_full_path like concat(#{orgFullPath,jdbcType=VARCHAR},'%')
+    </if>
+    group by order_id
+    ) a
+    inner join itshop.t_internet_access_order_before_change b
+    on a.change_id = b.change_id
+    ) b on a.order_id = b.order_id
+  </sql>
+
+  <sql id="select_from_t_internet_access_order_before_change">
+    select
+    b.change_id,
+    -1 as change_status,
+    b.order_id,
+    b.order_no,
+    b.start_time,
+    b.end_time,
+    b.product_id,
+    b.creater_by,
+    b.create_time,
+    b.modified_by,
+    b.modified_time,
+    b.broad_band,
+    b.export,
+    b.status,
+    b.total_price,
+    b.org_id,
+    b.line_name,
+    b.audit_time,
+    b.audit_price,
+    b.audit_by,
+    b.audit_price_by
+    from
+    (
+    select max(change_id) as change_id
+    from itshop.t_internet_access_order_before_change
+    where is_deleted =0
+    <if test="orgFullPath !=null">
+      and org_full_path like concat(#{orgFullPath,jdbcType=VARCHAR},'%')
+    </if>
+    group by order_id
+    ) a
+    inner join itshop.t_internet_access_order_before_change b
+    on a.change_id = b.change_id
+    <!--待审核订单-->
+    <if test='"toAudit".equalsIgnoreCase(dateRange)'>
+      and b.status = 10
+    </if>
+    <!--已审核订单-->
+    <if test='"audited".equalsIgnoreCase(dateRange)'>
+      and b.status != 10
+    </if>
+    order by b.change_id desc
+  </sql>
+
+  <select id="selectInternetAccessUnionOrder" resultMap="InternetAccessUnionOrderMap">
+    select tmp.*,
+    t_user.user_id as modified_user_id,
+    t_user.user_name as modified_user_name,
+    t_user1.user_id as creater_user_id,
+    t_user1.user_name as creater_user_name,
+    t_org.org_name as company_name,
+    t_org.parent_org_id as parent_org_id
+    from
+    (
+    select * from
+    (
+    select
+    a.change_id,
+    a.change_status,
+    a.order_id,
+    a.order_no,
+    a.start_time,
+    a.end_time,
+    a.product_id,
+    c.product_code,
+    ifnull(o.product_oem_name, c.product_name) as product_name,
+    a.creater_by,
+    a.create_time,
+    a.modified_by,
+    a.modified_time,
+    a.order_id as main_line_order_id,
+    c.product_code as main_line_product_code,
+    a.line_name as main_line_product_name,
+    a.broad_band as main_line_broad_band,
+    a.export as main_line_export,
+    a.product_id as main_line_product_id,
+    a.status,
+    a.total_price as total_price,
+    a.org_id,
+    a.audit_time,
+    a.audit_user_id,
+    a.audit_user_name,
+    a.audit_price_user_id,
+    a.audit_price_user_name,
+    a.audit_price
+    from
+    (
+    select
+    o.change_id,
+    o.change_status,
+    o.order_id,
+    o.order_no,
+    o.start_time,
+    o.end_time,
+    o.product_id,
+    o.creater_by,
+    o.create_time,
+    o.modified_by,
+    o.modified_time,
+    o.broad_band,
+    o.export,
+    o.status,
+    o.total_price,
+    o.org_id,
+    o.line_name,
+    o.audit_time,
+    o.audit_price,
+    t3.user_id as audit_user_id,
+    t3.user_name as audit_user_name,
+    t4.user_id as audit_price_user_id,
+    t4.user_name as audit_price_user_name
+    from (
+      <if test='"lately".equalsIgnoreCase(dateRange) or "history".equalsIgnoreCase(dateRange)'>
+        <include refid="select_from_t_internet_access_order" />
+      </if>
+      <!--待审核 或 已审核订单-->
+      <if test='"toAudit".equalsIgnoreCase(dateRange) or "audited".equalsIgnoreCase(dateRange)'>
+        <include refid="select_from_t_internet_access_order_before_change" />
+      </if>
+    ) o
+    left join authorization_platform.t_app_user_info t3 on
+    o.audit_by = t3.app_user_info_id
+    left join authorization_platform.t_app_user_info t4 on
+    o.audit_price_by = t4.app_user_info_id
+    ) a
+    left join itshop.t_product c
+    on a.product_id = c.product_id
+    left join
+    (
+    select *
+    from itshop.t_product_oem
+    where  is_deleted =0
+    <if test="orgId !=null">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    ) o
+    on a.product_id = o.product_id
+    ) tb0
+    union all
+    select * from
+    (
+    select
+    -1 as change_id,
+    -1 as change_status,
+    a.order_id,
+    a.order_no,
+    a.start_time,
+    a.end_time,
+    a.product_id,
+    c.product_code,
+    ifnull(o1.product_oem_name, c.product_name) as product_name,
+    a.creater_by,
+    a.create_time,
+    a.modified_by,
+    a.modified_time,
+    a.internet_access_order_id as main_line_order_id,
+    d.product_code as main_line_product_code,
+    b.line_name as main_line_product_name,
+    b.broad_band as main_line_broad_band,
+    b.export as main_line_export,
+    b.product_id as main_line_product_id,
+    -1 as status,
+    0.00 as total_price,
+    -1 as org_id,
+    null as audit_time,
+    -1 as audit_user_id,
+    null as audit_user_name,
+    -1 as audit_price_user_id,
+    null as audit_price_user_name,
+    0.00 as audit_price
+    from
+    (
+    select
+    order_id,
+    order_no,
+    start_time,
+    end_time,
+    product_id,
+    creater_by,
+    create_time,
+    modified_by,
+    modified_time,
+    internet_access_order_id
+    from itshop.t_internet_access_update_service_order
+    where is_deleted =0
+    <if test="createrBy !=null">
+      and creater_by = #{createrBy,jdbcType=INTEGER}
+    </if>
+    ) a
+    left join itshop.t_internet_access_order b
+    on a.internet_access_order_id = b.order_id
+    left join itshop.t_product c
+    on a.product_id = c.product_id
+    left join
+    (
+    select *
+    from itshop.t_product_oem
+    where  is_deleted =0
+    <if test="orgId !=null">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    ) o1
+    on a.product_id = o1.product_id
+    left join itshop.t_product d
+    on b.product_id = d.product_id
+    left join
+    (
+    select *
+    from itshop.t_product_oem
+    where  is_deleted =0
+    <if test="orgId !=null">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    ) o2
+    on b.product_id = o2.product_id
+    ) tb1
+    ) tmp
+    left join authorization_platform.t_app_user_info as t_user
+    on tmp.modified_by = t_user.app_user_info_id
+    left join authorization_platform.t_app_user_info as t_user1
+    on tmp.creater_by = t_user1.app_user_info_id
+    left join authorization_platform.t_organizational as t_org
+    on tmp.org_id = t_org.org_id
+    where 1=1
+    <!--当前订单-->
+    <if test='"lately".equalsIgnoreCase(dateRange)'>
+        and tmp.end_time >= now()
+    </if>
+    <!--历史订单-->
+    <if test='"history".equalsIgnoreCase(dateRange)'>
+      and tmp.end_time <![CDATA[ < ]]>  now()
+    </if>
+    <!--待审核订单-->
+    <if test='"toAudit".equalsIgnoreCase(dateRange)'>
+      and tmp.status = 10
+    </if>
+    <!--已审核订单-->
+    <if test='"audited".equalsIgnoreCase(dateRange)'>
+      and tmp.status != 10
+    </if>
+  </select>
+
+  <select id="selectApplicationSpeedUpUnionOrder" resultMap="ApplicationSpeedUpUnionOrderMap">
+    select tmp.*,
+    t_user.user_id as modified_user_id,
+    t_user.user_name as modified_user_name
+    from
+    (
+    select * from
+    (
+    select
+    a.order_id,
+    a.order_no,
+    a.start_time,
+    a.end_time,
+    a.product_id,
+    c.product_code,
+    ifnull(o1.product_oem_name, c.product_name) as product_name,
+    a.creater_by,
+    a.create_time,
+    a.modified_by,
+    a.modified_time,
+    a.internet_access_order_id as main_line_order_id,
+    d.product_code as main_line_product_code,
+    b.line_name as main_line_product_name,
+    b.broad_band as main_line_broad_band,
+    b.export as main_line_export,
+    b.product_id as main_line_product_id
+    from
+    (
+    select
+    order_id,
+    order_no,
+    null as start_time,
+    null as end_time,
+    product_id,
+    creater_by,
+    create_time,
+    modified_by,
+    modified_time,
+    internet_access_order_id
+    from itshop.t_application_speed_up_order
+    where is_deleted =0
+    <if test="createrBy !=null">
+      and creater_by = #{createrBy,jdbcType=INTEGER}
+    </if>
+    ) a
+    left join itshop.t_internet_access_order b
+    on a.internet_access_order_id = b.order_id
+    left join itshop.t_product c
+    on a.product_id = c.product_id
+    left join
+    (
+    select *
+    from itshop.t_product_oem
+    where  is_deleted =0
+    <if test="orgId !=null ">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    ) o1
+    on a.product_id = o1.product_id
+    left join itshop.t_product d
+    on b.product_id = d.product_id
+    left join
+    (
+    select *
+    from itshop.t_product_oem
+    where  is_deleted =0
+    <if test="orgId !=null ">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    ) o2
+    on b.product_id = o2.product_id
+    ) tb0
+    union all
+    select * from
+    (
+    select
+    a.order_id,
+    a.order_no,
+    a.start_time,
+    a.end_time,
+    a.product_id,
+    c.product_code,
+    ifnull(o1.product_oem_name, c.product_name) as product_name,
+    a.creater_by,
+    a.create_time,
+    a.modified_by,
+    a.modified_time,
+    a.internet_access_order_id as main_line_order_id,
+    d.product_code as main_line_product_code,
+    b.line_name as main_line_product_name,
+    b.broad_band as main_line_broad_band,
+    b.export as main_line_export,
+    b.product_id as main_line_product_id
+    from
+    (
+    select
+    order_id,
+    order_no,
+    start_time,
+    end_time,
+    product_id,
+    creater_by,
+    create_time,
+    modified_by,
+    modified_time,
+    internet_access_order_id
+    from itshop.t_application_speed_up_other_order
+    where is_deleted =0
+    <if test="createrBy !=null">
+      and creater_by = #{createrBy,jdbcType=INTEGER}
+    </if>
+    ) a
+    left join itshop.t_internet_access_order b
+    on a.internet_access_order_id = b.order_id
+    left join itshop.t_product c
+    on a.product_id = c.product_id
+    left join
+    (
+    select *
+    from itshop.t_product_oem
+    where  is_deleted =0
+    <if test="orgId !=null ">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    ) o1
+    on a.product_id = o1.product_id
+    left join itshop.t_product d
+    on b.product_id = d.product_id
+    left join
+    (
+    select *
+    from itshop.t_product_oem
+    where  is_deleted =0
+    <if test="orgId !=null ">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    ) o2
+    on b.product_id = o2.product_id
+    ) tb1
+    ) tmp
+    left join authorization_platform.t_app_user_info as t_user
+    on tmp.modified_by = t_user.app_user_info_id
+    where 1=1
+    <if test='"lately".equalsIgnoreCase(dateRange)'>
+      and tmp.end_time >= now()
+    </if>
+    <if test='"history".equalsIgnoreCase(dateRange)'>
+      and tmp.end_time <![CDATA[ < ]]>  now()
+    </if>
+  </select>
+</mapper>

@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TInternetAccessOrderBeforeChangeDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TInternetAccessOrderBeforeChange">
+    <id column="change_id" jdbcType="INTEGER" property="changeId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="broad_band" jdbcType="INTEGER" property="broadBand" />
+    <result column="export" jdbcType="INTEGER" property="export" />
+    <result column="contract_period" jdbcType="INTEGER" property="contractPeriod" />
+    <result column="payment_cycle" jdbcType="INTEGER" property="paymentCycle" />
+    <result column="payment_method" jdbcType="INTEGER" property="paymentMethod" />
+    <result column="ip_num" jdbcType="INTEGER" property="ipNum" />
+    <result column="ip_num_value" jdbcType="INTEGER" property="ipNumValue" />
+    <result column="application" jdbcType="INTEGER" property="application" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="basic_price" jdbcType="DECIMAL" property="basicPrice" />
+    <result column="export_discount_price" jdbcType="DECIMAL" property="exportDiscountPrice" />
+    <result column="contract_period_discount_price" jdbcType="DECIMAL" property="contractPeriodDiscountPrice" />
+    <result column="payment_cycle_discount_price" jdbcType="DECIMAL" property="paymentCycleDiscountPrice" />
+    <result column="payment_method_discount_price"  jdbcType="DECIMAL" property="paymentMethodDiscountPrice" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="business_id" jdbcType="VARCHAR" property="businessId" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="creater_user_id" jdbcType="VARCHAR" property="createrUserId" />
+    <result column="creater_user_name" jdbcType="VARCHAR" property="createrUserName" />
+    <result column="modified_user_id" jdbcType="VARCHAR" property="modifiedUserId" />
+    <result column="modified_user_name" jdbcType="VARCHAR" property="modifiedUserName" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="org_full_path" jdbcType="VARCHAR" property="orgFullPath" />
+    <result column="audit_by" jdbcType="INTEGER" property="auditBy" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="audit_pass_remark" jdbcType="VARCHAR" property="auditPassRemark" />
+    <result column="audit_refused_remark" jdbcType="VARCHAR" property="auditRefusedRemark" />
+    <result column="audit_price_by" jdbcType="INTEGER" property="auditPriceBy" />
+    <result column="audit_price" jdbcType="DECIMAL" property="auditPrice" />
+    <result column="install_address" jdbcType="VARCHAR" property="installAddress" />
+    <result column="line_name" jdbcType="VARCHAR" property="lineName" />
+    <result column="delivery_time" jdbcType="TIMESTAMP" property="deliveryTime" />
+    <!--扩展字段-->
+    <result column="audit_user_id" jdbcType="VARCHAR" property="auditUserId" />
+    <result column="audit_user_name" jdbcType="VARCHAR" property="auditUserName" />
+    <result column="audit_price_user_id" jdbcType="VARCHAR" property="auditPriceUserId" />
+    <result column="audit_price_user_name" jdbcType="VARCHAR" property="auditPriceUserName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    change_id, order_id, order_no, broad_band, export, contract_period, payment_cycle, 
+    payment_method, ip_num, ip_num_value, `application`, creater_by, create_time, modified_by, 
+    modified_time, is_deleted,status,basic_price,export_discount_price,contract_period_discount_price,
+    payment_cycle_discount_price,payment_method_discount_price,total_price,product_id,
+    business_id,start_time,end_time,
+    org_id,org_full_path,audit_by,audit_time,audit_pass_remark,audit_refused_remark,
+    audit_price_by,audit_price, install_address, line_name, delivery_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    o.*,
+    t1.user_id as creater_user_id,
+    t1.user_name as creater_user_name,
+    t2.user_id  as modified_user_id,
+    t2.user_name as modified_user_name,
+    t3.user_id as audit_user_id,
+    t3.user_name as audit_user_name,
+    t4.user_id as audit_price_user_id,
+    t4.user_name as audit_price_user_name
+    from itshop.t_internet_access_order_before_change o
+    left join authorization_platform.t_app_user_info t1 on
+    o.creater_by = t1.app_user_info_id
+    left join authorization_platform.t_app_user_info t2 on
+    o.modified_by = t2.app_user_info_id
+    left join authorization_platform.t_app_user_info t3 on
+    o.audit_by = t3.app_user_info_id
+    left join authorization_platform.t_app_user_info t4 on
+    o.audit_price_by = t4.app_user_info_id
+    where o.change_id = #{changeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_internet_access_order_before_change
+    where change_id = #{changeId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="changeId"
+          parameterType="com.itshop.web.dao.po.TInternetAccessOrderBeforeChange">
+    insert into t_internet_access_order_before_change
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="changeId != null">
+        change_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="broadBand != null">
+        broad_band,
+      </if>
+      <if test="export != null">
+        export,
+      </if>
+      <if test="contractPeriod != null">
+        contract_period,
+      </if>
+      <if test="paymentCycle != null">
+        payment_cycle,
+      </if>
+      <if test="paymentMethod != null">
+        payment_method,
+      </if>
+      <if test="ipNum != null">
+        ip_num,
+      </if>
+      <if test="ipNumValue != null">
+        ip_num_value,
+      </if>
+      <if test="application != null">
+        `application`,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="status != null">
+        `status`,
+      </if>
+      <if test="basicPrice != null">
+        basic_price,
+      </if>
+      <if test="exportDiscountPrice != null">
+        export_discount_price,
+      </if>
+      <if test="contractPeriodDiscountPrice != null">
+        contract_period_discount_price,
+      </if>
+      <if test="paymentCycleDiscountPrice != null">
+        payment_cycle_discount_price,
+      </if>
+      <if test="paymentMethodDiscountPrice != null">
+        payment_method_discount_price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="orgFullPath != null">
+        org_full_path,
+      </if>
+      <if test="auditBy != null">
+        audit_by,
+      </if>
+      <if test="auditTime != null">
+        audit_time,
+      </if>
+      <if test="auditPassRemark != null">
+        audit_pass_remark,
+      </if>
+      <if test="auditRefusedRemark != null">
+        audit_refused_remark,
+      </if>
+      <if test="auditPriceBy != null">
+        audit_price_by,
+      </if>
+      <if test="auditPrice != null">
+        audit_price,
+      </if>
+      <if test="installAddress != null">
+        install_address,
+      </if>
+      <if test="lineName != null">
+        line_name,
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="changeId != null">
+        #{changeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="broadBand != null">
+        #{broadBand,jdbcType=INTEGER},
+      </if>
+      <if test="export != null">
+        #{export,jdbcType=INTEGER},
+      </if>
+      <if test="contractPeriod != null">
+        #{contractPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="paymentCycle != null">
+        #{paymentCycle,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethod != null">
+        #{paymentMethod,jdbcType=INTEGER},
+      </if>
+      <if test="ipNum != null">
+        #{ipNum,jdbcType=INTEGER},
+      </if>
+      <if test="ipNumValue != null">
+        #{ipNumValue,jdbcType=INTEGER},
+      </if>
+      <if test="application != null">
+        #{application,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="basicPrice != null">
+        #{basicPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="exportDiscountPrice != null">
+        #{exportDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="contractPeriodDiscountPrice != null">
+        #{contractPeriodDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentCycleDiscountPrice != null">
+        #{paymentCycleDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentMethodDiscountPrice != null">
+        #{paymentMethodDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="orgFullPath != null">
+        #{orgFullPath,jdbcType=VARCHAR},
+      </if>
+      <if test="auditBy != null">
+        #{auditBy,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null">
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditPassRemark != null">
+        #{auditPassRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="auditRefusedRemark != null">
+        #{auditRefusedRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="auditPriceBy != null">
+        #{auditPriceBy,jdbcType=INTEGER},
+      </if>
+      <if test="auditPrice != null">
+        #{auditPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="installAddress != null">
+        #{installAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null">
+        #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null">
+        #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TInternetAccessOrderBeforeChange">
+    update t_internet_access_order_before_change
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="broadBand != null">
+        broad_band = #{broadBand,jdbcType=INTEGER},
+      </if>
+      <if test="export != null">
+        export = #{export,jdbcType=INTEGER},
+      </if>
+      <if test="contractPeriod != null">
+        contract_period = #{contractPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="paymentCycle != null">
+        payment_cycle = #{paymentCycle,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethod != null">
+        payment_method = #{paymentMethod,jdbcType=INTEGER},
+      </if>
+      <if test="ipNum != null">
+        ip_num = #{ipNum,jdbcType=INTEGER},
+      </if>
+      <if test="ipNumValue != null">
+        ip_num_value = #{ipNumValue,jdbcType=INTEGER},
+      </if>
+      <if test="application != null">
+        `application` = #{application,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="status != null">
+        `status` = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="basicPrice != null">
+        basic_price = #{basicPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="exportDiscountPrice != null">
+        export_discount_price = #{exportDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="contractPeriodDiscountPrice != null">
+        contract_period_discount_price = #{contractPeriodDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentCycleDiscountPrice != null">
+        payment_cycle_discount_price = #{paymentCycleDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentMethodDiscountPrice != null">
+        payment_method_discount_price = #{paymentMethodDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="orgFullPath != null">
+        org_full_path = #{orgFullPath,jdbcType=VARCHAR},
+      </if>
+      <if test="auditBy != null">
+        audit_by = #{auditBy,jdbcType=INTEGER},
+      </if>
+      <if test="auditTime != null">
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditPassRemark != null">
+        audit_pass_remark = #{auditPassRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="auditRefusedRemark != null">
+        audit_refused_remark = #{auditRefusedRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="auditPriceBy != null">
+        audit_price_by = #{auditPriceBy,jdbcType=INTEGER},
+      </if>
+      <if test="auditPrice != null">
+        audit_price = #{auditPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="installAddress != null">
+        install_address = #{installAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="lineName != null">
+        line_name = #{lineName,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryTime != null">
+        delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where change_id = #{changeId,jdbcType=INTEGER}
+  </update>
+
+
+  <select id="selectByOrderId" resultMap="BaseResultMap">
+    select
+    tmp.*,
+    t1.user_id as creater_user_id,
+    t1.user_name as creater_user_name,
+    t2.user_id as modified_user_id,
+    t2.user_name as modified_user_name,
+    t3.user_id as audit_user_id,
+    t3.user_name as audit_user_name,
+    t4.user_id as audit_price_user_id,
+    t4.user_name as audit_price_user_name
+    from itshop.t_internet_access_order_before_change tmp
+    left join authorization_platform.t_app_user_info as t1
+    on tmp.creater_by = t1.app_user_info_id
+    left join authorization_platform.t_app_user_info as t2
+    on tmp.modified_by = t2.app_user_info_id
+    left join authorization_platform.t_app_user_info t3 on
+      tmp.audit_by = t3.app_user_info_id
+    left join authorization_platform.t_app_user_info t4 on
+      tmp.audit_price_by = t4.app_user_info_id
+    where 1=1
+    and order_id = #{orderId,jdbcType=INTEGER}
+    order by tmp.change_id
+  </select>
+
+  <select id="selectCountByOrderId" resultType="java.lang.Integer">
+    select count(*)
+    from itshop.t_internet_access_order_before_change tmp
+    where 1=1
+    <if test="orderId !=null">
+      and order_id = #{orderId,jdbcType=INTEGER}
+    </if>
+    <if test="startDate !=null">
+      and create_time <![CDATA[ >= ]]> #{startDate,jdbcType=TIMESTAMP}
+    </if>
+    <if test="endDate !=null">
+      and create_time  <![CDATA[ <= ]]> #{endDate,jdbcType=TIMESTAMP}
+    </if>
+  </select>
+
+  <select id="selectLastTimeChangeInfo" resultMap="BaseResultMap">
+    select *
+    from itshop.t_internet_access_order_before_change
+    where 1=1
+    and order_id = #{orderId,jdbcType=INTEGER}
+    <if test="status != null">
+        and `status` = #{status,jdbcType=INTEGER}
+    </if>
+    order by change_id desc
+    limit 1
+  </select>
+
+</mapper>

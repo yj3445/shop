@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TProductOemDiscountRulesDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TProductOemDiscountRules">
+    <id column="product_oem_discount_rules_id" jdbcType="INTEGER" property="productOemDiscountRulesId" />
+    <result column="product_oem_id" jdbcType="INTEGER" property="productOemId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="product_item_id" jdbcType="INTEGER" property="productItemId" />
+    <result column="discount_rate" jdbcType="INTEGER" property="discountRate" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    product_oem_discount_rules_id, product_oem_id, product_id, org_id, product_item_id, 
+    discount_rate, creater_by, create_time, modified_by, modified_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_oem_discount_rules
+    where product_oem_discount_rules_id = #{productOemDiscountRulesId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" >
+     update t_product_oem_discount_rules
+        set is_deleted =1,
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+        modified_time = now()
+    where product_oem_discount_rules_id = #{productOemDiscountRulesId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertBatch"  useGeneratedKeys="true" keyProperty="productOemDiscountRulesId">
+    insert into t_product_oem_discount_rules (product_oem_discount_rules_id, product_oem_id,
+      product_id, org_id, product_item_id,
+      discount_rate, creater_by, create_time,
+      modified_by, modified_time, is_deleted
+      )
+    values
+    <foreach collection ="list" item="data" index= "index" separator =",">
+    (
+      #{data.productOemDiscountRulesId,jdbcType=INTEGER}, #{data.productOemId,jdbcType=INTEGER},
+      #{data.productId,jdbcType=INTEGER}, #{data.orgId,jdbcType=INTEGER}, #{data.productItemId,jdbcType=INTEGER},
+      #{data.discountRate,jdbcType=INTEGER}, #{data.createrBy,jdbcType=INTEGER}, #{data.createTime,jdbcType=TIMESTAMP},
+      #{data.modifiedBy,jdbcType=INTEGER}, #{data.modifiedTime,jdbcType=TIMESTAMP}, #{data.isDeleted,jdbcType=BIT}
+    )
+    </foreach >
+  </insert>
+  <insert id="insertSelective"  useGeneratedKeys="true" keyProperty="productOemDiscountRulesId"
+          parameterType="com.itshop.web.dao.po.TProductOemDiscountRules">
+    insert into t_product_oem_discount_rules
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productOemDiscountRulesId != null">
+        product_oem_discount_rules_id,
+      </if>
+      <if test="productOemId != null">
+        product_oem_id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="productItemId != null">
+        product_item_id,
+      </if>
+      <if test="discountRate != null">
+        discount_rate,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productOemDiscountRulesId != null">
+        #{productOemDiscountRulesId,jdbcType=INTEGER},
+      </if>
+      <if test="productOemId != null">
+        #{productOemId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="productItemId != null">
+        #{productItemId,jdbcType=INTEGER},
+      </if>
+      <if test="discountRate != null">
+        #{discountRate,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TProductOemDiscountRules">
+    update t_product_oem_discount_rules
+    <set>
+      <if test="productOemId != null">
+        product_oem_id = #{productOemId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="productItemId != null">
+        product_item_id = #{productItemId,jdbcType=INTEGER},
+      </if>
+      <if test="discountRate != null">
+        discount_rate = #{discountRate,jdbcType=INTEGER},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where product_oem_discount_rules_id = #{productOemDiscountRulesId,jdbcType=INTEGER}
+  </update>
+
+  <update id="deleteByProductOemId">
+        update t_product_oem_discount_rules
+        set is_deleted =1,
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+        modified_time = now()
+        where is_deleted =0
+        and  product_oem_id = #{productOemId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByProductOemId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product_oem_discount_rules
+    where is_deleted =0
+    and  product_oem_id = #{productOemId,jdbcType=INTEGER}
+  </select>
+</mapper>

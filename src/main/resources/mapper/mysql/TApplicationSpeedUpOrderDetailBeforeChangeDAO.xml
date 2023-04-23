@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TApplicationSpeedUpOrderDetailBeforeChangeDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TApplicationSpeedUpOrderDetailBeforeChange">
+    <id column="change_detail_id" jdbcType="INTEGER" property="changeDetailId" />
+    <result column="change_id" jdbcType="INTEGER" property="changeId" />
+    <result column="order_detail_id" jdbcType="INTEGER" property="orderDetailId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="speed" jdbcType="INTEGER" property="speed" />
+    <result column="unit" jdbcType="INTEGER" property="unit" />
+    <result column="duration" jdbcType="INTEGER" property="duration" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="url_speed_up_id" jdbcType="INTEGER" property="urlSpeedUpId" />
+    <result column="speed_unit" jdbcType="VARCHAR" property="speedUnit" />
+    <result column="price_unit" jdbcType="VARCHAR" property="priceUnit" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    change_detail_id, change_id, order_detail_id, order_id, price, url, speed, unit, 
+    duration, start_time, end_time, url_speed_up_id, speed_unit,
+    price_unit,status,total_price,
+    creater_by,create_time,modified_by,
+    modified_time,is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_application_speed_up_order_detail_before_change
+    where change_detail_id = #{changeDetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_application_speed_up_order_detail_before_change
+    where change_detail_id = #{changeDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="changeDetailId"
+          parameterType="com.itshop.web.dao.po.TApplicationSpeedUpOrderDetailBeforeChange">
+    insert into t_application_speed_up_order_detail_before_change (change_detail_id, change_id, order_detail_id, 
+      order_id, price, url, 
+      speed, unit, duration, 
+      start_time, end_time, url_speed_up_id, 
+      speed_unit,
+      price_unit,status,total_price,
+      creater_by,create_time,modified_by,
+      modified_time,is_deleted)
+    values (#{changeDetailId,jdbcType=INTEGER}, #{changeId,jdbcType=INTEGER}, #{orderDetailId,jdbcType=INTEGER}, 
+      #{orderId,jdbcType=INTEGER}, #{price,jdbcType=DECIMAL}, #{url,jdbcType=VARCHAR}, 
+      #{speed,jdbcType=INTEGER}, #{unit,jdbcType=INTEGER}, #{duration,jdbcType=INTEGER}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{urlSpeedUpId,jdbcType=INTEGER}, 
+      #{speedUnit,jdbcType=VARCHAR},
+      #{priceUnit,jdbcType=VARCHAR},#{status,jdbcType=INTEGER},#{totalPrice,jdbcType=DECIMAL},
+      #{createrBy,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=INTEGER},
+      #{modifiedTime,jdbcType=TIMESTAMP},#{isDeleted,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="changeDetailId"
+          parameterType="com.itshop.web.dao.po.TApplicationSpeedUpOrderDetailBeforeChange">
+    insert into t_application_speed_up_order_detail_before_change
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="changeDetailId != null">
+        change_detail_id,
+      </if>
+      <if test="changeId != null">
+        change_id,
+      </if>
+      <if test="orderDetailId != null">
+        order_detail_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="speed != null">
+        speed,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="duration != null">
+        duration,
+      </if>
+      <if test="startTime != null">
+        start_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="urlSpeedUpId != null">
+        url_speed_up_id,
+      </if>
+      <if test="speedUnit != null">
+        speed_unit,
+      </if>
+      <if test="priceUnit !=null">
+        price_unit,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="changeDetailId != null">
+        #{changeDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="changeId != null">
+        #{changeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDetailId != null">
+        #{orderDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=INTEGER},
+      </if>
+      <if test="duration != null">
+        #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="urlSpeedUpId != null">
+        #{urlSpeedUpId,jdbcType=INTEGER},
+      </if>
+      <if test="speedUnit != null">
+        #{speedUnit,jdbcType=VARCHAR},
+      </if>
+
+      <if test="priceUnit !=null">
+        #{priceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TApplicationSpeedUpOrderDetailBeforeChange">
+    update t_application_speed_up_order_detail_before_change
+    <set>
+      <if test="changeId != null">
+        change_id = #{changeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderDetailId != null">
+        order_detail_id = #{orderDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="speed != null">
+        speed = #{speed,jdbcType=INTEGER},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=INTEGER},
+      </if>
+      <if test="duration != null">
+        duration = #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="startTime != null">
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="urlSpeedUpId != null">
+        url_speed_up_id = #{urlSpeedUpId,jdbcType=INTEGER},
+      </if>
+      <if test="speedUnit != null">
+        speed_unit = #{speedUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="priceUnit !=null">
+        price_unit =#{priceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="totalPrice != null">
+        total_price= #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createrBy != null">
+        creater_by =#{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where change_detail_id = #{changeDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TApplicationSpeedUpOrderDetailBeforeChange">
+    update t_application_speed_up_order_detail_before_change
+    set change_id = #{changeId,jdbcType=INTEGER},
+      order_detail_id = #{orderDetailId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      price = #{price,jdbcType=DECIMAL},
+      url = #{url,jdbcType=VARCHAR},
+      speed = #{speed,jdbcType=INTEGER},
+      unit = #{unit,jdbcType=INTEGER},
+      duration = #{duration,jdbcType=INTEGER},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      url_speed_up_id = #{urlSpeedUpId,jdbcType=INTEGER},
+      speed_unit = #{speedUnit,jdbcType=VARCHAR},
+      price_unit =#{priceUnit,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      total_price= #{totalPrice,jdbcType=DECIMAL},
+      creater_by =#{createrBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      modified_by = #{modifiedBy,jdbcType=INTEGER},
+      modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=BIT}
+    where change_detail_id = #{changeDetailId,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatch" useGeneratedKeys="true" keyProperty="changeDetailId"
+          parameterType="java.util.List" >
+    insert into t_application_speed_up_order_detail_before_change (change_detail_id, change_id, order_detail_id,
+    order_id, price, url,
+    speed, unit, duration,
+    start_time, end_time, url_speed_up_id,
+    speed_unit,
+    price_unit,status,total_price,
+    creater_by,create_time,modified_by,
+    modified_time,is_deleted)
+    values
+    <foreach collection ="list" item="data" index= "index" separator =",">
+      (#{data.changeDetailId,jdbcType=INTEGER}, #{data.changeId,jdbcType=INTEGER}, #{data.orderDetailId,jdbcType=INTEGER},
+      #{data.orderId,jdbcType=INTEGER}, #{data.price,jdbcType=DECIMAL}, #{data.url,jdbcType=VARCHAR},
+      #{data.speed,jdbcType=INTEGER}, #{data.unit,jdbcType=INTEGER}, #{data.duration,jdbcType=INTEGER},
+      #{data.startTime,jdbcType=TIMESTAMP}, #{data.endTime,jdbcType=TIMESTAMP}, #{data.urlSpeedUpId,jdbcType=INTEGER},
+      #{data.speedUnit,jdbcType=VARCHAR},
+      #{data.priceUnit,jdbcType=VARCHAR},#{data.status,jdbcType=INTEGER},#{data.totalPrice,jdbcType=DECIMAL},
+      #{data.createrBy,jdbcType=INTEGER},#{data.createTime,jdbcType=TIMESTAMP}, #{data.modifiedBy,jdbcType=INTEGER},
+      #{data.modifiedTime,jdbcType=TIMESTAMP},#{data.isDeleted,jdbcType=BIT})
+    </foreach >
+  </insert>
+</mapper>

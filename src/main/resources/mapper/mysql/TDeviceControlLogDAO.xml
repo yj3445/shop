@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TDeviceControlLogDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TDeviceControlLog">
+    <id column="log_id" jdbcType="INTEGER" property="logId" />
+    <result column="service_type" jdbcType="VARCHAR" property="serviceType" />
+    <result column="operation_type" jdbcType="VARCHAR" property="operationType" />
+    <result column="record_type" jdbcType="BIT" property="recordType" />
+    <result column="business_id" jdbcType="VARCHAR" property="businessId" />
+    <result column="time_millis" jdbcType="INTEGER" property="timeMillis" />
+    <result column="exception_type" jdbcType="VARCHAR" property="exceptionType" />
+    <result column="uuid" jdbcType="VARCHAR" property="uuid" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.itshop.web.dao.po.TDeviceControlLogWithBLOBs">
+    <result column="request_json" jdbcType="LONGVARCHAR" property="requestJson" />
+    <result column="response_json" jdbcType="LONGVARCHAR" property="responseJson" />
+    <result column="exception_desc" jdbcType="LONGVARCHAR" property="exceptionDesc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    log_id, service_type, operation_type, record_type, business_id, time_millis, exception_type, 
+    uuid, creater_by, create_time
+  </sql>
+  <sql id="Blob_Column_List">
+    request_json, response_json, exception_desc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_device_control_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_device_control_log
+    where log_id = #{logId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.itshop.web.dao.po.TDeviceControlLogWithBLOBs">
+    insert into t_device_control_log (log_id, service_type, operation_type, 
+      record_type, business_id, time_millis, 
+      exception_type, uuid, creater_by, 
+      create_time, request_json, response_json, 
+      exception_desc)
+    values (#{logId,jdbcType=INTEGER}, #{serviceType,jdbcType=VARCHAR}, #{operationType,jdbcType=VARCHAR}, 
+      #{recordType,jdbcType=BIT}, #{businessId,jdbcType=VARCHAR}, #{timeMillis,jdbcType=INTEGER}, 
+      #{exceptionType,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, #{createrBy,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{requestJson,jdbcType=LONGVARCHAR}, #{responseJson,jdbcType=LONGVARCHAR}, 
+      #{exceptionDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TDeviceControlLogWithBLOBs">
+    insert into t_device_control_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        log_id,
+      </if>
+      <if test="serviceType != null">
+        service_type,
+      </if>
+      <if test="operationType != null">
+        operation_type,
+      </if>
+      <if test="recordType != null">
+        record_type,
+      </if>
+      <if test="businessId != null">
+        business_id,
+      </if>
+      <if test="timeMillis != null">
+        time_millis,
+      </if>
+      <if test="exceptionType != null">
+        exception_type,
+      </if>
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="requestJson != null">
+        request_json,
+      </if>
+      <if test="responseJson != null">
+        response_json,
+      </if>
+      <if test="exceptionDesc != null">
+        exception_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="logId != null">
+        #{logId,jdbcType=INTEGER},
+      </if>
+      <if test="serviceType != null">
+        #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="operationType != null">
+        #{operationType,jdbcType=VARCHAR},
+      </if>
+      <if test="recordType != null">
+        #{recordType,jdbcType=BIT},
+      </if>
+      <if test="businessId != null">
+        #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="timeMillis != null">
+        #{timeMillis,jdbcType=INTEGER},
+      </if>
+      <if test="exceptionType != null">
+        #{exceptionType,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null">
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestJson != null">
+        #{requestJson,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="responseJson != null">
+        #{responseJson,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="exceptionDesc != null">
+        #{exceptionDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TDeviceControlLogWithBLOBs">
+    update t_device_control_log
+    <set>
+      <if test="serviceType != null">
+        service_type = #{serviceType,jdbcType=VARCHAR},
+      </if>
+      <if test="operationType != null">
+        operation_type = #{operationType,jdbcType=VARCHAR},
+      </if>
+      <if test="recordType != null">
+        record_type = #{recordType,jdbcType=BIT},
+      </if>
+      <if test="businessId != null">
+        business_id = #{businessId,jdbcType=VARCHAR},
+      </if>
+      <if test="timeMillis != null">
+        time_millis = #{timeMillis,jdbcType=INTEGER},
+      </if>
+      <if test="exceptionType != null">
+        exception_type = #{exceptionType,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null">
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestJson != null">
+        request_json = #{requestJson,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="responseJson != null">
+        response_json = #{responseJson,jdbcType=LONGVARCHAR},
+      </if>
+      <if test="exceptionDesc != null">
+        exception_desc = #{exceptionDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.itshop.web.dao.po.TDeviceControlLogWithBLOBs">
+    update t_device_control_log
+    set service_type = #{serviceType,jdbcType=VARCHAR},
+      operation_type = #{operationType,jdbcType=VARCHAR},
+      record_type = #{recordType,jdbcType=BIT},
+      business_id = #{businessId,jdbcType=VARCHAR},
+      time_millis = #{timeMillis,jdbcType=INTEGER},
+      exception_type = #{exceptionType,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      creater_by = #{createrBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      request_json = #{requestJson,jdbcType=LONGVARCHAR},
+      response_json = #{responseJson,jdbcType=LONGVARCHAR},
+      exception_desc = #{exceptionDesc,jdbcType=LONGVARCHAR}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TDeviceControlLog">
+    update t_device_control_log
+    set service_type = #{serviceType,jdbcType=VARCHAR},
+      operation_type = #{operationType,jdbcType=VARCHAR},
+      record_type = #{recordType,jdbcType=BIT},
+      business_id = #{businessId,jdbcType=VARCHAR},
+      time_millis = #{timeMillis,jdbcType=INTEGER},
+      exception_type = #{exceptionType,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      creater_by = #{createrBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where log_id = #{logId,jdbcType=INTEGER}
+  </update>
+</mapper>

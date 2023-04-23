@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TProductCustomeCaseDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TProductCustomeCase">
+    <id column="product_custome_case_id" jdbcType="INTEGER" property="productCustomeCaseId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="pic_url" jdbcType="VARCHAR" property="picUrl" />
+    <result column="custome_case_name" jdbcType="VARCHAR" property="customeCaseName" />
+    <result column="custome_case_desc" jdbcType="VARCHAR" property="customeCaseDesc" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    product_custome_case_id, product_id, pic_url, custome_case_name, custome_case_desc, 
+    creater_by, create_time, modified_by, modified_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_custome_case
+    where product_custome_case_id = #{productCustomeCaseId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByProductId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product_custome_case
+    where is_deleted =0
+    and product_id = #{productId,jdbcType=INTEGER}
+  </select>
+  <update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update t_product_custome_case
+    set is_deleted =1,
+    modified_time = now(),
+    modified_by= #{modifiedBy,jdbcType=INTEGER}
+    where product_custome_case_id = #{productCustomeCaseId,jdbcType=INTEGER}
+  </update>
+
+  <update id="deleteByProductId" parameterType="java.lang.Integer">
+    update t_product_custome_case
+    set is_deleted =1,
+    modified_time = now(),
+    modified_by= #{modifiedBy,jdbcType=INTEGER}
+    where product_id = #{productId,jdbcType=INTEGER}
+  </update>
+
+  <insert id="insertBatch" useGeneratedKeys="true" keyProperty="productCustomeCaseId"
+          parameterType="java.util.List" >
+    insert into t_product_custome_case (product_custome_case_id, product_id,
+    pic_url, custome_case_name, custome_case_desc,
+    creater_by, create_time, modified_by,
+    modified_time, is_deleted)
+    values
+    <foreach collection ="list" item="data" index= "index" separator =",">
+      (
+      #{data.productCustomeCaseId,jdbcType=INTEGER},
+      #{data.productId,jdbcType=INTEGER},
+      #{data.picUrl,jdbcType=VARCHAR},
+      #{data.customeCaseName,jdbcType=VARCHAR},
+      #{data.customeCaseDesc,jdbcType=VARCHAR},
+      #{data.createrBy,jdbcType=INTEGER},
+      #{data.createTime,jdbcType=TIMESTAMP},
+      #{data.modifiedBy,jdbcType=INTEGER},
+      #{data.modifiedTime,jdbcType=TIMESTAMP},
+      #{data.isDeleted,jdbcType=BIT}
+      )
+    </foreach >
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="productCustomeCaseId"
+          parameterType="com.itshop.web.dao.po.TProductCustomeCase">
+    insert into t_product_custome_case
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productCustomeCaseId != null">
+        product_custome_case_id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="picUrl != null">
+        pic_url,
+      </if>
+      <if test="customeCaseName != null">
+        custome_case_name,
+      </if>
+      <if test="customeCaseDesc != null">
+        custome_case_desc,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productCustomeCaseId != null">
+        #{productCustomeCaseId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="picUrl != null">
+        #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="customeCaseName != null">
+        #{customeCaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="customeCaseDesc != null">
+        #{customeCaseDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TProductCustomeCase">
+    update t_product_custome_case
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="picUrl != null">
+        pic_url = #{picUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="customeCaseName != null">
+        custome_case_name = #{customeCaseName,jdbcType=VARCHAR},
+      </if>
+      <if test="customeCaseDesc != null">
+        custome_case_desc = #{customeCaseDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where product_custome_case_id = #{productCustomeCaseId,jdbcType=INTEGER}
+  </update>
+
+</mapper>

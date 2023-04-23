@@ -1,0 +1,41 @@
+[{
+	"productId": 101,
+	"productName": "应用加速产品",
+	"paymentCycle": [{
+		"value": 1,
+		"discountRate": 100
+	}, {
+		"value": 2,
+		"discountRate": 90
+	}, {
+		"value": 3,
+		"discountRate": 80
+	}],
+	"paymentMethod": [{
+		"value": 1,
+		"discountRate": 90
+	}, {
+		"value": 2,
+		"discountRate": 100
+	}]
+},{
+	"productId": 102,
+	"productName": "临时URL",
+	"paymentCycle": [{
+		"value": 1,
+		"discountRate": 100
+	}, {
+		"value": 2,
+		"discountRate": 90
+	}, {
+		"value": 3,
+		"discountRate": 80
+	}],
+	"paymentMethod": [{
+		"value": 1,
+		"discountRate": 90
+	}, {
+		"value": 2,
+		"discountRate": 100
+	}]
+}]

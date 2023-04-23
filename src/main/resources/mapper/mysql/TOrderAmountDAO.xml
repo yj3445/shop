@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TOrderAmountDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TOrderAmount">
+    <id column="order_amount_id" jdbcType="INTEGER" property="orderAmountId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="change_id" jdbcType="INTEGER" property="changeId" />
+    <result column="order_table_name" jdbcType="VARCHAR" property="orderTableName" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="product_oem_id" jdbcType="INTEGER" property="productOemId" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="org_full_path" jdbcType="VARCHAR" property="orgFullPath" />
+    <result column="end_user_oem_item_price_id" jdbcType="INTEGER" property="endUserOemItemPriceId" />
+    <result column="end_user_price" jdbcType="DECIMAL" property="endUserPrice" />
+    <result column="end_user_price_unit" jdbcType="VARCHAR" property="endUserPriceUnit" />
+    <result column="basic_price" jdbcType="DECIMAL" property="basicPrice" />
+    <result column="export_discount_rules_id" jdbcType="INTEGER" property="exportDiscountRulesId" />
+    <result column="export_discount_rate" jdbcType="INTEGER" property="exportDiscountRate" />
+    <result column="export_discount_price" jdbcType="DECIMAL" property="exportDiscountPrice" />
+    <result column="contract_period_discount_rules_id" jdbcType="INTEGER" property="contractPeriodDiscountRulesId" />
+    <result column="contract_period_discount_rate" jdbcType="INTEGER" property="contractPeriodDiscountRate" />
+    <result column="contract_period_discount_price" jdbcType="DECIMAL" property="contractPeriodDiscountPrice" />
+    <result column="payment_cycle_discount_rules_id" jdbcType="INTEGER" property="paymentCycleDiscountRulesId" />
+    <result column="payment_cycle_discount_rate" jdbcType="INTEGER" property="paymentCycleDiscountRate" />
+    <result column="payment_cycle_discount_price" jdbcType="DECIMAL" property="paymentCycleDiscountPrice" />
+    <result column="payment_method_discount_rules_id" jdbcType="INTEGER" property="paymentMethodDiscountRulesId" />
+    <result column="payment_method_discount_rate" jdbcType="INTEGER" property="paymentMethodDiscountRate" />
+    <result column="payment_method_discount_price" jdbcType="DECIMAL" property="paymentMethodDiscountPrice" />
+    <result column="total_price" jdbcType="DECIMAL" property="totalPrice" />
+    <result column="sales_total_price" jdbcType="DECIMAL" property="salesTotalPrice" />
+    <result column="provider_total_price" jdbcType="DECIMAL" property="providerTotalPrice" />
+    <result column="agent_level1_oem_item_price_id" jdbcType="INTEGER" property="agentLevel1OemItemPriceId" />
+    <result column="agent_level1_price" jdbcType="DECIMAL" property="agentLevel1Price" />
+    <result column="agent_level1_price_unit" jdbcType="VARCHAR" property="agentLevel1PriceUnit" />
+    <result column="agent_level1_total_price" jdbcType="DECIMAL" property="agentLevel1TotalPrice" />
+    <result column="agent_level2_oem_item_price_id" jdbcType="INTEGER" property="agentLevel2OemItemPriceId" />
+    <result column="agent_level2_price" jdbcType="DECIMAL" property="agentLevel2Price" />
+    <result column="agent_level2_price_unit" jdbcType="VARCHAR" property="agentLevel2PriceUnit" />
+    <result column="agent_level2_total_price" jdbcType="DECIMAL" property="agentLevel2TotalPrice" />
+    <result column="agent_level3_oem_item_price_id" jdbcType="INTEGER" property="agentLevel3OemItemPriceId" />
+    <result column="agent_level3_price" jdbcType="DECIMAL" property="agentLevel3Price" />
+    <result column="agent_level3_price_unit" jdbcType="VARCHAR" property="agentLevel3PriceUnit" />
+    <result column="agent_level3_total_price" jdbcType="DECIMAL" property="agentLevel3TotalPrice" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_amount_id, order_id, change_id, order_table_name, product_id, product_oem_id, 
+    org_id, org_full_path, end_user_oem_item_price_id, end_user_price, end_user_price_unit, 
+    basic_price, export_discount_rules_id, export_discount_rate, export_discount_price, 
+    contract_period_discount_rules_id, contract_period_discount_rate, contract_period_discount_price, 
+    payment_cycle_discount_rules_id, payment_cycle_discount_rate, payment_cycle_discount_price, 
+    payment_method_discount_rules_id, payment_method_discount_rate, payment_method_discount_price, 
+    total_price, sales_total_price, provider_total_price, agent_level1_oem_item_price_id, 
+    agent_level1_price, agent_level1_price_unit, agent_level1_total_price, agent_level2_oem_item_price_id, 
+    agent_level2_price, agent_level2_price_unit, agent_level2_total_price, agent_level3_oem_item_price_id, 
+    agent_level3_price, agent_level3_price_unit, agent_level3_total_price
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_order_amount
+    where order_amount_id = #{orderAmountId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByOrderIdAndChangeId" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from t_order_amount
+    where 1=1
+    <if test="orderId != null">
+     and  order_id = #{orderId,jdbcType=INTEGER}
+    </if>
+    <if test="changeId != null">
+      and change_id = #{changeId,jdbcType=INTEGER}
+    </if>
+    <if test="orderTableName != null">
+      and order_table_name = #{orderTableName,jdbcType=VARCHAR}
+    </if>
+    limit 1
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_order_amount
+    where order_amount_id = #{orderAmountId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="orderAmountId" parameterType="com.itshop.web.dao.po.TOrderAmount">
+    insert into t_order_amount (order_amount_id, order_id, change_id, 
+      order_table_name, product_id, product_oem_id, 
+      org_id, org_full_path, end_user_oem_item_price_id, 
+      end_user_price, end_user_price_unit, basic_price, 
+      export_discount_rules_id, export_discount_rate, 
+      export_discount_price, contract_period_discount_rules_id, 
+      contract_period_discount_rate, contract_period_discount_price, 
+      payment_cycle_discount_rules_id, payment_cycle_discount_rate, 
+      payment_cycle_discount_price, payment_method_discount_rules_id, 
+      payment_method_discount_rate, payment_method_discount_price, 
+      total_price, sales_total_price, provider_total_price, 
+      agent_level1_oem_item_price_id, agent_level1_price, 
+      agent_level1_price_unit, agent_level1_total_price, 
+      agent_level2_oem_item_price_id, agent_level2_price, 
+      agent_level2_price_unit, agent_level2_total_price, 
+      agent_level3_oem_item_price_id, agent_level3_price, 
+      agent_level3_price_unit, agent_level3_total_price
+      )
+    values (#{orderAmountId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{changeId,jdbcType=INTEGER}, 
+      #{orderTableName,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, #{productOemId,jdbcType=INTEGER}, 
+      #{orgId,jdbcType=INTEGER}, #{orgFullPath,jdbcType=VARCHAR}, #{endUserOemItemPriceId,jdbcType=INTEGER}, 
+      #{endUserPrice,jdbcType=DECIMAL}, #{endUserPriceUnit,jdbcType=VARCHAR}, #{basicPrice,jdbcType=DECIMAL}, 
+      #{exportDiscountRulesId,jdbcType=INTEGER}, #{exportDiscountRate,jdbcType=INTEGER}, 
+      #{exportDiscountPrice,jdbcType=DECIMAL}, #{contractPeriodDiscountRulesId,jdbcType=INTEGER}, 
+      #{contractPeriodDiscountRate,jdbcType=INTEGER}, #{contractPeriodDiscountPrice,jdbcType=DECIMAL}, 
+      #{paymentCycleDiscountRulesId,jdbcType=INTEGER}, #{paymentCycleDiscountRate,jdbcType=INTEGER}, 
+      #{paymentCycleDiscountPrice,jdbcType=DECIMAL}, #{paymentMethodDiscountRulesId,jdbcType=INTEGER}, 
+      #{paymentMethodDiscountRate,jdbcType=INTEGER}, #{paymentMethodDiscountPrice,jdbcType=DECIMAL}, 
+      #{totalPrice,jdbcType=DECIMAL}, #{salesTotalPrice,jdbcType=DECIMAL}, #{providerTotalPrice,jdbcType=DECIMAL}, 
+      #{agentLevel1OemItemPriceId,jdbcType=INTEGER}, #{agentLevel1Price,jdbcType=DECIMAL}, 
+      #{agentLevel1PriceUnit,jdbcType=VARCHAR}, #{agentLevel1TotalPrice,jdbcType=DECIMAL}, 
+      #{agentLevel2OemItemPriceId,jdbcType=INTEGER}, #{agentLevel2Price,jdbcType=DECIMAL}, 
+      #{agentLevel2PriceUnit,jdbcType=VARCHAR}, #{agentLevel2TotalPrice,jdbcType=DECIMAL}, 
+      #{agentLevel3OemItemPriceId,jdbcType=INTEGER}, #{agentLevel3Price,jdbcType=DECIMAL}, 
+      #{agentLevel3PriceUnit,jdbcType=VARCHAR}, #{agentLevel3TotalPrice,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="orderAmountId"  parameterType="com.itshop.web.dao.po.TOrderAmount">
+    insert into t_order_amount
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderAmountId != null">
+        order_amount_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="changeId != null">
+        change_id,
+      </if>
+      <if test="orderTableName != null">
+        order_table_name,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="productOemId != null">
+        product_oem_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="orgFullPath != null">
+        org_full_path,
+      </if>
+      <if test="endUserOemItemPriceId != null">
+        end_user_oem_item_price_id,
+      </if>
+      <if test="endUserPrice != null">
+        end_user_price,
+      </if>
+      <if test="endUserPriceUnit != null">
+        end_user_price_unit,
+      </if>
+      <if test="basicPrice != null">
+        basic_price,
+      </if>
+      <if test="exportDiscountRulesId != null">
+        export_discount_rules_id,
+      </if>
+      <if test="exportDiscountRate != null">
+        export_discount_rate,
+      </if>
+      <if test="exportDiscountPrice != null">
+        export_discount_price,
+      </if>
+      <if test="contractPeriodDiscountRulesId != null">
+        contract_period_discount_rules_id,
+      </if>
+      <if test="contractPeriodDiscountRate != null">
+        contract_period_discount_rate,
+      </if>
+      <if test="contractPeriodDiscountPrice != null">
+        contract_period_discount_price,
+      </if>
+      <if test="paymentCycleDiscountRulesId != null">
+        payment_cycle_discount_rules_id,
+      </if>
+      <if test="paymentCycleDiscountRate != null">
+        payment_cycle_discount_rate,
+      </if>
+      <if test="paymentCycleDiscountPrice != null">
+        payment_cycle_discount_price,
+      </if>
+      <if test="paymentMethodDiscountRulesId != null">
+        payment_method_discount_rules_id,
+      </if>
+      <if test="paymentMethodDiscountRate != null">
+        payment_method_discount_rate,
+      </if>
+      <if test="paymentMethodDiscountPrice != null">
+        payment_method_discount_price,
+      </if>
+      <if test="totalPrice != null">
+        total_price,
+      </if>
+      <if test="salesTotalPrice != null">
+        sales_total_price,
+      </if>
+      <if test="providerTotalPrice != null">
+        provider_total_price,
+      </if>
+      <if test="agentLevel1OemItemPriceId != null">
+        agent_level1_oem_item_price_id,
+      </if>
+      <if test="agentLevel1Price != null">
+        agent_level1_price,
+      </if>
+      <if test="agentLevel1PriceUnit != null">
+        agent_level1_price_unit,
+      </if>
+      <if test="agentLevel1TotalPrice != null">
+        agent_level1_total_price,
+      </if>
+      <if test="agentLevel2OemItemPriceId != null">
+        agent_level2_oem_item_price_id,
+      </if>
+      <if test="agentLevel2Price != null">
+        agent_level2_price,
+      </if>
+      <if test="agentLevel2PriceUnit != null">
+        agent_level2_price_unit,
+      </if>
+      <if test="agentLevel2TotalPrice != null">
+        agent_level2_total_price,
+      </if>
+      <if test="agentLevel3OemItemPriceId != null">
+        agent_level3_oem_item_price_id,
+      </if>
+      <if test="agentLevel3Price != null">
+        agent_level3_price,
+      </if>
+      <if test="agentLevel3PriceUnit != null">
+        agent_level3_price_unit,
+      </if>
+      <if test="agentLevel3TotalPrice != null">
+        agent_level3_total_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderAmountId != null">
+        #{orderAmountId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="changeId != null">
+        #{changeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderTableName != null">
+        #{orderTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="productOemId != null">
+        #{productOemId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="orgFullPath != null">
+        #{orgFullPath,jdbcType=VARCHAR},
+      </if>
+      <if test="endUserOemItemPriceId != null">
+        #{endUserOemItemPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="endUserPrice != null">
+        #{endUserPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="endUserPriceUnit != null">
+        #{endUserPriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="basicPrice != null">
+        #{basicPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="exportDiscountRulesId != null">
+        #{exportDiscountRulesId,jdbcType=INTEGER},
+      </if>
+      <if test="exportDiscountRate != null">
+        #{exportDiscountRate,jdbcType=INTEGER},
+      </if>
+      <if test="exportDiscountPrice != null">
+        #{exportDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="contractPeriodDiscountRulesId != null">
+        #{contractPeriodDiscountRulesId,jdbcType=INTEGER},
+      </if>
+      <if test="contractPeriodDiscountRate != null">
+        #{contractPeriodDiscountRate,jdbcType=INTEGER},
+      </if>
+      <if test="contractPeriodDiscountPrice != null">
+        #{contractPeriodDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentCycleDiscountRulesId != null">
+        #{paymentCycleDiscountRulesId,jdbcType=INTEGER},
+      </if>
+      <if test="paymentCycleDiscountRate != null">
+        #{paymentCycleDiscountRate,jdbcType=INTEGER},
+      </if>
+      <if test="paymentCycleDiscountPrice != null">
+        #{paymentCycleDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentMethodDiscountRulesId != null">
+        #{paymentMethodDiscountRulesId,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethodDiscountRate != null">
+        #{paymentMethodDiscountRate,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethodDiscountPrice != null">
+        #{paymentMethodDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salesTotalPrice != null">
+        #{salesTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="providerTotalPrice != null">
+        #{providerTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel1OemItemPriceId != null">
+        #{agentLevel1OemItemPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="agentLevel1Price != null">
+        #{agentLevel1Price,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel1PriceUnit != null">
+        #{agentLevel1PriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="agentLevel1TotalPrice != null">
+        #{agentLevel1TotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel2OemItemPriceId != null">
+        #{agentLevel2OemItemPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="agentLevel2Price != null">
+        #{agentLevel2Price,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel2PriceUnit != null">
+        #{agentLevel2PriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="agentLevel2TotalPrice != null">
+        #{agentLevel2TotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel3OemItemPriceId != null">
+        #{agentLevel3OemItemPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="agentLevel3Price != null">
+        #{agentLevel3Price,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel3PriceUnit != null">
+        #{agentLevel3PriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="agentLevel3TotalPrice != null">
+        #{agentLevel3TotalPrice,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TOrderAmount">
+    update t_order_amount
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="changeId != null">
+        change_id = #{changeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderTableName != null">
+        order_table_name = #{orderTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="productOemId != null">
+        product_oem_id = #{productOemId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="orgFullPath != null">
+        org_full_path = #{orgFullPath,jdbcType=VARCHAR},
+      </if>
+      <if test="endUserOemItemPriceId != null">
+        end_user_oem_item_price_id = #{endUserOemItemPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="endUserPrice != null">
+        end_user_price = #{endUserPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="endUserPriceUnit != null">
+        end_user_price_unit = #{endUserPriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="basicPrice != null">
+        basic_price = #{basicPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="exportDiscountRulesId != null">
+        export_discount_rules_id = #{exportDiscountRulesId,jdbcType=INTEGER},
+      </if>
+      <if test="exportDiscountRate != null">
+        export_discount_rate = #{exportDiscountRate,jdbcType=INTEGER},
+      </if>
+      <if test="exportDiscountPrice != null">
+        export_discount_price = #{exportDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="contractPeriodDiscountRulesId != null">
+        contract_period_discount_rules_id = #{contractPeriodDiscountRulesId,jdbcType=INTEGER},
+      </if>
+      <if test="contractPeriodDiscountRate != null">
+        contract_period_discount_rate = #{contractPeriodDiscountRate,jdbcType=INTEGER},
+      </if>
+      <if test="contractPeriodDiscountPrice != null">
+        contract_period_discount_price = #{contractPeriodDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentCycleDiscountRulesId != null">
+        payment_cycle_discount_rules_id = #{paymentCycleDiscountRulesId,jdbcType=INTEGER},
+      </if>
+      <if test="paymentCycleDiscountRate != null">
+        payment_cycle_discount_rate = #{paymentCycleDiscountRate,jdbcType=INTEGER},
+      </if>
+      <if test="paymentCycleDiscountPrice != null">
+        payment_cycle_discount_price = #{paymentCycleDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="paymentMethodDiscountRulesId != null">
+        payment_method_discount_rules_id = #{paymentMethodDiscountRulesId,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethodDiscountRate != null">
+        payment_method_discount_rate = #{paymentMethodDiscountRate,jdbcType=INTEGER},
+      </if>
+      <if test="paymentMethodDiscountPrice != null">
+        payment_method_discount_price = #{paymentMethodDiscountPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPrice != null">
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salesTotalPrice != null">
+        sales_total_price = #{salesTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="providerTotalPrice != null">
+        provider_total_price = #{providerTotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel1OemItemPriceId != null">
+        agent_level1_oem_item_price_id = #{agentLevel1OemItemPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="agentLevel1Price != null">
+        agent_level1_price = #{agentLevel1Price,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel1PriceUnit != null">
+        agent_level1_price_unit = #{agentLevel1PriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="agentLevel1TotalPrice != null">
+        agent_level1_total_price = #{agentLevel1TotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel2OemItemPriceId != null">
+        agent_level2_oem_item_price_id = #{agentLevel2OemItemPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="agentLevel2Price != null">
+        agent_level2_price = #{agentLevel2Price,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel2PriceUnit != null">
+        agent_level2_price_unit = #{agentLevel2PriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="agentLevel2TotalPrice != null">
+        agent_level2_total_price = #{agentLevel2TotalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel3OemItemPriceId != null">
+        agent_level3_oem_item_price_id = #{agentLevel3OemItemPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="agentLevel3Price != null">
+        agent_level3_price = #{agentLevel3Price,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel3PriceUnit != null">
+        agent_level3_price_unit = #{agentLevel3PriceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="agentLevel3TotalPrice != null">
+        agent_level3_total_price = #{agentLevel3TotalPrice,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where order_amount_id = #{orderAmountId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TOrderAmount">
+    update t_order_amount
+    set order_id = #{orderId,jdbcType=INTEGER},
+      change_id = #{changeId,jdbcType=INTEGER},
+      order_table_name = #{orderTableName,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=INTEGER},
+      product_oem_id = #{productOemId,jdbcType=INTEGER},
+      org_id = #{orgId,jdbcType=INTEGER},
+      org_full_path = #{orgFullPath,jdbcType=VARCHAR},
+      end_user_oem_item_price_id = #{endUserOemItemPriceId,jdbcType=INTEGER},
+      end_user_price = #{endUserPrice,jdbcType=DECIMAL},
+      end_user_price_unit = #{endUserPriceUnit,jdbcType=VARCHAR},
+      basic_price = #{basicPrice,jdbcType=DECIMAL},
+      export_discount_rules_id = #{exportDiscountRulesId,jdbcType=INTEGER},
+      export_discount_rate = #{exportDiscountRate,jdbcType=INTEGER},
+      export_discount_price = #{exportDiscountPrice,jdbcType=DECIMAL},
+      contract_period_discount_rules_id = #{contractPeriodDiscountRulesId,jdbcType=INTEGER},
+      contract_period_discount_rate = #{contractPeriodDiscountRate,jdbcType=INTEGER},
+      contract_period_discount_price = #{contractPeriodDiscountPrice,jdbcType=DECIMAL},
+      payment_cycle_discount_rules_id = #{paymentCycleDiscountRulesId,jdbcType=INTEGER},
+      payment_cycle_discount_rate = #{paymentCycleDiscountRate,jdbcType=INTEGER},
+      payment_cycle_discount_price = #{paymentCycleDiscountPrice,jdbcType=DECIMAL},
+      payment_method_discount_rules_id = #{paymentMethodDiscountRulesId,jdbcType=INTEGER},
+      payment_method_discount_rate = #{paymentMethodDiscountRate,jdbcType=INTEGER},
+      payment_method_discount_price = #{paymentMethodDiscountPrice,jdbcType=DECIMAL},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      sales_total_price = #{salesTotalPrice,jdbcType=DECIMAL},
+      provider_total_price = #{providerTotalPrice,jdbcType=DECIMAL},
+      agent_level1_oem_item_price_id = #{agentLevel1OemItemPriceId,jdbcType=INTEGER},
+      agent_level1_price = #{agentLevel1Price,jdbcType=DECIMAL},
+      agent_level1_price_unit = #{agentLevel1PriceUnit,jdbcType=VARCHAR},
+      agent_level1_total_price = #{agentLevel1TotalPrice,jdbcType=DECIMAL},
+      agent_level2_oem_item_price_id = #{agentLevel2OemItemPriceId,jdbcType=INTEGER},
+      agent_level2_price = #{agentLevel2Price,jdbcType=DECIMAL},
+      agent_level2_price_unit = #{agentLevel2PriceUnit,jdbcType=VARCHAR},
+      agent_level2_total_price = #{agentLevel2TotalPrice,jdbcType=DECIMAL},
+      agent_level3_oem_item_price_id = #{agentLevel3OemItemPriceId,jdbcType=INTEGER},
+      agent_level3_price = #{agentLevel3Price,jdbcType=DECIMAL},
+      agent_level3_price_unit = #{agentLevel3PriceUnit,jdbcType=VARCHAR},
+      agent_level3_total_price = #{agentLevel3TotalPrice,jdbcType=DECIMAL}
+    where order_amount_id = #{orderAmountId,jdbcType=INTEGER}
+  </update>
+</mapper>

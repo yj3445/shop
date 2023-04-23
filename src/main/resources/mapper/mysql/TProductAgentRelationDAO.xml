@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TProductAgentRelationDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TProductAgentRelation">
+    <id column="product_agent_relation_id" jdbcType="INTEGER" property="productAgentRelationId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="is_agent" jdbcType="BIT" property="isAgent" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    product_agent_relation_id, product_id, org_id, is_agent, creater_by, create_time, 
+    modified_by, modified_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_agent_relation
+    where product_agent_relation_id = #{productAgentRelationId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByProductIdAndOrgId" resultMap="BaseResultMap">
+
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update t_product_agent_relation
+    set  is_deleted =1, modified_time = now()
+    where product_agent_relation_id = #{productAgentRelationId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="productAgentRelationId" parameterType="com.itshop.web.dao.po.TProductAgentRelation">
+    insert into t_product_agent_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productAgentRelationId != null">
+        product_agent_relation_id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="isAgent != null">
+        is_agent,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productAgentRelationId != null">
+        #{productAgentRelationId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="isAgent != null">
+        #{isAgent,jdbcType=BIT},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TProductAgentRelation">
+    update t_product_agent_relation
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="isAgent != null">
+        is_agent = #{isAgent,jdbcType=BIT},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where product_agent_relation_id = #{productAgentRelationId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectCategoryProductAgent" resultType="com.itshop.web.dao.po.TCategoryProductAgent">
+    select
+    a.category_id as categoryId,
+    a.category_code as categoryCode,
+    a.category_name as categoryName,
+    a.category_level as categoryLevel,
+    a.order_num as categoryOrderNum,
+    a.enable as categoryEnable,
+    a.path as categoryPath,
+    a.parent_category_id as parentCategoryId,
+    b.product_id as productId,
+    b.product_code as productCode,
+    b.product_name as productName,
+    b.order_num as productOrderNum,
+    b.enable as productEnable,
+    b.path as productPath,
+    c.product_agent_relation_id as productAgentRelationId,
+    c.is_agent as productIsAgent
+    from (
+    select * from t_category
+    where 1=1
+    and is_deleted =0
+    and enable =1
+    )  a
+    left join (
+    select * from t_product
+    where 1=1
+    and is_deleted =0
+    and enable =1
+    ) b
+    on a.category_id = b.category_id
+    left join (
+      select * from t_product_agent_relation
+      where 1=1
+      and is_deleted =0
+      <if test="orgId != null">
+        and org_id = #{orgId,jdbcType=INTEGER}
+      </if>
+    ) c
+    on b.product_id = c.product_id
+    where 1=1
+  </select>
+
+  <select id="selectByOrgIdAndProductId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product_agent_relation
+    where is_deleted =0
+    <if test="productId != null">
+      and  product_id = #{productId,jdbcType=INTEGER}
+    </if>
+    <if test="orgId != null">
+      and org_id = #{orgId,jdbcType=INTEGER}
+    </if>
+    limit 1
+  </select>
+</mapper>

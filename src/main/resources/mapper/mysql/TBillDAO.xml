@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TBillDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TBill">
+    <id column="bill_id" jdbcType="INTEGER" property="billId" />
+    <result column="bill_code" jdbcType="VARCHAR" property="billCode" />
+    <result column="statement_id" jdbcType="INTEGER" property="statementId" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="bill_year_month" jdbcType="VARCHAR" property="billYearMonth" />
+    <result column="out_account_day" jdbcType="DATE" property="outAccountDay" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="order_id" jdbcType="INTEGER" property="orderId" />
+    <result column="change_id" jdbcType="INTEGER" property="changeId" />
+    <result column="order_table_name" jdbcType="VARCHAR" property="orderTableName" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="service_start_time" jdbcType="TIMESTAMP" property="serviceStartTime" />
+    <result column="service_end_time" jdbcType="TIMESTAMP" property="serviceEndTime" />
+    <result column="provider_pay_amount" jdbcType="DECIMAL" property="providerPayAmount" />
+    <result column="agent_level1_pay_amount" jdbcType="DECIMAL" property="agentLevel1PayAmount" />
+    <result column="agent_level2_pay_amount" jdbcType="DECIMAL" property="agentLevel2PayAmount" />
+    <result column="agent_level3_pay_amount" jdbcType="DECIMAL" property="agentLevel3PayAmount" />
+    <result column="end_user_pay_amount" jdbcType="DECIMAL" property="endUserPayAmount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+    <result column="bill_status" jdbcType="INTEGER" property="billStatus" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="org_full_path" jdbcType="VARCHAR" property="orgFullPath" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bill_id, bill_code, statement_id, org_id, bill_year_month, out_account_day, user_id,
+    order_id, change_id, order_table_name, product_id, service_start_time, service_end_time,
+    provider_pay_amount, agent_level1_pay_amount, agent_level2_pay_amount, agent_level3_pay_amount,
+    end_user_pay_amount, create_time, is_deleted, bill_status, modified_time, org_full_path
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_bill
+    where bill_id = #{billId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_bill
+    where bill_id = #{billId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.itshop.web.dao.po.TBill">
+    insert into t_bill (bill_id, bill_code, statement_id,
+                        org_id, bill_year_month, out_account_day,
+                        user_id, order_id, change_id,
+                        order_table_name, product_id, service_start_time,
+                        service_end_time, provider_pay_amount, agent_level1_pay_amount,
+                        agent_level2_pay_amount, agent_level3_pay_amount,
+                        end_user_pay_amount, create_time, is_deleted,
+                        bill_status, modified_time, org_full_path
+    )
+    values (#{billId,jdbcType=INTEGER}, #{billCode,jdbcType=VARCHAR}, #{statementId,jdbcType=INTEGER},
+            #{orgId,jdbcType=INTEGER}, #{billYearMonth,jdbcType=VARCHAR}, #{outAccountDay,jdbcType=DATE},
+            #{userId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{changeId,jdbcType=INTEGER},
+            #{orderTableName,jdbcType=VARCHAR}, #{productId,jdbcType=INTEGER}, #{serviceStartTime,jdbcType=TIMESTAMP},
+            #{serviceEndTime,jdbcType=TIMESTAMP}, #{providerPayAmount,jdbcType=DECIMAL}, #{agentLevel1PayAmount,jdbcType=DECIMAL},
+            #{agentLevel2PayAmount,jdbcType=DECIMAL}, #{agentLevel3PayAmount,jdbcType=DECIMAL},
+            #{endUserPayAmount,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{isDeleted,jdbcType=BIT},
+            #{billStatus,jdbcType=INTEGER}, #{modifiedTime,jdbcType=TIMESTAMP}, #{orgFullPath,jdbcType=VARCHAR}
+           )
+  </insert>
+  <insert id="insertSelective" parameterType="com.itshop.web.dao.po.TBill">
+    insert into t_bill
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="billId != null">
+        bill_id,
+      </if>
+      <if test="billCode != null">
+        bill_code,
+      </if>
+      <if test="statementId != null">
+        statement_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="billYearMonth != null">
+        bill_year_month,
+      </if>
+      <if test="outAccountDay != null">
+        out_account_day,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="changeId != null">
+        change_id,
+      </if>
+      <if test="orderTableName != null">
+        order_table_name,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="serviceStartTime != null">
+        service_start_time,
+      </if>
+      <if test="serviceEndTime != null">
+        service_end_time,
+      </if>
+      <if test="providerPayAmount != null">
+        provider_pay_amount,
+      </if>
+      <if test="agentLevel1PayAmount != null">
+        agent_level1_pay_amount,
+      </if>
+      <if test="agentLevel2PayAmount != null">
+        agent_level2_pay_amount,
+      </if>
+      <if test="agentLevel3PayAmount != null">
+        agent_level3_pay_amount,
+      </if>
+      <if test="endUserPayAmount != null">
+        end_user_pay_amount,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+      <if test="billStatus != null">
+        bill_status,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="orgFullPath != null">
+        org_full_path,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="billId != null">
+        #{billId,jdbcType=INTEGER},
+      </if>
+      <if test="billCode != null">
+        #{billCode,jdbcType=VARCHAR},
+      </if>
+      <if test="statementId != null">
+        #{statementId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="billYearMonth != null">
+        #{billYearMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="outAccountDay != null">
+        #{outAccountDay,jdbcType=DATE},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="changeId != null">
+        #{changeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderTableName != null">
+        #{orderTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="serviceStartTime != null">
+        #{serviceStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceEndTime != null">
+        #{serviceEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="providerPayAmount != null">
+        #{providerPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel1PayAmount != null">
+        #{agentLevel1PayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel2PayAmount != null">
+        #{agentLevel2PayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel3PayAmount != null">
+        #{agentLevel3PayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="endUserPayAmount != null">
+        #{endUserPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="billStatus != null">
+        #{billStatus,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgFullPath != null">
+        #{orgFullPath,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TBill">
+    update t_bill
+    <set>
+      <if test="billCode != null">
+        bill_code = #{billCode,jdbcType=VARCHAR},
+      </if>
+      <if test="statementId != null">
+        statement_id = #{statementId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="billYearMonth != null">
+        bill_year_month = #{billYearMonth,jdbcType=VARCHAR},
+      </if>
+      <if test="outAccountDay != null">
+        out_account_day = #{outAccountDay,jdbcType=DATE},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="changeId != null">
+        change_id = #{changeId,jdbcType=INTEGER},
+      </if>
+      <if test="orderTableName != null">
+        order_table_name = #{orderTableName,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="serviceStartTime != null">
+        service_start_time = #{serviceStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="serviceEndTime != null">
+        service_end_time = #{serviceEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="providerPayAmount != null">
+        provider_pay_amount = #{providerPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel1PayAmount != null">
+        agent_level1_pay_amount = #{agentLevel1PayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel2PayAmount != null">
+        agent_level2_pay_amount = #{agentLevel2PayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="agentLevel3PayAmount != null">
+        agent_level3_pay_amount = #{agentLevel3PayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="endUserPayAmount != null">
+        end_user_pay_amount = #{endUserPayAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="billStatus != null">
+        bill_status = #{billStatus,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgFullPath != null">
+        org_full_path = #{orgFullPath,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where bill_id = #{billId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itshop.web.dao.po.TBill">
+    update t_bill
+    set bill_code = #{billCode,jdbcType=VARCHAR},
+        statement_id = #{statementId,jdbcType=INTEGER},
+        org_id = #{orgId,jdbcType=INTEGER},
+        bill_year_month = #{billYearMonth,jdbcType=VARCHAR},
+        out_account_day = #{outAccountDay,jdbcType=DATE},
+        user_id = #{userId,jdbcType=INTEGER},
+        order_id = #{orderId,jdbcType=INTEGER},
+        change_id = #{changeId,jdbcType=INTEGER},
+        order_table_name = #{orderTableName,jdbcType=VARCHAR},
+        product_id = #{productId,jdbcType=INTEGER},
+        service_start_time = #{serviceStartTime,jdbcType=TIMESTAMP},
+        service_end_time = #{serviceEndTime,jdbcType=TIMESTAMP},
+        provider_pay_amount = #{providerPayAmount,jdbcType=DECIMAL},
+        agent_level1_pay_amount = #{agentLevel1PayAmount,jdbcType=DECIMAL},
+        agent_level2_pay_amount = #{agentLevel2PayAmount,jdbcType=DECIMAL},
+        agent_level3_pay_amount = #{agentLevel3PayAmount,jdbcType=DECIMAL},
+        end_user_pay_amount = #{endUserPayAmount,jdbcType=DECIMAL},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        is_deleted = #{isDeleted,jdbcType=BIT},
+        bill_status = #{billStatus,jdbcType=INTEGER},
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+        org_full_path = #{orgFullPath,jdbcType=VARCHAR}
+    where bill_id = #{billId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByOrderIdAndChangeId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_bill
+    where 1=1
+    <if test="orderId != null">
+     and  order_id = #{orderId,jdbcType=INTEGER}
+    </if>
+    <if test="changeId != null">
+      and  change_id = #{changeId,jdbcType=INTEGER}
+    </if>
+    <if test="orderTableName != null">
+     and  order_table_name = #{orderTableName,jdbcType=VARCHAR}
+    </if>
+    <if test="billYearMonth != null">
+     and  bill_year_month = #{billYearMonth,jdbcType=VARCHAR}
+    </if>
+    limit 1
+  </select>
+
+  <delete id="deleteByAfterBillYearMonth" >
+    delete from t_bill
+    where 1=1
+    and  order_id = #{orderId,jdbcType=INTEGER}
+    and  change_id = #{changeId,jdbcType=INTEGER}
+    and  order_table_name = #{orderTableName,jdbcType=VARCHAR}
+    and  bill_year_month <![CDATA[ > ]]> #{billYearMonth,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insertBatch" useGeneratedKeys="true" keyProperty="billId"
+          parameterType="java.util.List" >
+    insert into t_bill (bill_id, bill_code, statement_id,
+                        org_id, bill_year_month, out_account_day,
+                        user_id, order_id, change_id,
+                        order_table_name, product_id, service_start_time,
+                        service_end_time, provider_pay_amount, agent_level1_pay_amount,
+                        agent_level2_pay_amount, agent_level3_pay_amount,
+                        end_user_pay_amount, create_time, is_deleted,
+                        bill_status, modified_time,org_full_path)
+    values
+    <foreach collection ="list" item="data" index= "index" separator =",">
+      (#{data.billId,jdbcType=INTEGER}, #{data.billCode,jdbcType=VARCHAR}, #{data.statementId,jdbcType=INTEGER},
+      #{data.orgId,jdbcType=INTEGER}, #{data.billYearMonth,jdbcType=VARCHAR}, #{data.outAccountDay,jdbcType=DATE},
+      #{data.userId,jdbcType=INTEGER}, #{data.orderId,jdbcType=INTEGER}, #{data.changeId,jdbcType=INTEGER},
+      #{data.orderTableName,jdbcType=VARCHAR}, #{data.productId,jdbcType=INTEGER}, #{data.serviceStartTime,jdbcType=TIMESTAMP},
+      #{data.serviceEndTime,jdbcType=TIMESTAMP}, #{data.providerPayAmount,jdbcType=DECIMAL}, #{data.agentLevel1PayAmount,jdbcType=DECIMAL},
+      #{data.agentLevel2PayAmount,jdbcType=DECIMAL}, #{data.agentLevel3PayAmount,jdbcType=DECIMAL},
+      #{data.endUserPayAmount,jdbcType=DECIMAL}, #{data.createTime,jdbcType=TIMESTAMP}, #{data.isDeleted,jdbcType=BIT},
+      #{data.billStatus,jdbcType=INTEGER}, #{data.modifiedTime,jdbcType=TIMESTAMP}, #{data.orgFullPath,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+
+  <select id="selectByOrgIdAndLteBillYearMonth" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_bill
+    where is_deleted =0
+    <!--未出账-->
+    and bill_status=10
+    and org_full_path like concat(#{orgFullPath,jdbcType=VARCHAR},'%')
+    and bill_year_month <![CDATA[ <= ]]> #{billYearMonth,jdbcType=VARCHAR}
+  </select>
+
+  <update id="updateByOrgIdAndLteBillYearMonth"  parameterType="com.itshop.web.dao.po.TBill">
+    update t_bill
+    <set>
+      <if test="statementId != null">
+        statement_id = #{statementId,jdbcType=INTEGER},
+      </if>
+      <if test="billStatus != null">
+        bill_status = #{billStatus,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where 1=1
+    and org_id = #{orgId,jdbcType=INTEGER}
+    and is_deleted =0
+    <!--未出账-->
+    and bill_status=10
+    and bill_year_month <![CDATA[ <= ]]> #{billYearMonth,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateBillStatus2UnOutAccount" parameterType="java.lang.String">
+    update t_bill
+      set statement_id = -1,
+    <!--未出账-->
+      bill_status = 10,
+      modified_time = now()
+    where statement_id in ( select statement_id from t_statement  where statement_month = #{statementMonth,jdbcType=VARCHAR})
+  </update>
+
+  <select id="selectCompanyStatementBill" resultType="com.itshop.web.dto.response.CompanyStatementBillResp">
+    select *
+    from
+    (
+      select
+      tb.bill_code as billCode,
+      concat('JS',ts.statement_month,lpad(ts.statement_id,4,0))  as statementNo,
+      tb.bill_year_month as billYearMonth,
+      taui.user_id  as userAccount,
+      tb.order_id as orderId,
+      tiao.business_id as businessId,
+      tc.category_name as categoryName,
+      tp.product_code as productCode,
+      tp.product_name as productName,
+      tb.service_start_time as serviceStartTime,
+      tb.service_end_time as serviceEndTime,
+      tb.provider_pay_amount as providerPayAmount,
+      tb.agent_level1_pay_amount as agentLevel1PayAmount,
+      tb.agent_level2_pay_amount as agentLevel2PayAmount,
+      tb.agent_level3_pay_amount as agentLevel3PayAmount,
+      tb.end_user_pay_amount as endUserPayAmount,
+      tb.org_id as orgId,
+      to2.org_type as  orgType
+      from
+      itshop.t_bill tb
+      left join itshop.t_statement ts on tb.statement_id = ts.statement_id
+      left join itshop.t_product tp on tb.product_id = tp.product_id
+      left join itshop.t_category tc on tp.category_id = tc.category_id
+      left join itshop.t_internet_access_order tiao on tb.order_id = tiao.order_id and tb.order_table_name ='INTERNET_ACCESS_ORDER'
+      left join authorization_platform.t_app_user_info taui on tb.user_id = taui.app_user_info_id
+      left join authorization_platform.t_organizational to2 on tb.org_id = to2.org_id
+      where tb.is_deleted =0
+      and tb.org_id= #{orgId}
+      <if test="statementId !=null and statementId > 0">
+        and tb.statement_id= #{statementId}
+      </if>
+      <if test="startBillYearMonth != null and startBillYearMonth.length > 0">
+        and tb.bill_year_month >= #{startBillYearMonth}
+      </if>
+      <if test="endBillYearMonth != null and endBillYearMonth.length > 0">
+        and tb.bill_year_month <![CDATA[ <= ]]> #{endBillYearMonth}
+      </if>
+      <if test="categoryCode !=null and categoryCode.size() > 0">
+        and tc.category_code in
+        <foreach collection ="categoryCode" item="data" index= "index" open="(" close=")" separator="," >
+          #{data}
+        </foreach>
+      </if>
+      <if test="businessId != null and businessId.length > 0">
+        and tiao.business_id = #{businessId}
+      </if>
+    ) tmp
+
+  </select>
+
+  <select id="selectAgentMonthlyBill" resultType="com.itshop.web.dto.response.AgentMonthlyBillDetailResp">
+    select
+      concat('JS',ts.statement_month,lpad(ts.statement_id,4,0))  as statementNo,
+      tb.bill_year_month as billYearMonth,
+      taui.user_id  as userAccount,
+      tb.bill_code as billCode,
+      tb.order_id  as orderId,
+      tb.change_id as changeId,
+      tiao.order_no as orderNo,
+      tc.category_name as categoryName,
+      tp.product_code as productCode,
+      tp.product_name as productName,
+      tb.service_start_time as serviceStartTime,
+      tb.service_end_time as serviceEndTime,
+      tb.provider_pay_amount as providerPayAmount,
+      tb.agent_level1_pay_amount as agentLevel1PayAmount,
+      tb.agent_level2_pay_amount as agentLevel2PayAmount,
+      tb.agent_level3_pay_amount as agentLevel3PayAmount,
+      tb.end_user_pay_amount as endUserPayAmount,
+      case when tb.bill_status =10 then '未出账'
+           when tb.bill_status =20 then '已出账'
+          else '-' end as billStatus,
+      tb.out_account_day as outAccountDay,
+      taui1.user_name as  paymentConfirmUserName,
+      ts.bank_flow as  bankFlow,
+      ts.payment_time as paymentTime,
+      case when ts.payment_status ='NO_PAY' then '未结算'
+           when ts.payment_status ='PAY' then '已结算'
+          else '-' end as paymentStatus,
+      tb.org_id as orgId,
+      to2.org_type as  orgType
+    from
+      itshop.t_bill tb
+        left join itshop.t_statement ts on tb.statement_id = ts.statement_id
+        left join itshop.t_product tp on tb.product_id = tp.product_id
+        left join itshop.t_category tc on tp.category_id = tc.category_id
+        left join itshop.t_internet_access_order tiao on tb.order_id = tiao.order_id and tb.order_table_name ='INTERNET_ACCESS_ORDER'
+        left join authorization_platform.t_app_user_info taui on tb.user_id = taui.app_user_info_id
+        left join authorization_platform.t_app_user_info taui1 on ts.payment_confirm_user_id = taui1.app_user_info_id
+        left join authorization_platform.t_organizational to2 on tb.org_id = to2.org_id
+    where tb.is_deleted =0
+      and ts.is_deleted =0
+      and tb.statement_id= #{statementId}
+    order by tb.bill_year_month asc
+  </select>
+</mapper>

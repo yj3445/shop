@@ -1,0 +1,1 @@
+ mvn -e -U clean compile package

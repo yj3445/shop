@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itshop.web.dao.mysql.TProductOemItemPriceDAO">
+  <resultMap id="BaseResultMap" type="com.itshop.web.dao.po.TProductOemItemPrice">
+    <id column="product_oem_item_price_id" jdbcType="INTEGER" property="productOemItemPriceId" />
+    <result column="product_oem_id" jdbcType="INTEGER" property="productOemId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="product_item_id" jdbcType="INTEGER" property="productItemId" />
+    <result column="agent_price_id" jdbcType="INTEGER" property="agentPriceId" />
+    <result column="price" jdbcType="DECIMAL" property="price" />
+    <result column="price_unit" jdbcType="VARCHAR" property="priceUnit" />
+    <result column="creater_by" jdbcType="INTEGER" property="createrBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="modified_by" jdbcType="INTEGER" property="modifiedBy" />
+    <result column="modified_time" jdbcType="TIMESTAMP" property="modifiedTime" />
+    <result column="is_deleted" jdbcType="BIT" property="isDeleted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    product_oem_item_price_id, product_oem_id, product_id, org_id, product_item_id, agent_price_id, 
+    price, price_unit, creater_by, create_time, modified_by, modified_time, is_deleted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_oem_item_price
+    where product_oem_item_price_id = #{productOemItemPriceId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update t_product_oem_item_price
+    set is_deleted =1,
+    modified_time = now(),
+    modified_by = #{modifiedBy,jdbcType=INTEGER}
+    where product_oem_item_price_id = #{productOemItemPriceId,jdbcType=INTEGER}
+  </delete>
+
+  <delete id="deleteByAgentPriceId">
+    update t_product_oem_item_price
+    set is_deleted =1,
+    modified_time = now(),
+    modified_by = #{modifiedBy,jdbcType=INTEGER}
+    where agent_price_id = #{agentPriceId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insertSelective" useGeneratedKeys="true" keyProperty="productOemItemPriceId"  parameterType="com.itshop.web.dao.po.TProductOemItemPrice">
+    insert into t_product_oem_item_price
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productOemItemPriceId != null">
+        product_oem_item_price_id,
+      </if>
+      <if test="productOemId != null">
+        product_oem_id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="orgId != null">
+        org_id,
+      </if>
+      <if test="productItemId != null">
+        product_item_id,
+      </if>
+      <if test="agentPriceId != null">
+        agent_price_id,
+      </if>
+      <if test="price != null">
+        price,
+      </if>
+      <if test="priceUnit != null">
+        price_unit,
+      </if>
+      <if test="createrBy != null">
+        creater_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="modifiedBy != null">
+        modified_by,
+      </if>
+      <if test="modifiedTime != null">
+        modified_time,
+      </if>
+      <if test="isDeleted != null">
+        is_deleted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productOemItemPriceId != null">
+        #{productOemItemPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="productOemId != null">
+        #{productOemId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="productItemId != null">
+        #{productItemId,jdbcType=INTEGER},
+      </if>
+      <if test="agentPriceId != null">
+        #{agentPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="priceUnit != null">
+        #{priceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        #{isDeleted,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itshop.web.dao.po.TProductOemItemPrice">
+    update t_product_oem_item_price
+    <set>
+      <if test="productOemId != null">
+        product_oem_id = #{productOemId,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null">
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="productItemId != null">
+        product_item_id = #{productItemId,jdbcType=INTEGER},
+      </if>
+      <if test="agentPriceId != null">
+        agent_price_id = #{agentPriceId,jdbcType=INTEGER},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="priceUnit != null">
+        price_unit = #{priceUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="createrBy != null">
+        creater_by = #{createrBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        modified_by = #{modifiedBy,jdbcType=INTEGER},
+      </if>
+      <if test="modifiedTime != null">
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDeleted != null">
+        is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+    </set>
+    where product_oem_item_price_id = #{productOemItemPriceId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateProductOemId" parameterType="com.itshop.web.dao.po.TProductOemItemPrice">
+  update t_product_oem_item_price
+  set product_oem_id = #{productOemId,jdbcType=INTEGER},
+      modified_time = now(),
+      modified_by = #{modifiedBy,jdbcType=INTEGER}
+    where is_deleted =0
+    and  product_id = #{productId,jdbcType=INTEGER}
+    and org_id = #{orgId,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByProductAndOrgId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product_oem_item_price
+    where is_deleted =0
+    and  product_id = #{productId,jdbcType=INTEGER}
+    and  org_id = #{orgId,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByTargetOrgIdAndProductId" resultMap="BaseResultMap">
+    select a.*
+    from t_product_oem_item_price a
+           left join t_agent_price b on a.agent_price_id = b.agent_price_id
+           left join t_agent_price_org c on b.agent_price_id = c.agent_price_id
+    where  a.is_deleted =0
+      and b.is_deleted =0
+      and c.target_org_id = #{orgId,jdbcType=INTEGER}
+      and b.org_id = #{parentOrgId,jdbcType=INTEGER} and a.org_id = #{parentOrgId,jdbcType=INTEGER}
+      and a.product_id = #{productId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectEndPrice" resultMap="BaseResultMap" >
+    select a.*
+    from t_product_oem_item_price a
+           left join t_agent_price b on a.agent_price_id = b.agent_price_id
+    where a.is_deleted =0
+      and b.is_deleted =0
+      <!--终端价格-->
+      and b.price_type=2
+      and b.org_id = #{orgId,jdbcType=INTEGER} and a.org_id = #{orgId,jdbcType=INTEGER}
+      and a.product_id = #{productId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByProductItemIdAndAgentPriceId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_product_oem_item_price
+    where is_deleted =0
+    and  product_item_id = #{productItemId,jdbcType=INTEGER}
+    and  agent_price_id = #{agentPriceId,jdbcType=INTEGER}
+  </select>
+</mapper>
