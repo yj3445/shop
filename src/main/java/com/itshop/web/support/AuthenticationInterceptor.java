@@ -27,11 +27,13 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         if (handler instanceof HandlerMethod) {
+            log.info("Yang: get into AuthenticationInterceptor");
             String referrer = request.getHeader("referer");
             String email = request.getHeader("Remote-Email");
             String groups = request.getHeader("Remote-Groups");
             String user = request.getHeader("Remote-User");
             String name = request.getHeader("Remote-Name");
+            
             log.info("[AuthenticationInterceptor] referer:{},email:{},groups:{},user:{},name:{}", referrer, email, groups, user, name);
 
             HandlerMethod handlerMethod = (HandlerMethod) handler;
@@ -56,9 +58,12 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             }
             Environment environment = (Environment) ApplicationContextProvider.getBean(Environment.class);
             String traefikUrl = environment.getProperty("traefik.url");
-            if (StringUtils.isNotBlank(referrer)
-                    && StringUtils.isNotBlank(traefikUrl)
-                    && referrer.toLowerCase().contains(traefikUrl)) {
+            // if (StringUtils.isNotBlank(referrer)
+            //         && StringUtils.isNotBlank(traefikUrl)
+            //         && referrer.toLowerCase().contains(traefikUrl)) {
+            log.info("Yang: traefikurl={}",traefikUrl);
+            if ( StringUtils.isBlank(traefikUrl) 
+                    || ( StringUtils.isNotBlank(referrer) && referrer.toLowerCase().contains(traefikUrl) ) ) {
                 if (StringUtils.isBlank(groups) || StringUtils.isBlank(email)) {
                     msg = "来自Traefik系统的请求,缺少Remote-Groups或Remote-Email!";
                     log.error("[AuthenticationInterceptor] " + msg);
@@ -87,6 +92,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     return false;
                 }
             }
+            log.error("[AuthenticationInterceptor] referrer:{},未正确配置!",referrer);
             responseResult(HttpStatus.UNAUTHORIZED, response, RetWrapper.unauthorized());
             return false;
         }

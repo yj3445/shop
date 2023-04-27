@@ -2,6 +2,22 @@
 
 ## 版本
 
+### v0.92
+
+#### 概述
+- 通过配置中的 traefikurl ，可以控制是否检查reffer
+
+#### 更新
+- AuthenticationInterceptor.java
+    - traeficurl=""的时候，不再检查reffer
+    - reffer出现问题时，增加了一条打印信息
+
+- application-docker.properties 
+    - traefikurl -> null
+
+#### 输出
+- cbd/shop:0.9
+
 ### v0.91
 
 #### 概述
@@ -21,13 +37,13 @@
     - 删除 VOLUME /tmp
 
 #### 输出
-- cbd/shop:0.8
+- cbd/shop:0.9
 
 
 ### v0.9
 - 支持单点登录
 - source 完全来自 it-shop-sync-dev，未作修改调整
-- 成果：cbd/shop:0.8
+
 
 ### v0.8
 - 自带 login 路由
