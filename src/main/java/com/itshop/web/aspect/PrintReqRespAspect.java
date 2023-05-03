@@ -42,20 +42,18 @@ public class PrintReqRespAspect {
         ServletRequestAttributes requestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
-        UserInfoVO userInfoVO = (UserInfoVO) request.getSession().getAttribute(SessionConstants.USER_INFO_SESSION);
+        String userId = (String) request.getSession().getAttribute(SessionConstants.USER_ID_SESSION);
 
-        log.info("method:{} userInfo:{} request:{}", methodSign,
-                userInfoVO !=null? JSONObject.toJSONString(userInfoVO) :"",
-                JSONObject.toJSONString(argList));
+
         Object proceed = null;
         try {
             long stime = System.currentTimeMillis();
             proceed = pjp.proceed();
             long etime = System.currentTimeMillis();
-            log.info("method:{} ms:{} response:{}", methodSign, (etime -stime), JSONObject.toJSONString(proceed));
+            log.info("method:{} userId:{} request:{} ms:{}", methodSign,userId,JSONObject.toJSONString(argList), (etime -stime));
             return proceed;
         } catch (Throwable e) {
-            log.error("method:{} throwable:{}", methodSign, e);
+            log.error("method:{} userId:{} request:{} throwable:{}", methodSign,userId,JSONObject.toJSONString(argList), e);
             throw e;
         }
     }

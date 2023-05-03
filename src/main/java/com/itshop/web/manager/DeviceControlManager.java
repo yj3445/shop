@@ -203,7 +203,7 @@ public class DeviceControlManager {
         if (ex != null) {
             log.error(JSONObject.toJSONString(logWithBLOBs), ex);
         } else {
-            log.info(JSONObject.toJSONString(logWithBLOBs));
+            // log.info(JSONObject.toJSONString(logWithBLOBs));
         }
         addAsync(logWithBLOBs);
         return result;

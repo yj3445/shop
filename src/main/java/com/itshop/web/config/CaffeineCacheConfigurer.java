@@ -35,7 +35,7 @@ public class CaffeineCacheConfigurer {
                 }
             }
             String sha256Hex = DigestUtils.sha256Hex(sb + paraAndValue.toString());
-            log.info("cache key str: {}  cache key sha256Hex: {} ", (sb + paraAndValue.toString()), sha256Hex);
+            // log.info("cache key str: {}  cache key sha256Hex: {} ", (sb + paraAndValue.toString()), sha256Hex);
             return sha256Hex;
         };
     }

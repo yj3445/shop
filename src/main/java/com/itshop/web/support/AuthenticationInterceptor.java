@@ -2,6 +2,8 @@ package com.itshop.web.support;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
 import com.itshop.web.annotation.AuthenticationIgnore;
 import com.itshop.web.constants.SessionConstants;
 import com.itshop.web.dao.auth.AuthorizationRepository;
@@ -21,21 +23,21 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 
 @Slf4j
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
         if (handler instanceof HandlerMethod) {
-            log.info("Yang: get into AuthenticationInterceptor");
             String referrer = request.getHeader("referer");
             String email = request.getHeader("Remote-Email");
             String groups = request.getHeader("Remote-Groups");
             String user = request.getHeader("Remote-User");
             String name = request.getHeader("Remote-Name");
-            
-            log.info("[AuthenticationInterceptor] referer:{},email:{},groups:{},user:{},name:{}", referrer, email, groups, user, name);
+            log.info("referer:{},email:{},groups:{},user:{},name:{}", referrer, email, groups, user, name);
 
+            Map<String,String> customHeader = ImmutableMap.of("Email",email);
             HandlerMethod handlerMethod = (HandlerMethod) handler;
             //忽略登录情况
             AuthenticationIgnore loginIgnore = handlerMethod.getMethod().getAnnotation(AuthenticationIgnore.class);
@@ -43,27 +45,22 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 loginIgnore = handlerMethod.getMethod().getDeclaringClass().getAnnotation(AuthenticationIgnore.class);
             }
             if (loginIgnore != null) {
+                addCustomHeader(response,customHeader);
                 return true;
             }
             String msg ;
             //验证用户是否登录
             String userId = (String) request.getSession().getAttribute(SessionConstants.USER_ID_SESSION);
-            if (StringUtils.isNotBlank(userId)) {
+            if (StringUtils.isNotBlank(userId) && userId.equalsIgnoreCase(email)) {
                 //判断用户缓存跟email是否一致
-                if (userId.equalsIgnoreCase(email)) {
-                    return true;
-                } else {
-                    log.warn(String.format("[AuthenticationInterceptor] session-userId(%s)跟header-email(%s)不一致,需重新获取用户权限!", userId, email));
-                }
+                addCustomHeader(response,customHeader);
+                return true;
             }
-            Environment environment = (Environment) ApplicationContextProvider.getBean(Environment.class);
-            String traefikUrl = environment.getProperty("traefik.url");
+            // Environment environment = (Environment) ApplicationContextProvider.getBean(Environment.class);
+            // String traefikUrl = environment.getProperty("traefik.url");
             // if (StringUtils.isNotBlank(referrer)
             //         && StringUtils.isNotBlank(traefikUrl)
             //         && referrer.toLowerCase().contains(traefikUrl)) {
-            log.info("Yang: traefikurl={}",traefikUrl);
-            if ( StringUtils.isBlank(traefikUrl) 
-                    || ( StringUtils.isNotBlank(referrer) && referrer.toLowerCase().contains(traefikUrl) ) ) {
                 if (StringUtils.isBlank(groups) || StringUtils.isBlank(email)) {
                     msg = "来自Traefik系统的请求,缺少Remote-Groups或Remote-Email!";
                     log.error("[AuthenticationInterceptor] " + msg);
@@ -80,10 +77,11 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                 MenuManager menuManager = (MenuManager) ApplicationContextProvider.getBean(MenuManager.class);
                 Result<LoginUserAuthVO, String> authResult = authorizationRepository.login(email, "123.cbd");
                 if (Result.OK.equalsIgnoreCase(authResult.getCode()) && authResult.getSobj() != null) {
-                    log.info(String.format("[AuthenticationInterceptor],email:%s,获取用户权限成功!", email));
+//                    log.info(String.format("[AuthenticationInterceptor],email:%s,获取用户权限成功!", email));
                     request.getSession().setAttribute(SessionConstants.USER_ID_SESSION, email);
                     request.getSession().setAttribute(SessionConstants.USER_MENU_SESSION, menuManager.getLoginUserMenuList(authResult.getSobj().getUserVO()));
                     request.getSession().setAttribute(SessionConstants.USER_INFO_SESSION, ConvertUtils.convert2UserInfoVO(authResult.getSobj()));
+                    addCustomHeader(response,customHeader);
                     return true;
                 } else {
                     msg = "验证用户权限时,出现错误!";
@@ -91,12 +89,21 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
                     responseResult(HttpStatus.INTERNAL_SERVER_ERROR, response, RetWrapper.internalServerError(msg));
                     return false;
                 }
-            }
-            log.error("[AuthenticationInterceptor] referrer:{},未正确配置!",referrer);
-            responseResult(HttpStatus.UNAUTHORIZED, response, RetWrapper.unauthorized());
-            return false;
+            // }
+            // responseResult(HttpStatus.UNAUTHORIZED, response, RetWrapper.unauthorized());
+            // return false;
         }
         return true;
+    }
+
+    /**
+     * 添加自定义响应头
+     *
+     * @param response 响应
+     * @param headers  自定义头信息
+     */
+    private void addCustomHeader(HttpServletResponse response, Map<String,String> headers) {
+        headers.forEach(response::addHeader);
     }
 
     private void responseResult(HttpStatus httpStatus, HttpServletResponse response, RetResult<Object> result) {
@@ -106,7 +113,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         try {
             response.getWriter().write(JSON.toJSONString(result, SerializerFeature.WriteMapNullValue));
         } catch (IOException ex) {
-            log.error(ex.getMessage());
+//            log.error(ex.getMessage());
         }
     }
 }

@@ -108,7 +108,7 @@ public class RestTemplateConfigurer {
             sslConnectionSocketFactory = new SSLConnectionSocketFactory(sslContext,
                     hostnameVerifier);
         } catch (GeneralSecurityException ex) {
-            log.error("自定义SSLConnectionSocketFactory发生异常", ex);
+            // log.error("自定义SSLConnectionSocketFactory发生异常", ex);
             sslConnectionSocketFactory = SSLConnectionSocketFactory.getSocketFactory();
         }
         //设置协议http和https对应的处理socket连接工厂的对象

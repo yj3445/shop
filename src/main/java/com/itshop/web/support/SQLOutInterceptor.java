@@ -83,7 +83,7 @@ public class SQLOutInterceptor implements Interceptor {
         for (String key : replaceMap.keySet()) {
             reductionFlag = true;
             sql = sql.replace(key + " ", replaceMap.get(key) + " ");
-            log.info("降维的SqlId:{},替换表:{}--->{}", id, key, replaceMap.get(key));
+            // log.info("降维的SqlId:{},替换表:{}--->{}", id, key, replaceMap.get(key));
         }
         if (reductionFlag) {
             Configuration configuration = (Configuration) metaStmtHandler.getValue("delegate.configuration");
@@ -96,7 +96,7 @@ public class SQLOutInterceptor implements Interceptor {
                 }
             }
             metaStmtHandler.setValue("delegate.boundSql", newBoundSql);
-            log.info("降维的SqlId:{}完成", id);
+            // log.info("降维的SqlId:{}完成", id);
         }
     }
 
@@ -221,7 +221,7 @@ public class SQLOutInterceptor implements Interceptor {
             for (String value : parameters) {
                 sql = sql.replaceFirst("\\?", value);
             }
-            log.info("["+trackId+""+"] ["+userName+"]    ==>  " + id + ":\n" + sql.replace("\n", "").replaceAll("\\s{2,}"," "));
+            // log.info("["+trackId+""+"] ["+userName+"]    ==>  " + id + ":\n" + sql.replace("\n", "").replaceAll("\\s{2,}"," "));
 
         }
     }

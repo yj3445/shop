@@ -48,7 +48,7 @@ public class MinioController extends BaseController {
             response = minioUtil.uploadFile(file, minioProperties.getDefaultBucket());
         } catch (Exception e) {
             UserInfoVO userInfoVO = getUserInfoVO();
-            log.error(String.format("%s shang "), e);
+            // log.error(String.format("%s shang "), e);
             return RetWrapper.failure("上传失败!");
         }
         return RetWrapper.success(response);

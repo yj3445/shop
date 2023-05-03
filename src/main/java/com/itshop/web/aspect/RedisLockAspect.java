@@ -45,7 +45,7 @@ public class RedisLockAspect {
             lockKey = SpELParserUtils.parse(method, args, lock.key(), String.class);
         }
         String val = UUID.randomUUID().toString();
-        log.info("redis-key-info:{}", new Object[]{lockKey, val, lock.expire()});
+        // log.info("redis-key-info:{}", new Object[]{lockKey, val, lock.expire()});
 
         boolean success = redisSimpleLock.tryLock(lockKey, val, lock.expire());
         if (success) {

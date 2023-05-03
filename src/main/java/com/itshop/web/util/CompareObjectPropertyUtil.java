@@ -141,7 +141,7 @@ public class CompareObjectPropertyUtil {
             Object value = method.invoke(o, new Object[] {});
             return value;
         } catch (Exception e) {
-            log.error(e.getMessage(),e);
+            // log.error(e.getMessage(),e);
             return null;
         }
     }

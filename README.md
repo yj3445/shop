@@ -2,6 +2,44 @@
 
 ## 版本
 
+### v0.95
+
+#### 概述
+- 整合 it-shop-sync 里最后一个版本（6a7099） 0.95
+- 增加了1个返回头，表明当前用户信息
+- 删除清理了大量的 log 输出
+
+#### 更新
+- AuthenticationInterceptor.java ： add header
+- PrintReqRespAspect.java:  45 UserInfoVo
+- RedisLOckAspect.java
+- CaffeineCacheCOnfigurer.java
+- RestTemplateCOnfigurer.java
+- MinioController.java
+- StatsRepository.java
+- InternetAccessProductPriceRepository.java
+- DeviceControlleManager.java
+- AuthenticationInterceptor.java
+- SQLOutInterceptor.java
+- CompareObjectPropertyUtil.java
+
+#### 输出
+- cbd/shop:0.93
+
+
+
+### v0.93
+
+#### 概述
+- 不再检查referer
+
+#### 更新
+- AuthenticationInterceptor.java
+
+#### 输出
+- cbd/shop:0.93
+
+
 ### v0.92
 
 #### 概述
@@ -16,7 +54,7 @@
     - traefikurl -> null
 
 #### 输出
-- cbd/shop:0.9
+- cbd/shop:0.92
 
 ### v0.91
 
@@ -37,7 +75,7 @@
     - 删除 VOLUME /tmp
 
 #### 输出
-- cbd/shop:0.9
+- cbd/shop:0.91
 
 
 ### v0.9

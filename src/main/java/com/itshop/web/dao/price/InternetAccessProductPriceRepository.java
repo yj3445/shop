@@ -64,15 +64,15 @@ public class InternetAccessProductPriceRepository {
                 result = getParentOrgSettingPrice(productId, userInfoVO);
             }
         }
-        log.info("[getInternetAccessProductPrice]" +
-                        " productId:[{}],orgType:[{}],orgId:[{}],parentOrgId:[{}],agentUseEndUserPrice:[{}]" +
-                        " InternetAccessProductPriceConfig:[{}]",
-                productId,
-                OrgTypeEnum.getName(userInfoVO.getOrgType()),
-                userInfoVO.getOrgId(),
-                userInfoVO.getParentOrgId(),
-                agentUseEndUserPrice,
-                result);
+        // log.info("[getInternetAccessProductPrice]" +
+        //                 " productId:[{}],orgType:[{}],orgId:[{}],parentOrgId:[{}],agentUseEndUserPrice:[{}]" +
+        //                 " InternetAccessProductPriceConfig:[{}]",
+        //         productId,
+        //         OrgTypeEnum.getName(userInfoVO.getOrgType()),
+        //         userInfoVO.getOrgId(),
+        //         userInfoVO.getParentOrgId(),
+        //         agentUseEndUserPrice,
+        //         result);
         return result;
     }
 

@@ -21,7 +21,7 @@ public class StatsRepository  extends RestBaseRepository {
         ParameterizedTypeReference<DeviceControlResponseResult<TrendStackResponse>> responseBodyType = new ParameterizedTypeReference<DeviceControlResponseResult<TrendStackResponse>>() {
         };
         String requestBody = JSONObject.toJSONString(trendStackRequest);
-        log.info("url:{},requestBody:{}", url, requestBody);
+        // log.info("url:{},requestBody:{}", url, requestBody);
         DeviceControlResponseResult<TrendStackResponse> result = new DeviceControlResponseResult<TrendStackResponse> ();
         try{
             result = exchange(url, HttpMethod.POST, responseBodyType, requestBody);
